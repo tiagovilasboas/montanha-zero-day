@@ -1,0 +1,5 @@
+# Foto pessoal usada só como referência para gerar a arte
+art/ref/
+# Originais do Artlist (pesados; tools/fetch_art.py baixa de novo)
+art/raw/
+__pycache__/

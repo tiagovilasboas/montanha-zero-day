@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="description" content="Montanha: Zero Day — plataforma cyberpunk em pixel art. Hackeie a cidade com o robô BYTE.">
+<meta name="theme-color" content="#070914">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Zero Day">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+</head>
+<body>
+<title>Montanha Zero Day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<div id="app">
+  <div id="wrap">
+    <canvas id="cv" width="320" height="192"></canvas>
+
+    <div id="hud" hidden>
+      <div class="hud-row">
+        <span class="hud-label">LV</span><b id="hud-lv">1</b>
+        <div class="bar bar-hp"><i id="hud-hp"></i></div>
+        <span id="hud-xp"></span>
+      </div>
+      <div class="hud-row">
+        <span class="hud-label">EP</span>
+        <div class="bar bar-ep"><i id="hud-ep"></i></div>
+        <span class="hud-label" id="hud-boost">JET</span>
+        <div class="bar bar-jet"><i id="hud-jet"></i></div>
+      </div>
+    </div>
+
+    <div id="bossbar" hidden><span>RANSOM-TITAN</span><div class="bar"><i id="boss-hp"></i></div></div>
+    <button id="btn-pause" hidden aria-label="Pausar">II</button>
+    <div id="keys" hidden aria-label="Controles do teclado">
+      <span><kbd>←</kbd><kbd>→</kbd> mover</span>
+      <span><kbd>Z</kbd> pular <small>(segure no ar: voar)</small></span>
+      <span><kbd>X</kbd> atirar <small>(segure: carga)</small></span>
+      <span><kbd>C</kbd> hack</span>
+      <span><kbd>Esc</kbd> pausa</span>
+    </div>
+    <div id="toast" hidden></div>
+    <div id="card" hidden><small id="card-kicker"></small><strong id="card-title"></strong></div>
+  </div>
+
+  <div id="pad">
+    <div id="dpad" aria-label="Mover">
+      <span class="dpad-half dpad-left" aria-hidden="true">◀</span>
+      <span class="dpad-half dpad-right" aria-hidden="true">▶</span>
+    </div>
+    <div id="btns">
+      <button data-action="hack" class="btn-hack">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M5 1h6v3H5zM5 12h6v3H5z" fill="currentColor"/><rect x="3" y="4" width="10" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 6v2.5h2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        HACK
+      </button>
+      <button data-action="fire" class="btn-fire">TIRO</button>
+      <button data-action="jump" class="btn-jump">PULO</button>
+    </div>
+  </div>
+
+  <div id="screen" hidden></div>
+
+  <div id="dialog" hidden>
+    <img id="dlg-portrait" alt="">
+    <div class="dlg-body"><b id="dlg-name"></b><p id="dlg-text"></p></div>
+    <span class="dlg-next" aria-hidden="true">▼</span>
+  </div>
+
+  <div id="puzzle" hidden>
+    <div class="pz-window">
+      <h2 id="pz-title"></h2>
+      <p id="pz-help"></p>
+      <div id="pz-timer"><i></i></div>
+      <div id="pz-body"></div>
+      <p id="pz-msg" class="pz-msg"></p>
+      <button id="pz-cancel">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

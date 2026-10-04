@@ -1,0 +1,56 @@
+// Caixa de diálogo estilo Final Fantasy: retrato, nome e texto com efeito de máquina de escrever.
+import { $ } from './core.js';
+import { SPEAKERS } from './config.js';
+import { PORTRAIT_URL } from './sprites.js';
+import { sfx } from './audio.js';
+
+let current = null;
+const el = () => $('#dialog');
+
+export const dialogOpen = () => !!current;
+
+export function say(lines, onDone) {
+  current = { lines, index: 0, shown: 0, onDone };
+  el().hidden = false;
+  showLine();
+}
+
+function showLine() {
+  const [who, text] = current.lines[current.index];
+  const img = $('#dlg-portrait');
+  img.hidden = !PORTRAIT_URL[who];
+  if (PORTRAIT_URL[who]) img.src = PORTRAIT_URL[who];
+  $('#dlg-name').textContent = SPEAKERS[who] || '';
+  current.text = text; current.shown = 0;
+  $('#dlg-text').textContent = '';
+  el().classList.remove('is-done');
+}
+
+export function tickDialog() {
+  if (!current || current.shown >= current.text.length) return;
+  const before = Math.floor(current.shown);
+  current.shown = Math.min(current.text.length, current.shown + 1.25);
+  const now = Math.floor(current.shown);
+  if (now !== before) {
+    $('#dlg-text').textContent = current.text.slice(0, now);
+    if (now % 3 === 0) sfx('blip');
+  }
+  if (current.shown >= current.text.length) el().classList.add('is-done');
+}
+
+export function advanceDialog() {
+  if (!current) return;
+  if (current.shown < current.text.length) {
+    current.shown = current.text.length;
+    $('#dlg-text').textContent = current.text;
+    el().classList.add('is-done');
+    return;
+  }
+  if (++current.index < current.lines.length) { showLine(); return; }
+  const done = current.onDone;
+  current = null;
+  el().hidden = true;
+  done?.();
+}
+
+export function bindDialog() { el().addEventListener('pointerdown', e => { e.preventDefault(); advanceDialog(); }); }

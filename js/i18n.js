@@ -215,6 +215,7 @@ const UI = {
 
 // Narrative lines stay in Portuguese inside config.js. English is looked up from the original text.
 const LINES = {
+  'Porta laser no caminho? Chegue no terminal amarelo e aperte HACK.': 'Laser door ahead? Walk up to the yellow terminal and press HACK.',
   'Telhados do Cecapão': 'Cecapão Rooftops',
   'Subsolo 404: Servidor Submerso': 'Sublevel 404: Sunken Server',
   'Kernel Panic: o Núcleo': 'Kernel Panic: the Core',

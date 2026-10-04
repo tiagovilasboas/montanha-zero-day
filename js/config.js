@@ -73,12 +73,14 @@ export const STAGES = [
     intro: [
       ['byte', 'Telhados do Cecapão. O sinal da cápsula da Gle vem do fim destes prédios.'],
       ['byte', 'Lembrete: no ar, SEGURE o PULO para ligar o JET da mochila.'],
+      ['byte', 'Porta laser no caminho? Chegue no terminal amarelo e aperte HACK.'],
       ['hero', 'Cada drone derrubado é um passo mais perto de você, amor. Bora.'],
     ],
     infos: [
       'Segure TIRO para carregar o relógio. Solte para um disparo pesado que atravessa inimigos.',
-      'Perto de uma torreta vermelha, aperte HACK: ela passa a lutar do nosso lado.',
-      'Longe de terminais e torretas, HACK solta um pulso EMP que paralisa inimigos.',
+      // Uma placa pode ter mais de uma fala (lista): aqui a torreta e o EMP vêm juntos.
+      ['Perto de uma torreta vermelha, aperte HACK: ela passa a lutar do nosso lado.',
+        'Longe de terminais e torretas, HACK solta um pulso EMP que paralisa inimigos.'],
     ],
   },
   {

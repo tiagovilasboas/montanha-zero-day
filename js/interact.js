@@ -27,7 +27,7 @@ export function updateInteractables() {
   }
   for (const i of world.infos) {
     if (i.seen || !overlap(i, p)) continue;
-    i.seen = true; emit('say', [['byte', i.text]]);
+    i.seen = true; emit('say', [].concat(i.text).map(line => ['byte', line]));
   }
   for (const t of world.terminals) if (t.cool > 0) t.cool--;
   if (world.goal && overlap(world.goal, p)) emit('stage:clear');

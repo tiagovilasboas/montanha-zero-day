@@ -28,6 +28,7 @@ export const THEMES = [
 // Legenda dos blocos de fase:
 // # sólido  = plataforma  ^ laser  P início  1-3 terminal  a-c porta laser do terminal 1-3
 // A-C ponte do terminal 1-3  d drone  m malware  X torreta  h vida  e energia  k checkpoint  i dica  G portal
+// | feixe de pulso (liga e desliga; feixes vizinhos alternam)
 export const CHUNKS = {
   start: ['', '', '', '', '', '', '', '', '         ====', '  P         i', '####################', '####################'],
   flat: ['', '', '', '         d', '', '', '              ===', '     e', '    ===        m', '', '####################', '####################'],
@@ -38,6 +39,16 @@ export const CHUNKS = {
   stairs: ['', '', '', '', '             =====', '', '         ===', '                 d', '     ===', '  e', '####           #####', '####^^^^^^^^^^^#####'],
   check: ['', '', '', '', '', '      h', '     ===', '', '             d', '   k        i', '####################', '####################'],
   goal: ['                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '               G   #', '####################', '####################'],
+  // Blocos do Núcleo (fase 3): feixes de pulso, subida sobre lasers e um corredor de torretas.
+  pulse: ['      |       |', '      |       |', '      |       |', '      |       |', '      |   d   |', '      |       |',
+    '      |       |', '      |       |', '      |       |', '   i  |       |   e', '####################', '####################'],
+  climb: ['', '', '', '              h', '            ====', '', '       ===', '                 d', '   ===', '',
+    '###            #####', '###^^^^^^^^^^^^#####'],
+  gauntlet: ['', '', '', '', '          h', '         ===', '', '', '     X            X', ' m  ###   m      ###',
+    '####################', '####################'],
+  pulse2: ['     |     |     |', '     |     |     |', '     |     |     |', '     |     |     |', '     |     |     |',
+    '     |  d  |     |', '     |     |     |', '     |     |     |', '     |     |     |', '     |     |  m  | e',
+    '####################', '####################'],
   arena: ['                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '       ====        #', '                   #', '   ===             #', '  1                #', '####################', '####################'],
 };
 
@@ -86,7 +97,7 @@ export const STAGES = [
   },
   {
     name: 'Kernel Panic: o Núcleo', theme: 2, track: 2, hero: 'gle',
-    chunks: ['start', 'flat', 'door', 'stairs', 'turret', 'check', 'arena'],
+    chunks: ['start', 'flat', 'pulse', 'door', 'climb', 'check', 'gauntlet', 'pulse2', 'stairs', 'turret', 'check', 'arena'],
     intro: [
       ['gleyce', 'Subsolo limpo. E agora, Byte?'],
       ['byte', 'O sinal do Montanha some dentro do Núcleo, a casa do RANSOM-TITAN.'],
@@ -94,6 +105,8 @@ export const STAGES = [
     ],
     infos: [
       'Sinto a assinatura do RANSOM-TITAN. Guarde EP para os terminais.',
+      'Feixes de pulso! Eles piscam antes de ligar. Passe quando apagarem.',
+      'Checkpoint salvo. O sinal do Montanha ficou mais forte. Tá perto, Gle.',
       'Depois deste checkpoint vem o chefe. Respira fundo, Gle. O Montanha está esperando por você.',
     ],
   },

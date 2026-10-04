@@ -81,8 +81,8 @@ SRP, KISS, DRY and clean code: each module owns one thing, data lives in `js/con
 
 ## Credits
 
-Art generated with Artlist (Nano Banana 2 for images, Seedance 1.5 for animation clips) from original prompts and the author's reference photos. Music and sound effects are synthesized in the browser with WebAudio; there are no audio files.
+Art generated with Artlist (Nano Banana 2 for images, Seedance 1.5 and 2.0 for animation clips) from original prompts and the author's reference photos. Music and sound effects are synthesized in the browser with WebAudio; there are no audio files.
 
 ## License
 
-No license yet. All rights reserved by the author until one is added.
+Made by [Tiago Vilas Boas](https://github.com/tiagovilasboas). No license yet. All rights reserved by the author until one is added.

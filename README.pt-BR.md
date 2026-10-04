@@ -49,3 +49,7 @@ Qualquer hospedagem estática serve. No GitHub Pages, o plano gratuito exige rep
 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): módulos, loop, câmera, eventos e como adicionar conteúdo (em inglês).
 - [docs/ART_PIPELINE.md](docs/ART_PIPELINE.md): como a arte foi feita e como regenerar os assets (em inglês).
+
+## Autor
+
+Feito por [Tiago Vilas Boas](https://github.com/tiagovilasboas).

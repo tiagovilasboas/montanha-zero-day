@@ -1,7 +1,7 @@
 // Fluxo do jogo: máquina de estados (título → história → mapa → fase → resultado/fim) e o passo da simulação.
 import { STAGES, STORY, HEROES, T, W, H, ZOOM } from './config.js';
 import { on, emit, save, persist, resetSave, clamp } from './core.js';
-import { world, buildLevel, setArenaWall, makeBoss } from './world.js';
+import { world, buildLevel, setArenaWall, makeArenaBoss } from './world.js';
 import { input, pollInput, consumeMeta } from './input.js';
 import { playTrack, stopMusic, sfx, toggleMute } from './audio.js';
 import { say, dialogOpen, tickDialog, advanceDialog } from './dialog.js';
@@ -15,19 +15,19 @@ import { updateEnemies } from './enemies.js';
 import { updateBoss } from './boss.js';
 import { updateBullets, gainXp } from './combat.js';
 import { updateInteractables } from './interact.js';
-import { updateFx, startLove } from './fx.js';
+import { updateFx, startLove, burst } from './fx.js';
 import { startScene, endScene, updateScene } from './scene.js';
 
 export const game = { mode: 'title', menuFrame: 0, cardTimer: 0, cardDone: null, canInstall: false, blocked: false };   // blocked: celular em retrato (pede para girar)
 
 // ---- Navegação entre telas
 function goTitle() { game.mode = 'title'; setHudVisible(false); playTrack('title'); screens.showTitle(game.canInstall); }
-function goMap() { game.mode = 'map'; setHudVisible(false); playTrack('title'); screens.showMap(); }
+function goMap() { game.mode = 'map'; persist(); setHudVisible(false); playTrack('title'); screens.showMap(); }   // salva o XP ganho na fase
 
 function startStory() {
-  resetSave();
   game.mode = 'story'; screens.hideScreen();
-  talk(STORY.intro, () => { save.started = true; persist(); goMap(); });
+  // Só apaga o progresso ao fim da introdução: fechar o app no meio dela não perde o jogo salvo.
+  talk(STORY.intro, () => { resetSave(); save.started = true; persist(); goMap(); });
 }
 
 function talk(lines, done) { say(lines, () => { lockButtons(); done?.(); }); }
@@ -72,7 +72,8 @@ function finishStage() {
 }
 
 function gameOver() {
-  if (game.mode !== 'play') return;
+  // Durante a explosão do chefe a luta já foi ganha: não existe game over (e o retry recriaria o chefe).
+  if (game.mode !== 'play' || dialogOpen() || world.boss?.dead) return;
   game.mode = 'over'; stopMusic(); setHudVisible(false); persist();
   screens.showGameOver();
 }
@@ -85,13 +86,14 @@ function retryFromCheckpoint() {
   respawn();
   game.mode = 'play'; screens.hideScreen(); setHudVisible(true);
   playTrack(STAGES[world.level.index].track);
+  lockButtons();   // o toque em "Tentar de novo" não vira pulo/tiro
 }
 
 // ---- Arena do chefe
 function resetArena() {
   setArenaWall(false);
   world.enemies = world.enemies.filter(e => e.x < world.level.arenaX);
-  world.boss = makeBoss(world.level.arenaX + 14 * T, 56);
+  world.boss = makeArenaBoss(world.level.arenaX);
   world.terminals.forEach(t => { t.cool = 0; });
 }
 
@@ -99,10 +101,23 @@ function checkArena() {
   const L = world.level;
   if (L.arenaX < 0 || L.locked || world.player.x < L.arenaX + T * 3) return;
   setArenaWall(true); stopMusic();
-  talk(STORY.boss, () => { world.boss.active = true; playTrack('boss'); toast('DERROTE O RANSOM-TITAN'); });
+  const fight = () => { world.boss.active = true; playTrack('boss'); toast('DERROTE O RANSOM-TITAN'); };
+  // A fala do chefe só toca na primeira entrada; depois de morrer, a luta recomeça direto.
+  if (L.bossSeen) fight(); else { L.bossSeen = true; talk(STORY.boss, fight); }
+}
+
+// Chefe explodindo: limpa tiros e drones e protege o jogador, senão ele morreria e a revanche traria um chefe novo.
+function bossDying() {
+  world.bullets.forEach(b => { if (b.from === 'enemy') b.dead = true; });
+  world.enemies.forEach(e => {
+    if (e.dead || e.ally || e.x < world.level.arenaX) return;
+    e.dead = true; burst(e.x + e.w / 2, e.y + e.h / 2, '#9b5cff', 12);
+  });
+  world.player.invuln = 999;
 }
 
 function victory() {
+  world.player.invuln = 0;
   gainXp(50);
   talk(STORY.ending, () => {
     const i = world.level.index;
@@ -165,6 +180,7 @@ export function bindGame() {
   on('player:dead', gameOver);
   on('stage:clear', clearStage);
   on('boss:firewall', () => talk(STORY.firewall));
+  on('boss:dying', bossDying);
   on('boss:defeated', victory);
 
   on('ui:new', startStory);

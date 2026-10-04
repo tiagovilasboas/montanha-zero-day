@@ -501,7 +501,8 @@ function drawHero(ctx, p) {
 }
 
 function drawPlayer(ctx, p) {
-  if (!p || (p.invuln > 0 && Math.floor(world.frame / 2) % 2)) return;
+  // Pisca durante a invulnerabilidade, menos na explosão do chefe (ali ela é só proteção, não dano).
+  if (!p || (p.invuln > 0 && !world.boss?.dead && Math.floor(world.frame / 2) % 2)) return;
   const x = sx(p.x - 3), y = Math.round(p.y - 2);
   if (drawHero(ctx, p)) { drawCharge(ctx, p); return; }
   ctx.drawImage(SPR.hero[heroKey(p)][p.face > 0 ? 0 : 1], x, y);

@@ -116,14 +116,16 @@ export function updatePlayer() {
 export function hurtPlayer(dmg, dir = -world.player.face) {
   const p = world.player;
   if (p.invuln || p.hp <= 0) return;
-  p.hp -= dmg; p.invuln = 70; p.vx = dir * 2.2; p.vy = -2.6;
+  // No ar o empurrão é menor: um golpe não deve jogar o herói direto num poço de laser.
+  p.hp -= dmg; p.invuln = 70; p.vx = dir * (p.onGround ? 2.2 : 1.2); p.vy = p.onGround ? -2.6 : -1.6;
   world.cam.shake = 6; sfx('hurt');
   if (p.hp <= 0) emit('player:dead');
 }
 
 function fallHazard() {
   const p = world.player;
-  p.hp -= 4; sfx('hurt'); world.cam.shake = 8;
+  // Cair logo depois de levar dano (ainda piscando) custa menos: o primeiro golpe já foi cobrado.
+  p.hp -= p.invuln ? 2 : 4; sfx('hurt'); world.cam.shake = 8;
   burst(p.x + 5, Math.min(p.y, H - 8), '#ff3b5c', 14);
   if (p.hp <= 0) { emit('player:dead'); return; }
   respawn();

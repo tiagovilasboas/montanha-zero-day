@@ -28,6 +28,8 @@ export function makeBoss(x, y) {
   return { x, y, w: 56, h: 50, baseY: y, hp: 60, max: 60, phase: 1, shield: false, shieldTime: 0,
     stun: 0, flash: 0, cd: 90, spawnCd: 240, t: 0, beam: null, active: false, dead: false, deathT: 0, gone: false };
 }
+// Posição única do chefe na arena: usada ao montar a fase e ao recomeçar a luta.
+export const makeArenaBoss = arenaX => makeBoss(arenaX + 15 * T - 8, 56);
 
 function normalizeRow(row, width) {
   const pad = row.endsWith('#') ? '#' : ' ';
@@ -58,7 +60,7 @@ export function buildLevel(stageIndex) {
   columns.forEach((col, x) => col.forEach((c, r) => { grid[r * w + x] = c.t; grp[r * w + x] = c.g; }));
 
   Object.assign(world, {
-    level: { index: stageIndex, stage, theme: THEMES[stage.theme], w, grid, grp, groups, arenaX, locked: false },
+    level: { index: stageIndex, stage, theme: THEMES[stage.theme], w, grid, grp, groups, arenaX, locked: false, bossSeen: false },
     enemies: [], bullets: [], pickups: [], fx: [], rings: [], terminals: [], checkpoints: [], infos: [],
     goal: null, boss: null, love: 0, scene: null, time: 0, kills: 0, xpGained: 0, hints: new Set(),
   });
@@ -79,7 +81,7 @@ export function buildLevel(stageIndex) {
       case 'G': world.goal = { x: s.x, y: s.y - 16, w: 16, h: 32 }; break;
     }
   }
-  if (arenaX >= 0) world.boss = makeBoss(arenaX + 15 * T - 8, 56);
+  if (arenaX >= 0) world.boss = makeArenaBoss(arenaX);
   return start;
 }
 

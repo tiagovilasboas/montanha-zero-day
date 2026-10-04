@@ -4,25 +4,37 @@ import { save, persist } from './core.js';
 let ac = null, master, musicBus, sfxBus, noiseBuf;
 const music = { track: null, step: 0, next: 0 };
 
-// Trilhas originais em clima de RPG de fantasia: melodia de flauta, acordes longos de cordas, harpa em arpejos amplos.
-// Cada símbolo da melodia é uma colcheia: nota (C5, F#4, Bb5), "-" segura a anterior, "." é pausa.
-// "chords" tem um acorde por compasso (8 colcheias); dele saem o baixo e a harpa.
+// Trilhas originais, uma por fase, cada uma inspirada num estilo de jogo clássico (nenhuma melodia é copiada).
+// melody: uma colcheia por símbolo: nota (C5, F#4, Bb5), "-" segura a anterior, "." é pausa. 8 compassos de 8.
+// chords: um acorde por compasso; dele saem baixo, harpa e cordas.
+// voice: instrumento da melodia (flute, brass, bell). bass: pedal | walk | drive | bounce.
+// arp: wide | sparse | off. drums: soft | march | drive | battle | none.
 const TRACKS = {
-  title: { bpm: 84, drums: false, chords: 'D G D A Bm G A D', lead: `
-    A4 - - - D5 - E5 -   F#5 - - - G5 - F#5 E5   D5 - - - A4 - - -   . . E5 F#5 E5 - C#5 -
-    D5 - - - F#5 - B5 -  A5 - G5 - F#5 - E5 -    F#5 - E5 - C#5 - A4 - D5 - - - - - . .` },
-  0: { bpm: 120, drums: true, chords: 'C Bb F C C Bb F G', lead: `
-    C5 - - G4 C5 . D5 E5   F5 - - D5 Bb4 - C5 D5   C5 - A4 - F4 - A4 C5   G4 - - - . . G4 A4
-    C5 - - G4 C5 . E5 G5   F5 - D5 - Bb4 - D5 F5   A5 - G5 F5 E5 - C5 -   D5 - - - G4 . B4 D5` },
-  1: { bpm: 96, drums: false, chords: 'Dm C Dm C Bb C Dm A', lead: `
-    D5 - F5 - A5 - G5 F5   E5 - - - C5 - . .   D5 - F5 - A5 - B5 -   C6 - - - G5 - . .
-    F5 - - D5 F5 - Bb5 -   A5 - G5 - E5 - C5 -   D5 - E5 F5 E5 - D5 -   C#5 - - - E5 - A4 -` },
-  2: { bpm: 138, drums: true, drive: true, chords: 'Am F G E Am F Dm E', lead: `
-    A4 . A4 C5 E5 - A5 -   G5 - F5 - E5 - C5 -   D5 . D5 G5 B5 - D6 -   B5 - G#5 - E5 - . .
-    A5 . A5 G5 A5 - E5 -   F5 - E5 - C5 - A4 -   D5 - F5 - A5 - D6 -   C6 - B5 - G#5 - E5 -` },
-  boss: { bpm: 156, drums: true, drive: true, chords: 'Cm Ab Bb G Cm Ab Fm G', lead: `
-    C5 C5 . Eb5 . G5 F#5 G5   Ab5 - G5 - Eb5 - C5 -   D5 D5 . F5 . Bb5 A5 Bb5   B5 - - - G5 - D5 -
-    C6 - B5 - C6 - G5 -   Ab5 - G5 F5 Eb5 - C5 -   F5 - Ab5 - C6 - F5 -   G5 - - - B4 - D5 F5` },
+  // Título: prelúdio de cristal, no espírito de RPGs de fantasia (harpa rolando, flauta, cordas).
+  title: { bpm: 76, voice: 'flute', bass: 'pedal', arp: 'wide', drums: 'none', pad: true,
+    chords: 'C Am F G C Am Dm G', melody: `
+    E5 - - D5 E5 - G5 -   A5 - - G5 E5 - C5 -   F5 - - E5 F5 - A5 -   G5 - - - D5 - B4 -
+    E5 - - D5 E5 - G5 -   C6 - - B5 A5 - E5 -   D5 - F5 - A5 - G5 F5   E5 - - - D5 - - -` },
+  // Fase 1, Telhados: marcha de aventura de campo aberto (metais, caixa de marcha, fanfarra na abertura).
+  0: { bpm: 132, voice: 'brass', bass: 'walk', arp: 'sparse', drums: 'march', pad: true,
+    chords: 'C Bb F C C Bb F G', melody: `
+    G4 . G4 G4 C5 - E5 -   D5 . D5 D5 F5 - D5 -   C5 - A4 - F4 . A4 C5   E5 - - . G4 - C5 E5
+    G5 - E5 - C5 . E5 G5   F5 - D5 - Bb4 . D5 F5   A5 - G5 F5 E5 - C5 -   D5 - - - G4 B4 D5 G5` },
+  // Fase 2, Data Center: caverna de cristal, mistério (sinos, acordes longos, pouca percussão).
+  1: { bpm: 84, voice: 'bell', bass: 'pedal', arp: 'sparse', drums: 'soft', pad: true,
+    chords: 'Am F C G Am F Dm E', melody: `
+    E5 - - - A5 - - -   C6 - - B5 A5 - - -   G5 - - - E5 - G5 -   D5 - - - B4 - D5 -
+    E5 - - . A5 - C6 -   F5 - A5 - C6 - A5 -   D5 - F5 - A5 - - -   G#5 - - - E5 - B4 -` },
+  // Fase 3, Núcleo: tensão sombria e ritmo seco, num clima de fortaleza final (metais e baixo em colcheias).
+  2: { bpm: 146, voice: 'brass', bass: 'drive', arp: 'off', drums: 'drive', pad: true,
+    chords: 'Dm Bb C A Dm Bb Gm A', melody: `
+    D5 D5 F5 D5 A5 - G5 F5   F5 F5 D5 F5 Bb5 - A5 G5   E5 E5 G5 E5 C6 - B5 G5   C#5 C#5 E5 C#5 A5 - G5 E5
+    D5 F5 A5 D6 C6 - A5 F5   D5 F5 Bb5 D6 C6 - Bb5 F5   G5 Bb5 D6 Bb5 A5 - G5 D5   E5 - G5 - C#6 - E6 -` },
+  // Chefe: batalha decisiva (baixo correndo em oitavas, metais, cordas, tons e caixa).
+  boss: { bpm: 158, voice: 'brass', bass: 'bounce', arp: 'off', drums: 'battle', pad: true,
+    chords: 'Em C Am B Em C D B', melody: `
+    E5 G5 B5 E6 D6 - B5 G5   C6 E5 G5 C6 B5 - G5 E5   A5 C6 E6 C6 A5 - E5 C5   B5 D#6 F#6 D#6 B5 - F#5 D#5
+    E5 G5 B5 E6 G6 - E6 B5   C6 E6 G6 E6 C6 - G5 E5   D6 F#6 A6 F#6 D6 - A5 F#5   B5 - D#6 - F#6 - B6 -` },
 };
 
 const PITCH = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -47,7 +59,7 @@ function parseChord(name) {
   return { root: pitchClass(letter, acc), tones: [0, minor ? 3 : 4, 7, 12] };
 }
 
-for (const t of Object.values(TRACKS)) { t.lead = parseLead(t.lead); t.chords = t.chords.split(' ').map(parseChord); }
+for (const t of Object.values(TRACKS)) { t.notes = parseLead(t.melody); t.chords = t.chords.split(' ').map(parseChord); }
 
 const midi = m => 440 * Math.pow(2, (m - 69) / 12);
 
@@ -122,6 +134,8 @@ function addVibrato(osc, t) {
 // oscs: [onda, múltiplo da frequência, desafinação em cents, volume]
 const VOICES = {
   flute: { oscs: [['triangle', 1, 0, 0.7], ['sine', 2, 0, 0.16]], cutoff: 3000, attack: 0.05, release: 0.18, sustain: 0.85, vibrato: true },
+  brass: { oscs: [['sawtooth', 1, -6, 0.5], ['sawtooth', 1, 6, 0.5]], cutoff: 3200, attack: 0.04, release: 0.14, sustain: 0.8 },
+  bell: { oscs: [['sine', 1, 0, 0.7], ['sine', 2.01, 0, 0.3], ['sine', 2.76, 0, 0.14]], cutoff: 6500, attack: 0.003, release: 1.5, pluck: true },
   strings: { oscs: [['sawtooth', 1, -9, 0.5], ['sawtooth', 1, 9, 0.5]], cutoff: 900, attack: 0.45, release: 0.7, sustain: 0.9 },
   harp: { oscs: [['sine', 1, 0, 0.8], ['triangle', 2, 0, 0.18]], cutoff: 4200, attack: 0.004, release: 1.1, pluck: true },
   bass: { oscs: [['sine', 1, 0, 0.8], ['triangle', 1, 0, 0.35]], cutoff: 520, attack: 0.02, release: 0.25, sustain: 0.8 },
@@ -173,38 +187,62 @@ function harmonyFor(m, chord) {
   return m - 5;
 }
 
-const BASS_WALK = [0, 7, 12, 7];                     // fundamental, quinta, oitava, quinta, uma por tempo
-const BASS_DRIVE = [0, null, 0, 12, 7, null, 12, 7];  // faixas de batalha: movimento em colcheias
+// Padrões de baixo por colcheia do compasso (semitons acima da fundamental; null = pausa).
+const BASS = {
+  walk: [0, null, 7, null, 12, null, 7, null],
+  drive: [0, null, 0, 12, 7, null, 12, 7],
+  bounce: [0, 12, 0, 12, 0, 12, 0, 12],
+  pedal: [0, null, null, null, 7, null, null, null],
+};
+const LEAD_VOLUME = { flute: 0.1, brass: 0.075, bell: 0.09 };
+
+const kick = (delay, vol = 0.28) => tone(110, 0.14, 'sine', vol, delay, 45, musicBus);
+const snare = (delay, vol = 0.08) => noise(0.09, vol, delay, musicBus);
+const hat = (delay, vol = 0.03) => noise(0.03, vol, delay, musicBus);
+const tom = (delay, f = 150) => tone(f, 0.14, 'sine', 0.2, delay, f * 0.6, musicBus);
+
+// Percussão de cada estilo. bar = índice do compasso (usado nas viradas de bateria).
+const DRUMS = {
+  none: () => {},
+  soft: (pos, d) => { if (pos === 0) tone(105, 0.3, 'sine', 0.18, d, 52, musicBus); },
+  march: (pos, d) => { if (pos === 0 || pos === 4) kick(d); if (pos === 2 || pos === 6) snare(d, 0.09); if (pos === 7) snare(d, 0.035); },
+  drive: (pos, d) => { if (pos === 0 || pos === 3 || pos === 4) kick(d); if (pos === 2 || pos === 6) snare(d, 0.09); if (pos % 2) hat(d); },
+  battle: (pos, d, bar) => {
+    if ([0, 3, 4, 7].includes(pos)) kick(d, 0.3);
+    if (pos === 2 || pos === 6) snare(d, 0.1);
+    hat(d, 0.028);
+    if (bar % 4 === 3 && pos >= 5) tom(d, pos === 5 ? 170 : pos === 6 ? 140 : 110);   // virada no fim da frase
+  },
+};
 
 // Uma colcheia da trilha. Pequenas variações de tempo e volume tiram o ar de máquina.
 function playStep(track, i, step, delay) {
-  const pos = i % 8, chord = track.chords[Math.floor(i / 8) % track.chords.length];
-  const lead = track.lead[i % track.lead.length], beat = pos % 2 === 0 ? 1 : 0.85;
+  const pos = i % 8, bar = Math.floor(i / 8), chord = track.chords[bar % track.chords.length];
+  const lead = track.notes[i % track.notes.length], beat = pos % 2 === 0 ? 1 : 0.85;
   const [t3, t5] = [chord.tones[1], chord.tones[2]];
 
   if (lead) {
-    const d = delay + rand(0.012), len = lead.len * step;
-    voice(midi(lead.m), len, 'flute', 0.1 * (0.9 + Math.random() * 0.2), d);
-    voice(midi(harmonyFor(lead.m, chord)), len, 'flute', 0.04, d + 0.01);
+    const d = delay + rand(0.012), len = lead.len * step, vol = LEAD_VOLUME[track.voice];
+    voice(midi(lead.m), len, track.voice, vol * (0.9 + Math.random() * 0.2), d);
+    if (track.voice !== 'bell') voice(midi(harmonyFor(lead.m, chord)), len, track.voice, vol * 0.4, d + 0.01);
   }
-  if (pos === 0) [0, t3, t5].forEach(t => voice(midi(48 + chord.root + t), step * 8, 'strings', 0.028, delay));
+  if (track.pad && pos === 0) [0, t3, t5].forEach(t => voice(midi(48 + chord.root + t), step * 8, 'strings', 0.028, delay));
 
-  const arp = [0, t3, t5, 12, 12 + t3, 12 + t5];
-  for (let h = 0; h < 2; h++) {
-    const note16 = arp[ARP[(pos * 2 + h) % 16]];
-    voice(midi(48 + chord.root + note16), step * 3, 'harp', 0.05 * beat * (h ? 0.8 : 1) * (0.85 + Math.random() * 0.3), delay + h * step / 2 + rand(0.008));
-  }
-
-  const root = 36 + chord.root + (chord.root < 4 ? 12 : 0);
-  if (track.drive) {
-    if (BASS_DRIVE[pos] !== null) voice(midi(root + BASS_DRIVE[pos]), step * 0.9, 'bass', 0.2, delay);
-  } else if (pos % 2 === 0) {
-    voice(midi(root + BASS_WALK[pos / 2]), step * 1.8, 'bass', 0.2, delay);
+  if (track.arp !== 'off') {
+    const arp = [0, t3, t5, 12, 12 + t3, 12 + t5];
+    for (let h = 0; h < 2; h++) {
+      if (track.arp === 'sparse' && (h === 1 || pos % 2)) continue;
+      const note16 = arp[ARP[(pos * 2 + h) % 16]];
+      voice(midi(48 + chord.root + note16), step * 3, 'harp', 0.05 * beat * (h ? 0.8 : 1) * (0.85 + Math.random() * 0.3), delay + h * step / 2 + rand(0.008));
+    }
   }
 
-  // Percussão de orquestra: tímpano grave nos tempos fortes; nas batalhas, caixa suave no contratempo.
-  if (track.drums && pos % 4 === 0) tone(105, 0.28, 'sine', pos === 0 ? 0.3 : 0.2, delay, 52, musicBus);
-  if (track.drive && (pos === 2 || pos === 6)) noise(0.1, 0.05, delay, musicBus);
+  const offset = BASS[track.bass][pos];
+  if (offset !== null) {
+    const root = 36 + chord.root + (chord.root < 4 ? 12 : 0), hold = track.bass === 'pedal' ? step * 4 : track.bass === 'walk' ? step * 1.8 : step * 0.9;
+    voice(midi(root + offset), hold, 'bass', 0.2, delay);
+  }
+  DRUMS[track.drums](pos, delay, bar);
 }
 
 export function tickMusic() {

@@ -2,4 +2,8 @@
 art/ref/
 # Originais do Artlist (pesados; tools/fetch_art.py baixa de novo)
 art/raw/
+# Links assinados do Artlist (dão acesso às artes originais): ficam só na sua máquina
+tools/fetch_art.py
+# Script auxiliar de commits
+commit_history.sh
 __pycache__/

@@ -742,3 +742,10 @@ dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; white-spa
 .credit { margin: 0; font-size: 13px; letter-spacing: 0.04em; color: var(--dim); opacity: 0.7; }
 .credit a { color: inherit; text-decoration: none; border-bottom: 1px dotted currentColor; }
 .credit a:hover, .credit a:focus-visible { opacity: 1; color: var(--cyan, #3df0ff); }
+
+/* Créditos no final do jogo */
+.credits dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 15px; }
+.credits dt { color: var(--dim); white-space: nowrap; }
+.credits dd { margin: 0; }
+.credits a { color: var(--cyan); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.credits .thanks { margin: 10px 0 0; text-align: center; color: var(--gold, #ffd23d); }

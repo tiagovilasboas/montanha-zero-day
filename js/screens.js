@@ -111,8 +111,11 @@ export function showEnding() {
   show(`${EMBLEM}<h2 class="logo">${t('endingHead')}</h2>
     <p class="tagline">${t('endingNote')}</p>
     <section class="win result"><h3>${t('finalSheet')}</h3>${statList([[t('level'), save.lv], [t('totalXp'), save.xp]])}</section>
-    <div class="menu">${button('map', t('missionMap'))}${button('title', t('titleScreen'), 'class="btn-ghost"')}</div>
-    ${credit()}`);
+    <section class="win result credits"><h3>${t('creditsHead')}</h3>
+      <dl>${['Game', 'Art', 'Music', 'Built', 'Support'].map(k => `<dt>${t(`credits${k}`)}</dt><dd>${t(`credits${k}Text`)}</dd>`).join('')}</dl>
+      <p class="thanks">${t('thanks')}</p>
+    </section>
+    <div class="menu">${button('map', t('missionMap'))}${button('title', t('titleScreen'), 'class="btn-ghost"')}</div>`);
 }
 
 export function refreshSoundLabel() {

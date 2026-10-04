@@ -32,6 +32,7 @@ What it does:
 - **Chroma key** with a soft edge and despill, so no colored halo is left around hair or edges.
 - **Trim and resize** at `SCALE = 6` real pixels per logical pixel (characters are exported at 36 × 6 = 216 px tall).
 - **Animation sheets** from the clips: frames are extracted at 24 fps, cleaned of the colored glow of the jet and shots, aligned by torso and feet so the character does not drift, and packed into one horizontal sheet per pose with a foot anchor. A short loop is chosen per pose (run cycle, idle ping-pong, jump tail, first part of the shot).
+- **Montanha's run and jump (revised):** the first run clip led with the same leg on every step, and the jump clip faced left. The run was regenerated with Seedance 2.0 from a running pose (Nano Banana 2) used as **both the start and the end frame**, so the clip loops; a 19-frame, two-step cycle (frames 30–48 at 24 fps) was picked and packed into 10 frames. The jump sheet keeps only the four side frames, mirrored to face right; the game picks frame 0 in the air and loops 1–3 while hovering.
 - **Pink BYTE:** Gle's robot is a recolor of BYTE (cyan accents to pink, light tint on the shell).
 - **Metadata:** `assets/anims.json`.
 

@@ -1,18 +1,19 @@
 ---
 title: "I Built a Full PWA Game in One Day with Claude Opus 5.5 and Claude Code (Here Is the Real Token Cost & Harness Setup)"
-published: false
-description: "Montanha: Zero Day, a Mega Man X–style PWA built with Claude Opus 5.5 and Claude Code on top of a central engineering harness: benchmarks vs real-world delivery, Artlist AI assets, and headless Playwright E2E tests."
+published: true
+dev_article_id: 4796702
+description: "Montanha: Zero Day, a Mega Man X-style PWA built with Claude Opus 5.5 and Claude Code on a harness: vendor benchmarks, Artlist assets, a session playtest, and the gap that playtest left behind."
 tags: ai, gamedev, javascript, claude
 cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/devto-cover.png
 ---
 
-On a Sunday, I turned a slightly silly idea into an actual game: **Montanha: Zero Day**, a cyberpunk platformer in the style of Mega Man X that runs in the browser and on phones, offline, as a PWA. The hero is me (Montanha), the heroine is Gle, and the villain is a giant piece of ransomware called RANSOM-TITAN.
+On Sunday I sat down to turn a three-sentence idea into a browser game, **Montanha: Zero Day**. A prompt that short is a photo of a cabinet: you can see the shape, and you still have no jig for the cuts.
 
-I built it together with **Claude Opus 5.5**, orchestrated via **Claude Code** and Cowork (the agentic execution mode of the Claude ecosystem). By the end of the day, the usage panel showed I had spent **about half of my daily token limit**.
+Without the jig, the model invents the workshop. A framework, a bundler, a new folder layout, and the token limit goes into the second and third attempt. I have watched that happen. The hard part is not the idea. It is holding the cut after the first structure comes out wrong.
 
-This post covers what the model promises on benchmarks, how it operated seamlessly across local CLI and cloud runtime, and what it actually delivered on a real project when guided by a **central engineering harness**.
+What held it was not a longer prompt. A harness already sits next to the repo: guides before the model writes, sensors after it says the work is done. Opus 5.5, through Claude Code, used about half of my daily allotment on the usage panel and shipped the game. The hero is me (Montanha), the heroine is Gle, and the villain is a ransomware called RANSOM-TITAN. It runs in the browser and on phones, offline, as a PWA.
 
-👉 **Play it live:** [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) (the in-game dialogue is in Brazilian Portuguese)  
+👉 **Play it live:** [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) (Portuguese only when the browser language is Portuguese and the timezone is Brazil; English otherwise)  
 👉 **Source Code:** [github.com/tiagovilasboas/montanha-zero-day](https://github.com/tiagovilasboas/montanha-zero-day)
 
 ![Montanha: Zero Day Title Screen](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/title-screen.webp)
@@ -40,7 +41,7 @@ This harness provides continuous feedforward rules (*Guides*) and automated feed
 2. **Behavioral Invariants:** Zero-assumptions development. The agent must verify facts through execution, inspect DOM/canvas states directly, and confirm before claiming completion.
 3. **Domain-Driven Commits:** Structured git workflows with atomic commits scoped strictly by semantic domains (`feat(hero)`, `fix(gameplay)`, `style(mobile)`).
 
-This is where Claude Code and Opus 5.5 shine compared to everything before them: **they respect the harness naturally**. Claude Code seamlessly bridged local terminal execution (Python scripts, ffmpeg pipelines, git staging) with cloud reasoning, adhering strictly to the constraints without trying to invent unnecessary abstractions or libraries.
+This is where Claude Code and Opus 5.5 were useful. Claude Code ran the local tools (Python, ffmpeg, git) and the cloud reasoning in the same session, and it stayed inside those constraints instead of adding a library the game did not need.
 
 ---
 
@@ -82,7 +83,7 @@ Opus 5.5 holds first place (the median for comparable models sits at 26). Howeve
 | Input (per 1M tokens) | $4 | $5 | $10 |
 | Output (per 1M tokens) | $20 | $25 | $50 |
 
-Anthropic claims real-world workflows run **~40% cheaper than on Opus 5** because the model requires fewer iterations to resolve the exact same goal. My Sunday confirmed this: a whole production day of code, art processing, game design, and E2E testing consumed barely half of my daily allotment.
+Anthropic claims real-world workflows run **~40% cheaper than on Opus 5** because the model needs fewer iterations for the same goal. My Sunday does not confirm that percentage. The usage panel showed about half of the daily allotment for code, art, design, and the playtest runs. The panel does not split input, output, and cache, so "half" is a reading, not a token bill.
 
 ---
 
@@ -93,6 +94,13 @@ Anthropic claims real-world workflows run **~40% cheaper than on Opus 5** becaus
 - **Ending:** She shatters the boss core, retrieves his decryption key, and opens Montanha's prison cell.
 
 Under the hood: **Vanilla JavaScript ES modules** (~2,700 lines across 24 single-purpose files), HTML5 Canvas, a deterministic 60 Hz simulation loop, service workers for offline PWA installation, a 100% synthesized WebAudio procedural soundtrack (no bulky MP3/OGG assets), and HD-2D art pipeline. Zero frameworks, zero bundlers.
+
+![The stage 1 ending: hearts, the RANSOM-TITAN claw drops, grabs Montanha and lifts him away from Gle's capsule](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
+*The stage 1 ending, frame by frame: hearts, the claw drops, grabs Montanha and lifts him away.*
+
+![Gle gliding on her golden light boots through the flooded server room of stage 2](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-boots.jpg)
+
+![Gle facing the RANSOM-TITAN boss, a giant padlock with a red eye, in the Core arena](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
 
 ---
 
@@ -121,13 +129,13 @@ Total cost: **590 Artlist credits**. Result: fully custom, beautifully animated 
 
 ## Autonomous Playwright E2E Testing & Navigation
 
-One of the standout moments of the day was how Opus 5.5 and Claude Code took charge of testing and QA.
+Session scene. Not player telemetry. The bot ran in that chat. The scripts are not in the repository, so a clone of the game does not include this sensor.
 
-Rather than assuming code worked because it compiled, the agent actively spun up **Playwright in headless Chromium** to navigate and validate the gameplay end-to-end:
-- **Autonomous Playtesting Bot:** Claude didn't just check if the page loaded. It created a scripted bot powered by the game's actual physics engine (`js/physics.js`). The bot ran through inputs, jumped across gaps, and stress-tested collision boxes.
-- **Finding Pixel-Level Bottlenecks:** During the stage 3 expansion (pulse beams and laser gauntlets), the automated bot discovered that a platform jump was precisely **1 pixel out of reach** if taken at the absolute platform edge. The agent immediately adjusted the level chunk coordinate in `config.js` and re-tested.
-- **Exploiting Game Mechanics:** The Playwright bot caught an invulnerability exploit: players could sacrifice 3 HP and simply walk through active hazard beams while blinking. Claude fixed the beam collision logic to act as a solid wall during hero invulnerability.
-- **Full Visual Walkthrough:** Across 3 stages, the E2E suite traversed title screens, cutscenes, boss phases, and the ending sequence, verifying that dialogue portraits and audio state machines transitioned flawlessly.
+Rather than treating a clean compile as proof, the agent started **Playwright in headless Chromium** and played:
+- **Playtesting bot:** It did more than load the page. It drove a scripted bot through the game's physics (`js/physics.js`), jumped gaps, and pressed on collision boxes.
+- **One pixel short:** During the stage 3 expansion (pulse beams), the bot found a platform jump **1 pixel out of reach** from the absolute edge. The agent moved the chunk in `config.js` and ran the jump again.
+- **Walk through the beam:** The bot caught an invulnerability hole: spend 3 HP and walk through a live hazard while blinking. The beam collision was changed so it stays solid during invulnerability.
+- **One walk of the three stages:** Title, cutscenes, boss, and ending, checking that portraits and the audio state changed with the scene. That walk is one session. It is not a suite you can re-run from CI.
 
 ![Montanha hovering with his jetpack in Neo-Sampa](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/montanha-jetpack.webp)
 
@@ -140,12 +148,12 @@ Rather than assuming code worked because it compiled, the agent actively spun up
 ### 1. Parallel Subagent Auditing
 When tasked with reviewing game feel and narrative consistency, Claude Code branched out **two subagents in parallel**: one dedicated to story plot holes, and another hunting edge cases in the game engine. 
 
-They surfaced 16 prioritized issues and verified them by running the build:
+Session scene. Not a production bug count. They surfaced 16 prioritized issues and checked them by running the build:
 - *Boss Resurrection Bug:* Dying while the boss explosion triggered would resurrect the boss at full health upon pressing "Retry".
 - *Level 1 Fall Glitch:* Knockback from low-tier enemies knocked the hero backwards directly into unrecoverable pits.
 
 ### 2. Diagnosing "Character Feel"
-I gave feedback that *"Gle felt much more fluid to play than Montanha."* Rather than blindly tweaking speed variables, the model verified that the physics parameters were mathematically identical. 
+Session scene. I gave feedback that *"Gle felt much more fluid to play than Montanha."* Rather than blindly tweaking speed variables, the model verified that the physics parameters were mathematically identical. 
 
 It then inspected the animation sprites:
 - Montanha was literally turning backwards during jump ascents because the video generation had mirrored his horizontal orientation.
@@ -153,28 +161,20 @@ It then inspected the animation sprites:
 
 It mirrored the sprite sheet, hooked up an ascending vs hovering jetpack frame selector, and introduced distinct neon trails (cyan for Montanha, radiant gold for Gle).
 
+![Montanha's jump frames before (facing backwards, two frames facing the camera) and after (mirrored side frames)](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/jump-before-after.png)
+
+![Montanha's run cycle before (same leg forward every step) and after (regenerated two-step loop)](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/run-before-after.png)
+
 ### 3. A 12-Chunk Stage Expansion
-When asked to expand Stage 3 before the boss, it invented **pulse beams**—rhythmic laser barriers that pulse in counterpoint with adjacent beams, blinking prior to firing. The stage grew from 7 to 12 sections, complete with an automated bot proving a clean, no-damage clear in 39 seconds flat.
+When asked to expand Stage 3 before the boss, it added **pulse beams**: laser barriers that blink before they fire, offset from the beam next to them. The stage grew from 7 to 12 sections. Session scene. One bot run reported a clean, no-damage clear in 39 seconds. That number is not a sample of players.
 
 ---
 
-## The Takeaway: How This Changes the Future of Engineering
+## The Takeaway
 
-What impressed me most was not the raw code output. It was the **holistic engineering steering**.
+Sunday went from a three-sentence prompt to a playable PWA: code, generated art, procedural audio, and a service worker. The usage panel read about half of the daily allotment. Artlist cost **590 credits**. One bot run reported a 39-second clear.
 
-Claude Code running Opus 5.5 handled:
-- Architecture adherence via central harness steerings.
-- Dynamic asset extraction and CLI image processing.
-- Playwright E2E automation and game-loop stress testing.
-- Semantic git hygiene (18 cleanly decoupled domain commits).
-
-If Claude Code and Opus 5.5 can take a rough 3-sentence idea and deliver a complete, highly playable, polished 2D platformer with custom graphics, audio, PWA offline caching, and zero bugs in **less than a day**...
-
-**How long until this exact same setup rebuilds your entire legacy system, internal tool, or production SaaS from top to bottom?**
-
-Make no mistake: this is extraordinarily good. With Opus 5.5, **Anthropic has pushed the frontier model race to a completely different level**. We are no longer talking about chat completions, toy snippets, or autocomplete suggestions. We are witnessing end-to-end autonomous engineering—reasoning that orchestrates local tools, cloud runtimes, creative generation suites, and automated verification loops.
-
-When you connect a model of this caliber to a solid, battle-tested engineering harness, software development stops being about typing code. It becomes pure intent, architectural guardrails, and rapid autonomous execution.
+That bot is not in the repo. Clone the [game](https://github.com/tiagovilasboas/montanha-zero-day) and you get the PWA, not the Playwright sensor. I will not call the build bug-free. The same day found a boss that came back at full health, a knockback into a pit, and a beam you could walk through while invulnerable. What you play is the build after those fixes. Nobody has measured how real players die.
 
 ---
 
@@ -191,7 +191,9 @@ When you connect a model of this caliber to a solid, battle-tested engineering h
 The emerging stack is unmistakable:  
 `Opus 5.5 + Claude Code` → `TypeScript / Vanilla ES Modules` → `Canvas / Three.js / WebGL` → `Procedural / Generative Assets` → `Instant Browser Delivery`.
 
-When software architecture is enforced by a proper harness, developers can bypass the bloated setup of traditional engines and build rich, responsive, interactive worlds directly for the open web.
+A harness can keep the architecture from drifting. It does not, by itself, put a test in the repository or a player on the other side of the screen.
+
+When an agent finds a bug by playing, do you commit the test, or does the proof stay in the chat?
 
 ---
 

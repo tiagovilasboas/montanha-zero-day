@@ -5,6 +5,7 @@ import { world, makeEnemy } from './world.js';
 import { overlap, center } from './physics.js';
 import { sfx } from './audio.js';
 import { burst } from './fx.js';
+import { t } from './i18n.js';
 
 const BOOM_COLORS = ['#ff3b5c', '#ffd23d', '#ffffff'];
 
@@ -49,7 +50,7 @@ export function updateBoss() {
   if (b.dead) return dying(b);
   b.t++;
   if (b.flash) b.flash--;
-  if (b.shieldTime > 0 && --b.shieldTime === 0) { b.shield = true; emit('toast', 'O FIREWALL VOLTOU!'); }
+  if (b.shieldTime > 0 && --b.shieldTime === 0) { b.shield = true; emit('toast', t('firewallBack')); }
   if (b.stun > 0) { b.stun--; return; }
 
   const target = center(world.player);

@@ -8,6 +8,7 @@ import { input } from './input.js';
 import { sfx } from './audio.js';
 import { burst, exhaust } from './fx.js';
 import { tryHack } from './hack.js';
+import { t } from './i18n.js';
 
 const CHARGE_FULL = 42;
 // A área de acerto do tiro desce além do desenho, para alcançar inimigos no chão (o tiro sai alto, na altura do relógio).
@@ -94,7 +95,7 @@ function hintAtDoor(p) {
   const ahead = Math.floor((p.face > 0 ? p.x + p.w + 2 : p.x - 2) / T), row = Math.floor((p.y + 8) / T);
   if (tileAt(ahead, row) === TILE.DOOR && !world.hints.has('door')) {
     world.hints.add('door');
-    emit('toast', 'Porta laser! Hackeie o terminal amarelo');
+    emit('toast', t('laserDoor'));
   }
 }
 

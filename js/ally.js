@@ -6,6 +6,7 @@ import { fireAt, nearestHostile } from './combat.js';
 import { center } from './physics.js';
 import { burst } from './fx.js';
 import { sfx } from './audio.js';
+import { t } from './i18n.js';
 
 const RANGE = 110, FIRE_EVERY = 150, SHOT_SPEED = 3.2, REPAIR_EVERY = 720, REPAIR_BELOW = 0.3;
 
@@ -32,7 +33,7 @@ function repair(a, p) {
   if (--a.repair > 0) return;
   p.hp = Math.min(p.max, p.hp + 1); a.repair = REPAIR_EVERY;
   burst(p.x + p.w / 2, p.y + 4, '#7dff9b', 10, 1.4);
-  emit('toast', 'BYTE: reparo de emergência +1 HP');
+  emit('toast', t('byteHeal'));
 }
 
 export function updateAlly() {

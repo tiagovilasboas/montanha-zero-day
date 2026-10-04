@@ -5,6 +5,7 @@ import { world, isSolid } from './world.js';
 import { overlap, center, distance } from './physics.js';
 import { sfx } from './audio.js';
 import { burst, spark } from './fx.js';
+import { t } from './i18n.js';
 
 const COLORS = { player: '#3df0ff', ally: '#7dff9b', enemy: '#ff3b5c' };
 
@@ -62,7 +63,7 @@ export function gainXp(amount) {
   if (p) { p.max = maxHpFor(save.lv); p.hp = p.max; burst(p.x + 5, p.y + 9, '#ffd23d', 24); }
   persist();
   sfx('levelUp');
-  emit('toast', `SUBIU DE NÍVEL! LV ${save.lv}`);
+  emit('toast', t('levelUp', { lv: save.lv }));
 }
 
 export function damageEnemy(e, dmg) {

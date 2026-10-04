@@ -2,13 +2,10 @@
 import { $ } from './core.js';
 import { sfx, tone, SEQ_NOTES } from './audio.js';
 import { setKeyHook } from './input.js';
+import { t } from './i18n.js';
 
-const ARROWS = [['↑', 'cima', 'ArrowUp'], ['→', 'direita', 'ArrowRight'], ['↓', 'baixo', 'ArrowDown'], ['←', 'esquerda', 'ArrowLeft']];
-const HELP = {
-  seq: 'Memorize a sequência e repita na mesma ordem.',
-  bin: 'Ligue os bits até a soma bater com o alvo.',
-  grid: 'Deixe todos os nós em ciano. Cada toque inverte o nó e os vizinhos. Travou? Uma dica pisca.',
-};
+const ARROWS = [['↑', 'up', 'ArrowUp'], ['→', 'right', 'ArrowRight'], ['↓', 'down', 'ArrowDown'], ['←', 'left', 'ArrowLeft']];
+const HELP = { seq: 'helpSeq', bin: 'helpBin', grid: 'helpGrid' };
 
 let pz = null;
 export const puzzleOpen = () => !!pz;
@@ -21,7 +18,7 @@ const KINDS = {
       p.seq = Array.from({ length: 3 + p.level }, () => (Math.random() * 4) | 0);
       p.pos = 0; p.ready = false;
       return `<div class="seq-slots">${p.seq.map(() => '<i></i>').join('')}</div>
-        <div class="seq-pad">${ARROWS.map(([a, label], i) => `<button class="sq sq-${i}" data-v="${i}" aria-label="${label}">${a}</button>`).join('')}</div>`;
+        <div class="seq-pad">${ARROWS.map(([a, label], i) => `<button class="sq sq-${i}" data-v="${i}" aria-label="${t(label)}">${a}</button>`).join('')}</div>`;
     },
     start(p) { playSequence(p); },
     pick(p, v) {
@@ -43,8 +40,8 @@ const KINDS = {
         const v = 1 << (p.bits - 1 - i);
         return `<button class="bit" data-v="${v}"><span>0</span><small>${v}</small></button>`;
       }).join('');
-      return `<div class="bin-target">ALVO <b>${p.target}</b></div><div class="bin-row">${buttons}</div>
-        <div class="bin-current">ATUAL <b id="bin-value">0</b></div>`;
+      return `<div class="bin-target">${t('target')} <b>${p.target}</b></div><div class="bin-row">${buttons}</div>
+        <div class="bin-current">${t('current')} <b id="bin-value">0</b></div>`;
     },
     pick(p, v, btn) {
       p.value ^= v;
@@ -63,7 +60,7 @@ const KINDS = {
       p.todo = new Set(shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8]).slice(0, p.level >= 3 ? 3 : 2));
       p.todo.forEach(i => toggleCross(p.cells, i));
       p.idle = 0;
-      return `<div class="grid3">${p.cells.map((_, i) => `<button class="node" data-v="${i}" aria-label="nó ${i + 1}"></button>`).join('')}</div>`;
+      return `<div class="grid3">${p.cells.map((_, i) => `<button class="node" data-v="${i}" aria-label="${t('node', { n: i + 1 })}"></button>`).join('')}</div>`;
     },
     start(p) { paintGrid(p); },
     pick(p, v) {
@@ -96,11 +93,11 @@ function paintGrid(p) { document.querySelectorAll('.node').forEach((n, i) => { n
 function flash(sel) { const b = $(sel); b?.classList.add('lit'); setTimeout(() => b?.classList.remove('lit'), 160); }
 
 function playSequence(p) {
-  message('OBSERVE...');
+  message(t('observe'));
   let i = 0;
   const next = () => {
     if (pz !== p) return;
-    if (i >= p.seq.length) { p.ready = true; message('SUA VEZ'); return; }
+    if (i >= p.seq.length) { p.ready = true; message(t('yourTurn')); return; }
     const v = p.seq[i++], btn = $(`.sq-${v}`);
     btn.classList.add('lit'); tone(SEQ_NOTES[v], 0.3, 'square', 0.1);
     setTimeout(() => { btn.classList.remove('lit'); setTimeout(next, 150); }, 420);
@@ -113,8 +110,8 @@ function message(text, cls = '') { const m = $('#pz-msg'); m.textContent = text;
 export function openPuzzle({ kind, level, label, onWin, onFail, onCancel }) {
   const k = KINDS[kind];
   pz = { kind, level, onWin, onFail, onCancel, time: 0, max: k.seconds * 60, done: false };
-  $('#pz-title').textContent = `HACK // ${label}`;
-  $('#pz-help').textContent = HELP[kind];
+  $('#pz-title').textContent = t('hackTitle', { label });
+  $('#pz-help').textContent = t(HELP[kind]);
   message('');
   $('#pz-body').innerHTML = k.setup(pz);
   $('#puzzle').hidden = false;
@@ -134,8 +131,8 @@ function finish(ok, text) {
   sfx(ok ? 'hackOk' : 'hackFail');
   setTimeout(() => { close(); (ok ? p.onWin : p.onFail)?.(); }, ok ? 650 : 900);
 }
-const win = () => finish(true, 'ACESSO CONCEDIDO');
-const fail = (text = 'ACESSO NEGADO') => finish(false, text);
+const win = () => finish(true, t('accessOk'));
+const fail = (text = t('accessDenied')) => finish(false, text);
 
 function paintTimer() { $('#pz-timer i').style.width = `${100 * (1 - pz.time / pz.max)}%`; }
 
@@ -144,7 +141,7 @@ export function tickPuzzle() {
   pz.time++;
   if (pz.kind === 'grid' && ++pz.idle === HINT_AFTER) showHint(pz);
   paintTimer();
-  if (pz.time >= pz.max) fail('TEMPO ESGOTADO');
+  if (pz.time >= pz.max) fail(t('timeUp'));
 }
 
 function onKey(e) {

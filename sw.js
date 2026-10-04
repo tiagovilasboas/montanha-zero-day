@@ -1,10 +1,10 @@
 // Service worker: cache-first offline shell + stale-while-revalidate for Google Fonts.
-const VERSION = 'zeroday-v20';
+const VERSION = 'zeroday-v21';
 const FONT_CACHE = 'zeroday-fonts';
 
 const MODULES = [
   'main', 'game', 'screens', 'render', 'config', 'core', 'audio', 'input', 'sprites', 'world', 'physics',
-  'dialog', 'hud', 'puzzle', 'fx', 'combat', 'player', 'hack', 'enemies', 'boss', 'ally', 'interact', 'assets', 'scene',
+  'dialog', 'hud', 'puzzle', 'fx', 'combat', 'player', 'hack', 'enemies', 'boss', 'ally', 'interact', 'assets', 'scene', 'i18n',
 ].map((name) => `js/${name}.js`);
 
 const ART = [

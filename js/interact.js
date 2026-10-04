@@ -4,6 +4,7 @@ import { world } from './world.js';
 import { overlap } from './physics.js';
 import { sfx } from './audio.js';
 import { burst } from './fx.js';
+import { t } from './i18n.js';
 
 const PICKUP = {
   hp: p => { p.hp = Math.min(p.max, p.hp + 4); },
@@ -22,7 +23,7 @@ export function updateInteractables() {
   for (const c of world.checkpoints) {
     if (c.on || !overlap(c, p)) continue;
     c.on = true; p.checkpoint = { x: c.x - 1, y: c.y + c.h - p.h };
-    sfx('pick'); emit('toast', 'CHECKPOINT SALVO');
+    sfx('pick'); emit('toast', t('checkpoint'));
   }
   for (const i of world.infos) {
     if (i.seen || !overlap(i, p)) continue;

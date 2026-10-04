@@ -1,8 +1,8 @@
 {
   "name": "Montanha: Zero Day",
   "short_name": "Zero Day",
-  "description": "Plataforma cyberpunk em pixel art: o hacker Montanha, a Gle e o robô BYTE contra o RANSOM-TITAN.",
-  "lang": "pt-BR",
+  "description": "Cyberpunk pixel-art platformer: hacker Montanha, Gle, and the robot BYTE against RANSOM-TITAN.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",

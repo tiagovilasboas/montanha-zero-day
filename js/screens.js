@@ -3,6 +3,7 @@
 import { $, emit, save } from './core.js';
 import { STAGES, xpNeed, maxHpFor, shotDamage } from './config.js';
 import { setPortrait } from './assets.js';
+import { t, tr } from './i18n.js';
 
 // Emblema do Montanha: o pico de montanha do relógio e do patch da jaqueta.
 const EMBLEM = `<svg class="emblem" viewBox="0 0 120 64" aria-hidden="true">
@@ -23,39 +24,40 @@ function show(html) {
 }
 export function hideScreen() { $('#screen').hidden = true; }
 // Crédito discreto do autor (título e final).
-const CREDIT = `<p class="credit">um jogo de <a href="https://github.com/tiagovilasboas" target="_blank" rel="noopener">Tiago Vilas Boas</a></p>`;
-const soundLabel = () => `Som: ${save.muted ? 'desligado' : 'ligado'}`;
+const credit = () => `<p class="credit">${t('credit')}</p>`;
+const soundLabel = () => t('sound', { state: save.muted ? t('off') : t('on') });
 
 export function showTitle(canInstall) {
   show(`${EMBLEM}
     <h1 class="logo">MONTANHA<small>ZERO DAY</small></h1>
-    <p class="tagline">Ele foi resgatar a Gle. Agora é ela quem vai buscar ele.</p>
+    <p class="tagline">${t('tagline')}</p>
     <div class="menu">
-      ${save.started ? button('continue', 'Continuar') : ''}
-      ${button('new', save.started ? 'Novo jogo' : 'Começar')}
+      ${save.started ? button('continue', t('continue')) : ''}
+      ${button('new', save.started ? t('newGame') : t('start'))}
       ${button('sound', soundLabel())}
-      ${button('install', 'Instalar app', canInstall ? '' : 'hidden')}
+      ${button('lang', t('langSwitch'), 'class="btn-ghost"')}
+      ${button('install', t('install'), canInstall ? '' : 'hidden')}
     </div>
-    <p class="hint">Teclado: ← → mover · Z pular (segure no ar = voar) · X atirar (segure = carga) · C hack · Esc pausa</p>
-    ${CREDIT}`);
+    <p class="hint">${t('keyHint')}</p>
+    ${credit()}`);
 }
 
 function stageButton(stage, i) {
   const done = save.cleared.includes(i), locked = i >= save.unlocked;
-  const state = done ? 'CONCLUÍDA' : locked ? 'BLOQUEADA' : 'LIVRE';
+  const state = done ? t('cleared') : locked ? t('locked') : t('open');
   const cls = done ? 'is-done' : locked ? 'is-locked' : '';
   return `<button class="stage-btn ${cls}" data-act="stage" data-i="${i}" ${locked ? 'disabled' : ''}>
-    <span class="num">${String(i + 1).padStart(2, '0')}</span><span class="name">${stage.name}</span><span class="state">${state}</span></button>`;
+    <span class="num">${String(i + 1).padStart(2, '0')}</span><span class="name">${tr(stage.name)}</span><span class="state">${state}</span></button>`;
 }
 
 // Ficha de quem joga a próxima missão liberada (fase 1 Montanha; depois, Gle).
 const ROSTER = {
   montanha: { name: 'MONTANHA', label: 'Montanha', portrait: 'hero', gear: [
-    ['Relógio H4X', 'atira, carrega disparo pesado e hackeia terminais e torretas.'],
-    ['Mochila JET', 'segure PULO no ar: o jato te leva pro alto.']] },
+    ['gearWatchName', 'gearWatchText'],
+    ['gearJetName', 'gearJetText']] },
   gle: { name: 'GLE', label: 'Gle', portrait: 'gleyce', gear: [
-    ['Manopla dourada', 'atira, carrega disparo pesado e hackeia terminais e torretas.'],
-    ['Botas de luz', 'segure PULO no ar: as botas te seguram no alto.']] },
+    ['gearGauntletName', 'gearGauntletText'],
+    ['gearBootsName', 'gearBootsText']] },
 };
 
 export function showMap() {
@@ -64,18 +66,18 @@ export function showMap() {
   show(`<div class="map-grid">
     <section class="win status">
       <h3>${hero.name}</h3>
-      <img class="portrait" alt="Retrato de ${hero.label}">
+      <img class="portrait" alt="${t('portraitAlt', { name: hero.label })}">
       ${statList([['LV', save.lv], ['HP', maxHpFor(save.lv)], ['XP', `${save.xp} / ${xpNeed(save.lv)}`],
-        ['Tiro', shotDamage(save.lv, false)], ['Carga', shotDamage(save.lv, true)]])}
+        [t('shot'), shotDamage(save.lv, false)], [t('charge'), shotDamage(save.lv, true)]])}
     </section>
     <section class="win">
-      <h3>MISSÕES</h3>
+      <h3>${t('missions')}</h3>
       ${STAGES.map(stageButton).join('')}
     </section>
     <section class="win equip">
-      <h3>EQUIPAMENTO</h3>
-      <ul>${hero.gear.map(([item, text]) => `<li><b>${item}</b> ${text}</li>`).join('')}
-        <li><b>BYTE</b> robô assistente que dá dicas e atira sozinho.</li>
+      <h3>${t('equipment')}</h3>
+      <ul>${hero.gear.map(([item, text]) => `<li><b>${t(item)}</b> ${t(text)}</li>`).join('')}
+        <li>${t('gearByte')}</li>
       </ul>
     </section>
   </div>
@@ -85,32 +87,32 @@ export function showMap() {
 
 export function showResult({ stageName, time, kills, xp, rescue }) {
   // Fase 1 termina com o rapto: a manchete é a Gle livre, não "missão concluída".
-  const head = rescue ? 'GLE<small>LIBERTADA</small>' : 'MISSÃO<small>CONCLUÍDA</small>';
-  const note = rescue ? '<p class="tagline">O Montanha foi capturado. Agora é a vez dela.</p>' : '';
+  const head = rescue ? t('gleHead') : t('missionHead');
+  const note = rescue ? `<p class="tagline">${t('rescueNote')}</p>` : '';
   show(`<h2 class="logo">${head}</h2>${note}
-    <section class="win result"><h3>${stageName}</h3>
-      ${statList([['Tempo', formatTime(time)], ['Inimigos', kills], ['XP ganho', xp], ['Nível', save.lv]])}
+    <section class="win result"><h3>${tr(stageName)}</h3>
+      ${statList([[t('time'), formatTime(time)], [t('enemies'), kills], [t('xpGained'), xp], [t('level'), save.lv]])}
     </section>
-    <div class="menu">${button('map', 'Continuar')}</div>`);
+    <div class="menu">${button('map', t('continue'))}</div>`);
 }
 
 export function showGameOver() {
-  show(`<h2 class="logo">SISTEMA<small>COMPROMETIDO</small></h2>
-    <p class="tagline">O Byte reiniciou seus sistemas no último checkpoint.</p>
-    <div class="menu">${button('retry', 'Voltar ao checkpoint')}${button('map', 'Mapa de missões', 'class="btn-ghost"')}</div>`);
+  show(`<h2 class="logo">${t('overHead')}</h2>
+    <p class="tagline">${t('overNote')}</p>
+    <div class="menu">${button('retry', t('retry'))}${button('map', t('missionMap'), 'class="btn-ghost"')}</div>`);
 }
 
 export function showPause() {
-  show(`<h2 class="logo">PAUSA</h2>
-    <div class="menu">${button('resume', 'Continuar')}${button('sound', soundLabel())}${button('map', 'Sair para o mapa', 'class="btn-ghost"')}</div>`);
+  show(`<h2 class="logo">${t('pauseTitle')}</h2>
+    <div class="menu">${button('resume', t('resume'))}${button('sound', soundLabel())}${button('map', t('leaveMap'), 'class="btn-ghost"')}</div>`);
 }
 
 export function showEnding() {
-  show(`${EMBLEM}<h2 class="logo">A REDE<small>ESTÁ LIVRE</small></h2>
-    <p class="tagline">A Gle venceu o RANSOM-TITAN, tirou o Montanha da cela e Neo-Sampa acendeu de novo. Mesmo time, sempre.</p>
-    <section class="win result"><h3>FICHA FINAL</h3>${statList([['Nível', save.lv], ['XP total', save.xp]])}</section>
-    <div class="menu">${button('map', 'Mapa de missões')}${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>
-    ${CREDIT}`);
+  show(`${EMBLEM}<h2 class="logo">${t('endingHead')}</h2>
+    <p class="tagline">${t('endingNote')}</p>
+    <section class="win result"><h3>${t('finalSheet')}</h3>${statList([[t('level'), save.lv], [t('totalXp'), save.xp]])}</section>
+    <div class="menu">${button('map', t('missionMap'))}${button('title', t('titleScreen'), 'class="btn-ghost"')}</div>
+    ${credit()}`);
 }
 
 export function refreshSoundLabel() {

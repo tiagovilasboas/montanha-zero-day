@@ -3,6 +3,7 @@ import { $ } from './core.js';
 import { save } from './core.js';
 import { xpNeed, HEROES } from './config.js';
 import { world } from './world.js';
+import { lang, tr } from './i18n.js';
 
 let cache = '';
 const pct = (v, max) => `${Math.max(0, Math.min(100, (100 * v) / max))}%`;
@@ -12,11 +13,11 @@ export function setHudVisible(v) { $('#hud').hidden = !v; $('#keys').hidden = !v
 export function updateHud() {
   const p = world.player, b = world.boss;
   if (!p) return;
-  const key = [p.hero, p.hp, p.max, p.ep | 0, p.fuel | 0, save.lv, save.xp, b && b.active && !b.gone ? b.hp : -1, b?.shield].join();
+  const key = [lang(), p.hero, p.hp, p.max, p.ep | 0, p.fuel | 0, save.lv, save.xp, b && b.active && !b.gone ? b.hp : -1, b?.shield].join();
   if (key === cache) return;
   cache = key;
   $('#hud-lv').textContent = save.lv;
-  $('#hud-boost').textContent = HEROES[p.hero].boost;
+  $('#hud-boost').textContent = tr(HEROES[p.hero].boost);
   $('#hud-xp').textContent = `${save.xp}/${xpNeed(save.lv)}`;
   $('#hud-hp').style.width = pct(p.hp, p.max);
   $('#hud-ep').style.width = pct(p.ep, p.maxEp);

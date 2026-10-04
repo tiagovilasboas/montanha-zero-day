@@ -1,6 +1,7 @@
 // Caixa de diálogo estilo Final Fantasy: retrato, nome e texto com efeito de máquina de escrever.
 import { $ } from './core.js';
 import { SPEAKERS } from './config.js';
+import { t, tr } from './i18n.js';
 import { setPortrait } from './assets.js';
 import { sfx } from './audio.js';
 
@@ -26,8 +27,8 @@ function showLine() {
   const [who, text] = current.lines[current.index];
   const img = $('#dlg-portrait');
   setPortrait(img, who);
-  $('#dlg-name').textContent = SPEAKERS[who] || '';
-  current.text = text; current.shown = 0;
+  $('#dlg-name').textContent = who === 'sys' ? t('system') : (SPEAKERS[who] || '');
+  current.text = tr(text); current.shown = 0;
   paint(0);
   el().classList.remove('is-done');
 }

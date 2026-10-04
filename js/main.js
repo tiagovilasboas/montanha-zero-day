@@ -10,6 +10,7 @@ import { bindScreens } from './screens.js';
 import { renderWorld, renderBackdrop, setRenderScale } from './render.js';
 import { loadArt } from './assets.js';
 import { game, step, bindGame, showsWorld, goTitle } from './game.js';
+import { applyDom } from './i18n.js';
 
 const ctx = $('#cv').getContext('2d');
 
@@ -81,6 +82,7 @@ function boot() {
   fitViewport();
   bindRotate();
   installSupport();
+  applyDom();
   goTitle();
   requestAnimationFrame(loop);
 }

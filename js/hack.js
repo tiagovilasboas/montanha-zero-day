@@ -7,6 +7,7 @@ import { burst, ring } from './fx.js';
 import { openPuzzle } from './puzzle.js';
 import { gainXp } from './combat.js';
 import { lockButtons } from './player.js';
+import { t as txt } from './i18n.js';
 
 const EMP_COST = 10, TURRET_COST = 5;
 
@@ -19,44 +20,44 @@ function puzzle(opts) {
   openPuzzle({
     ...opts,
     onWin: () => { lockButtons(); opts.onWin(); },
-    onFail: () => { lockButtons(); const p = world.player; p.hp = Math.max(1, p.hp - 2); emit('toast', 'Choque de retorno: -2 HP'); },
+    onFail: () => { lockButtons(); const p = world.player; p.hp = Math.max(1, p.hp - 2); emit('toast', txt('shock')); },
     onCancel: () => { lockButtons(); opts.onCancel?.(); },
   });
 }
 
 function hackBossTerminal(t) {
   const b = world.boss;
-  if (!b || b.phase < 2 || !b.shield) return emit('toast', 'Terminal bloqueado. Ainda não é hora.');
-  if (t.cool > 0) return emit('toast', 'Terminal recarregando...');
+  if (!b || b.phase < 2 || !b.shield) return emit('toast', txt('terminalLocked'));
+  if (t.cool > 0) return emit('toast', txt('terminalCooling'));
   puzzle({
-    kind: Math.random() < 0.5 ? 'grid' : 'bin', level: 3, label: 'NÚCLEO DO TITAN',
+    kind: Math.random() < 0.5 ? 'grid' : 'bin', level: 3, label: txt('titanCore'),
     onWin: () => {
       b.shield = false; b.shieldTime = 480; b.stun = 90; t.cool = 600;
       burst(b.x + 22, b.y + 22, '#3df0ff', 30);
-      emit('toast', 'FIREWALL DERRUBADO! ATAQUE!');
+      emit('toast', txt('firewallDown'));
     },
   });
 }
 
-function hackTerminal(t) {
+function hackTerminal(term) {
   puzzle({
-    kind: t.kind, level: t.isHardBoss ? 5 : world.level.index + 1, label: t.isHardBoss ? `DATACENTER MAINFRAME` : `TERMINAL 0x${(0x3a + t.g).toString(16).toUpperCase()}`,
-    onWin: () => { t.done = true; world.level.groups[t.g].hacked = true; gainXp(2); emit('toast', 'ACESSO LIBERADO'); },
+    kind: term.kind, level: term.isHardBoss ? 5 : world.level.index + 1, label: term.isHardBoss ? txt('mainframe') : `TERMINAL 0x${(0x3a + term.g).toString(16).toUpperCase()}`,
+    onWin: () => { term.done = true; world.level.groups[term.g].hacked = true; gainXp(2); emit('toast', txt('accessGranted')); },
   });
 }
 
 function hackTurret(turret, p) {
-  if (p.ep < TURRET_COST) return emit('toast', 'EP insuficiente');
+  if (p.ep < TURRET_COST) return emit('toast', txt('lowEp'));
   p.ep -= TURRET_COST;
   puzzle({
-    kind: 'seq', level: 0, label: 'TORRETA HOSTIL',
-    onWin: () => { turret.ally = true; turret.hp = turret.max; gainXp(4); emit('toast', 'TORRETA AGORA É ALIADA'); },
+    kind: 'seq', level: 0, label: txt('hostileTurret'),
+    onWin: () => { turret.ally = true; turret.hp = turret.max; gainXp(4); emit('toast', txt('turretAllied')); },
     onCancel: () => { p.ep = Math.min(p.maxEp, p.ep + TURRET_COST); },   // desistiu: devolve o EP
   });
 }
 
 function emp(p) {
-  if (p.ep < EMP_COST) return emit('toast', 'EP insuficiente para o pulso EMP');
+  if (p.ep < EMP_COST) return emit('toast', txt('lowEmp'));
   p.ep -= EMP_COST;
   const c = center(p);
   ring(c.x, c.y); sfx('emp');

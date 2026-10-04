@@ -17,6 +17,7 @@ import { updateBullets, gainXp } from './combat.js';
 import { updateInteractables } from './interact.js';
 import { updateFx, startLove, burst } from './fx.js';
 import { startScene, endScene, updateScene } from './scene.js';
+import { t, tr, toggleLang } from './i18n.js';
 
 export const game = { mode: 'title', menuFrame: 0, cardTimer: 0, cardDone: null, canInstall: false, blocked: false };   // blocked: celular em retrato (pede para girar)
 
@@ -41,7 +42,7 @@ function startStage(index) {
   game.mode = 'play';
   screens.hideScreen(); setHudVisible(true);
   playTrack(STAGES[index].track);
-  showCard(`FASE ${index + 1}`, STAGES[index].name);
+  showCard(t('stageKicker', { n: index + 1 }), tr(STAGES[index].name));
   game.cardTimer = 110;
   game.cardDone = () => talk(STAGES[index].intro);
 }
@@ -101,7 +102,7 @@ function checkArena() {
   const L = world.level;
   if (L.arenaX < 0 || L.locked || world.player.x < L.arenaX + T * 3) return;
   setArenaWall(true); stopMusic();
-  const fight = () => { world.boss.active = true; playTrack('boss'); toast('DERROTE O RANSOM-TITAN'); };
+  const fight = () => { world.boss.active = true; playTrack('boss'); toast(t('defeatBoss')); };
   // A fala do chefe só toca na primeira entrada; depois de morrer, a luta recomeça direto.
   if (L.bossSeen) fight(); else { L.bossSeen = true; talk(STORY.boss, fight); }
 }
@@ -191,6 +192,7 @@ export function bindGame() {
   on('ui:retry', retryFromCheckpoint);
   on('ui:resume', resume);
   on('ui:sound', () => { toggleMute(); screens.refreshSoundLabel(); });
+  on('ui:lang', () => { toggleLang(); if (game.mode === 'title') screens.showTitle(game.canInstall); });
   on('ui:install', () => emit('install'));
   on('ui:pause', pause);
 }

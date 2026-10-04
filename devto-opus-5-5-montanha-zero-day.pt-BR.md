@@ -94,6 +94,13 @@ A Anthropic estima que tarefas típicas saiam **~40% mais baratas que no Opus 5*
 
 Arquitetura: **JavaScript puro em módulos ES** (~2.700 linhas em 24 módulos), HTML5 Canvas, loop fixo a 60 Hz, PWA offline via service worker, trilha sonora inteiramente sintetizada com WebAudio (sem arquivos de áudio pesados) e arte HD. Sem frameworks, sem build.
 
+![O fim da fase 1: corações, a garra do RANSOM-TITAN desce, agarra o Montanha e o leva para longe da cápsula da Gle](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
+*O fim da fase 1, quadro a quadro: corações, a garra desce, agarra o Montanha e o leva embora.*
+
+![A Gle planando com as botas de luz douradas na sala de servidores alagada da fase 2](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-boots.jpg)
+
+![A Gle diante do chefe RANSOM-TITAN, um cadeado gigante com um olho vermelho, na arena do Núcleo](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
+
 ---
 
 ## Arte HD Gerada com Créditos no Artlist
@@ -148,6 +155,10 @@ Quando comentei que *"a Gle parecia mais fluida de controlar que o Montanha"*, e
 - O ciclo de corrida repetia sempre a mesma perna na frente.
 
 Ele espelhou a folha de sprites, criou lógica para alternar frames de subida e flutuação com a mochila a jato e desenhou auras neon próprias para cada herói.
+
+![Quadros do pulo do Montanha antes (de costas, dois quadros de frente para a câmera) e depois (quadros de lado, espelhados)](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/jump-before-after.png)
+
+![Ciclo de corrida do Montanha antes (mesma perna na frente a cada passo) e depois (loop de dois passos gerado de novo)](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/run-before-after.png)
 
 ---
 

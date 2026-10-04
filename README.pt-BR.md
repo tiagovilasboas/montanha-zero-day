@@ -60,11 +60,11 @@ python3 -m http.server 8000
 O progresso fica no `localStorage`, na chave `montanha-zero-day-v1`.
 
 `index.html` e os ícones são gerados a partir do `game.html`: `pip install pillow && python3 build.py`.
-Ao publicar JS ou arte novos, aumente o `VERSION` do `sw.js` para os apps instalados atualizarem.
+O build também carimba o `VERSION` do `sw.js` com um hash do código e da arte. Antes de cada publicação, rode `python3 build.py --sw` (ou o build completo) para os apps instalados atualizarem.
 
 ## Publicar
 
-A versão no ar é servida pelo **GitHub Pages** a partir da raiz da `main`: cada push atualiza [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) em um ou dois minutos. Aumente o `VERSION` do `sw.js` a cada versão para quem instalou receber a atualização.
+A versão no ar é servida pelo **GitHub Pages** a partir da raiz da `main`: cada push atualiza [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) em um ou dois minutos. Rode `python3 build.py --sw` antes de publicar para quem instalou receber a atualização.
 
 Qualquer hospedagem estática serve. No GitHub Pages, o plano gratuito exige repositório público. Cloudflare Pages, Netlify e Vercel aceitam repositório privado no plano gratuito (build vazio, publicar a raiz).
 

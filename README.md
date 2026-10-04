@@ -68,11 +68,11 @@ pip install pillow
 python3 build.py
 ```
 
-Re-run it whenever `game.html` changes. When you ship new JS or art, bump `VERSION` in `sw.js` so installed copies refresh.
+Re-run it whenever `game.html` changes. It also stamps `VERSION` in `sw.js` with a hash of the code and art. Before each deploy, run `python3 build.py --sw` (or the full build) so installed copies refresh.
 
 ## Deploy
 
-The live build is served by **GitHub Pages** from the root of `main`: every push updates [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) within a minute or two. Bump `VERSION` in `sw.js` with each release so installed copies pick it up.
+The live build is served by **GitHub Pages** from the root of `main`: every push updates [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) within a minute or two. Run `python3 build.py --sw` before pushing a release so installed copies pick it up.
 
 Any static host works. Publish the repository root (or just `index.html`, `sw.js`, `manifest.webmanifest`, `css/`, `js/`, `assets/` and `icons/`).
 

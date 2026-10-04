@@ -57,7 +57,7 @@ Everything is synthesized, and each stage has its own original track in a differ
 
 ## Offline
 
-`sw.js` precaches the shell, modules and art with a versioned cache and serves cache-first. Bump `VERSION` when shipping changes.
+`sw.js` precaches the shell, modules and art with a versioned cache and serves cache-first. `python3 build.py --sw` sets `VERSION` from a content hash; run it before shipping.
 
 ## How to add content
 

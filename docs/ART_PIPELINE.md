@@ -38,7 +38,7 @@ What it does:
 
 ## 3. Check
 
-Run the game, look at the characters at the zoom the camera uses, and confirm the shot leaves the watch or gauntlet. If you change the art, re-measure the muzzle point in `HEROES` (`config.js`) and bump `VERSION` in `sw.js`.
+Run the game, look at the characters at the zoom the camera uses, and confirm the shot leaves the watch or gauntlet. If you change the art, re-measure the muzzle point in `HEROES` (`config.js`) and run `python3 build.py --sw`.
 
 ## Notes
 

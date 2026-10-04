@@ -22,6 +22,8 @@ function show(html) {
   el.querySelector('button:not([disabled])')?.focus({ preventScroll: true });
 }
 export function hideScreen() { $('#screen').hidden = true; }
+// Crédito discreto do autor (título e final).
+const CREDIT = `<p class="credit">um jogo de <a href="https://github.com/tiagovilasboas" target="_blank" rel="noopener">Tiago Vilas Boas</a></p>`;
 const soundLabel = () => `Som: ${save.muted ? 'desligado' : 'ligado'}`;
 
 export function showTitle(canInstall) {
@@ -34,7 +36,8 @@ export function showTitle(canInstall) {
       ${button('sound', soundLabel())}
       ${button('install', 'Instalar app', canInstall ? '' : 'hidden')}
     </div>
-    <p class="hint">Teclado: ← → mover · Z pular (segure no ar = voar) · X atirar (segure = carga) · C hack · Esc pausa</p>`);
+    <p class="hint">Teclado: ← → mover · Z pular (segure no ar = voar) · X atirar (segure = carga) · C hack · Esc pausa</p>
+    ${CREDIT}`);
 }
 
 function stageButton(stage, i) {
@@ -105,7 +108,8 @@ export function showEnding() {
   show(`${EMBLEM}<h2 class="logo">A REDE<small>ESTÁ LIVRE</small></h2>
     <p class="tagline">A Gle venceu o RANSOM-TITAN, tirou o Montanha da cela e Neo-Sampa acendeu de novo. Mesmo time, sempre.</p>
     <section class="win result"><h3>FICHA FINAL</h3>${statList([['Nível', save.lv], ['XP total', save.xp]])}</section>
-    <div class="menu">${button('map', 'Mapa de missões')}${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>`);
+    <div class="menu">${button('map', 'Mapa de missões')}${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>
+    ${CREDIT}`);
 }
 
 export function refreshSoundLabel() {

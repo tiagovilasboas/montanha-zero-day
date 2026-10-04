@@ -3,7 +3,7 @@ title: "I Built a Full PWA Game in One Day with Claude Opus 5.5 and Claude Code 
 published: false
 description: "Montanha: Zero Day, a Mega Man X–style PWA built with Claude Opus 5.5 and Claude Code on top of a central engineering harness: benchmarks vs real-world delivery, Artlist AI assets, and headless Playwright E2E tests."
 tags: ai, gamedev, javascript, claude
-cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/title_art.webp
+cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/devto-cover.png
 ---
 
 On a Sunday, I turned a slightly silly idea into an actual game: **Montanha: Zero Day**, a cyberpunk platformer in the style of Mega Man X that runs in the browser and on phones, offline, as a PWA. The hero is me (Montanha), the heroine is Gle, and the villain is a giant piece of ransomware called RANSOM-TITAN.
@@ -14,6 +14,8 @@ This post covers what the model promises on benchmarks, how it operated seamless
 
 👉 **Play it live:** [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) (the in-game dialogue is in Brazilian Portuguese)  
 👉 **Source Code:** [github.com/tiagovilasboas/montanha-zero-day](https://github.com/tiagovilasboas/montanha-zero-day)
+
+![Montanha: Zero Day Title Screen](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/title-screen.webp)
 
 ---
 
@@ -126,6 +128,10 @@ Rather than assuming code worked because it compiled, the agent actively spun up
 - **Finding Pixel-Level Bottlenecks:** During the stage 3 expansion (pulse beams and laser gauntlets), the automated bot discovered that a platform jump was precisely **1 pixel out of reach** if taken at the absolute platform edge. The agent immediately adjusted the level chunk coordinate in `config.js` and re-tested.
 - **Exploiting Game Mechanics:** The Playwright bot caught an invulnerability exploit: players could sacrifice 3 HP and simply walk through active hazard beams while blinking. Claude fixed the beam collision logic to act as a solid wall during hero invulnerability.
 - **Full Visual Walkthrough:** Across 3 stages, the E2E suite traversed title screens, cutscenes, boss phases, and the ending sequence, verifying that dialogue portraits and audio state machines transitioned flawlessly.
+
+![Montanha hovering with his jetpack in Neo-Sampa](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/montanha-jetpack.webp)
+
+![Gle facing the rhythmic pulse beams in Stage 3](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-pulse-beams.webp)
 
 ---
 

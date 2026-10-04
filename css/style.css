@@ -428,6 +428,8 @@ img { image-rendering: pixelated; }
 .grid3 .node::after { transform: rotate(-45deg); }
 .grid3 .node.on { background: var(--cyan); border-color: #fff; box-shadow: 0 0 16px var(--cyan); }
 .grid3 .node.on::before, .grid3 .node.on::after { display: none; }
+.grid3 .node.hint { animation: hintpulse 0.8s ease-in-out infinite; }
+@keyframes hintpulse { 50% { border-color: var(--gold); box-shadow: 0 0 18px var(--gold); } }
 
 /* ---------- Screens (menus) ---------- */
 #screen {

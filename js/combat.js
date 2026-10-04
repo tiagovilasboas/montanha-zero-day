@@ -20,6 +20,33 @@ export function hostileTargets() {
   return list;
 }
 
+// Mira assistida: escolhe o inimigo mais próximo dentro de um cone à frente (até ~63° para cima ou para baixo).
+// Quem está na linha do tiro tem preferência. Devolve o inimigo (ou null para atirar reto).
+export function aimTarget(x, y, face, range = 210) {
+  let best = null, bestScore = Infinity;
+  for (const e of hostileTargets()) {
+    const c = center(e), dx = (c.x - x) * face, dy = c.y - y;
+    if (dx < 10 || dx > range || Math.abs(dy) > dx * 2) continue;
+    const score = Math.hypot(dx, dy) + Math.abs(dy) * 0.4;
+    if (score < bestScore) { best = e; bestScore = score; }
+  }
+  return best;
+}
+
+// Tiro guiado: o projétil faz curvas suaves (~4° por quadro) em direção ao alvo e solta o alvo se passar dele.
+const TURN = 0.07;
+function steer(b) {
+  const t = b.target;
+  if (!t || t.dead || t.gone || (t === world.boss && t.shield)) { b.target = null; return; }
+  const c = center(t), speed = Math.hypot(b.vx, b.vy), cur = Math.atan2(b.vy, b.vx);
+  const bx = b.x + b.w / 2, by = b.y + b.h / 2;
+  if ((c.x - bx) * Math.sign(b.vx || 1) < -4) { b.target = null; return; }   // já passou do alvo
+  let diff = Math.atan2(c.y - by, c.x - bx) - cur;
+  diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+  const next = cur + Math.max(-TURN, Math.min(TURN, diff));
+  b.vx = Math.cos(next) * speed; b.vy = Math.sin(next) * speed;
+}
+
 export function nearestHostile(from, range) {
   let best = null, bestD = range;
   for (const e of hostileTargets()) { const d = distance(from, e); if (d < bestD) { best = e; bestD = d; } }
@@ -70,6 +97,7 @@ function strike(b, target, onHit) {
 export function updateBullets() {
   const { cam, player, boss } = world;
   for (const b of world.bullets) {
+    if (b.target) steer(b);
     b.x += b.vx; b.y += b.vy;
     if (--b.life <= 0 || b.x < cam.x - 24 || b.x > cam.x + 360) { b.dead = true; continue; }
     if (hitsWall(b)) { b.dead = true; spark(b.x, b.y, COLORS[b.from]); continue; }
@@ -78,7 +106,7 @@ export function updateBullets() {
       if (overlap(b, player)) { b.dead = true; emit('player:hit', { dmg: b.dmg, dir: Math.sign(b.vx) || 1 }); }
       continue;
     }
-    const hit = b.drop ? { x: b.x, y: b.y, w: b.w, h: b.h + b.drop } : b;
+    const pad = b.pad || 0, hit = pad || b.drop ? { x: b.x - pad, y: b.y - pad, w: b.w + 2 * pad, h: b.h + 2 * pad + (b.drop || 0) } : b;
     for (const e of world.enemies) {
       if (e.dead || e.ally || !overlap(hit, e)) continue;
       strike(b, e, () => damageEnemy(e, b.dmg));

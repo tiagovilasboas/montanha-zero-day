@@ -15,7 +15,7 @@ const BEHAVIOR = {
     e.x += e.vx;
     if (Math.abs(e.x - e.originX) > 40) e.vx *= -1;
     e.y = e.originY + Math.sin(e.t * 0.05) * 10;
-    if (--e.cd <= 0) { e.cd = 130; if (Math.abs(target.x - e.x) < 150) fireAt('enemy', e.x + 7, e.y + 8, target.x, target.y, 1.5); }
+    if (--e.cd <= 0) { e.cd = 130; if (Math.abs(target.x - e.x) < 150) fireAt('enemy', e.x + e.w / 2, e.y + e.h * 0.8, target.x, target.y, 1.5); }
   },
   crawler(e) {
     const dir = e.vx;
@@ -29,11 +29,12 @@ const BEHAVIOR = {
   turret(e, target) {
     let aim = target, inRange = Math.abs(target.x - e.x) < 170;
     if (e.ally) { const foe = nearestHostile(e, 170); inRange = !!foe; aim = foe && center(foe); }
-    if (inRange) e.angle = Math.atan2(aim.y - (e.y + 4), aim.x - (e.x + 7));
+    const cx = e.x + e.w / 2, cy = e.y + e.h * 0.35;
+    if (inRange) e.angle = Math.atan2(aim.y - cy, aim.x - cx);
     if (--e.cd > 0) return;
     e.cd = e.ally ? 50 : 110;
     if (!inRange) return;
-    const mx = e.x + 7 + Math.cos(e.angle) * 8, my = e.y + 4 + Math.sin(e.angle) * 8;
+    const mx = cx + Math.cos(e.angle) * 9, my = cy + Math.sin(e.angle) * 9;
     fireAt(e.ally ? 'ally' : 'enemy', mx, my, aim.x, aim.y, e.ally ? 3 : 1.7);
   },
 };

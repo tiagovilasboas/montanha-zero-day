@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Transforma a arte bruta (art/raw/*.png) nos assets do jogo (assets/*.webp).
+"""Turns raw art (art/raw/*.png and *.mp4) into the game assets (assets/*.webp and anims.json).
 
-Recorta o fundo chroma (magenta ou verde), corta as bordas vazias, separa as poses do herói,
-fatia os blocos do chão e redimensiona tudo para ~4x o tamanho lógico do jogo.
+Removes the chroma background (magenta or green), trims empty borders, splits hero poses,
+slices floor tiles, builds animation sheets from the video clips and resizes everything to
+SCALE real pixels per logical pixel (the camera zoom shows the art up to ~6x).
+See docs/ART_PIPELINE.md.
 
     python3 tools/process_art.py
 """

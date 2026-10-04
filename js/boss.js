@@ -10,10 +10,10 @@ const BOOM_COLORS = ['#ff3b5c', '#ffd23d', '#ffffff'];
 
 function spread(b, target) {
   const n = b.phase === 1 ? 3 : 5;
-  const base = Math.atan2(target.y - (b.y + 22), target.x - (b.x + 8));
+  const cx = b.x + b.w / 2, cy = b.y + b.h / 2, base = Math.atan2(target.y - cy, target.x - cx);
   for (let i = 0; i < n; i++) {
     const a = base + (i - (n - 1) / 2) * 0.22;
-    world.bullets.push({ from: 'enemy', x: b.x + 6, y: b.y + 20, w: 5, h: 5, vx: Math.cos(a) * 1.9, vy: Math.sin(a) * 1.9, dmg: 2, life: 220 });
+    world.bullets.push({ from: 'enemy', x: cx - 2.5, y: cy - 2.5, w: 5, h: 5, vx: Math.cos(a) * 1.9, vy: Math.sin(a) * 1.9, dmg: 2, life: 220 });
   }
   sfx('shoot');
 }
@@ -54,7 +54,7 @@ export function updateBoss() {
 
   const target = center(world.player);
   b.y = b.baseY + Math.sin(b.t * 0.03) * 40;
-  if (b.phase === 2) b.x = world.level.arenaX + 14 * T + Math.sin(b.t * 0.017) * 40;
+  if (b.phase === 2) b.x = world.level.arenaX + 12 * T + Math.sin(b.t * 0.017) * 40;
   if (--b.cd <= 0) { b.cd = b.phase === 1 ? 80 : 60; spread(b, target); }
   if (--b.spawnCd <= 0) { b.spawnCd = b.phase === 1 ? 300 : 240; summon(b); }
   if (b.phase === 2) beam(b, target);

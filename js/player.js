@@ -1,8 +1,9 @@
 // Montanha: movimento estilo Mega Man, JET da mochila, tiro do relógio (normal e carregado), dano.
-import { PHYS, T, H, HEROES, HERO_HEIGHT, maxHpFor, shotDamage } from './config.js';
+import { PHYS, PLAYER, T, H, HEROES, HERO_HEIGHT, maxHpFor, shotDamage } from './config.js';
+import { aimTarget } from './combat.js';
 import { save, emit } from './core.js';
 import { world, TILE, tileAt } from './world.js';
-import { moveX, moveY, touchesTile } from './physics.js';
+import { moveX, moveY, touchesTile, center } from './physics.js';
 import { input } from './input.js';
 import { sfx } from './audio.js';
 import { burst, exhaust } from './fx.js';
@@ -11,10 +12,13 @@ import { tryHack } from './hack.js';
 const CHARGE_FULL = 42;
 // A área de acerto do tiro desce além do desenho, para alcançar inimigos no chão (o tiro sai alto, na altura do relógio).
 const HIT_DROP = 24;
+// Folga em volta do tiro: perdoa por poucos pixels, principalmente contra alvos que se mexem.
+const HIT_PAD = 4;
 
 export function createPlayer(spawn, hero = 'montanha') {
   const max = maxHpFor(save.lv);
-  return { hero, x: spawn.x, y: spawn.y, w: 10, h: 18, vx: 0, vy: 0, face: 1, onGround: false, coyote: 0, buffer: 0,
+  spawn = { x: spawn.x, y: spawn.y - (PLAYER.h - 18) };   // o ponto de início foi desenhado para uma caixa de 18: mantém os pés no chão
+  return { hero, x: spawn.x, y: spawn.y, w: PLAYER.w, h: PLAYER.h, vx: 0, vy: 0, face: 1, onGround: false, coyote: 0, buffer: 0,
     jumping: false, hovering: false, hp: max, max, ep: 30, maxEp: 30, fuel: PHYS.fuel, maxFuel: PHYS.fuel,
     charge: 0, cooldown: 0, shootAnim: 0, invuln: 0, anim: 0, checkpoint: { ...spawn }, lockJump: false, lockFire: false };
 }
@@ -59,7 +63,13 @@ function shoot(p, charged) {
   b.y = feet - (mz.h * HERO_HEIGHT) / 0.97 - b.h / 2;
   const mx = p.x + p.w / 2 + p.face * mz.reach;
   b.x = p.face > 0 ? mx : mx - b.w;
-  world.bullets.push({ from: 'player', color: HEROES[p.hero].shot, vy: 0, dmg, life: charged ? 120 : 80, drop: HIT_DROP, ...b });
+  // Tiro guiado: sai já inclinado para o inimigo mais próximo à frente e curva até ele.
+  const foe = aimTarget(mx, b.y + b.h / 2, p.face);
+  if (foe) {
+    const c = center(foe), a = Math.atan2(c.y - (b.y + b.h / 2), c.x - mx), speed = Math.abs(b.vx);
+    b.vx = Math.cos(a) * speed; b.vy = Math.sin(a) * speed; b.target = foe;
+  }
+  world.bullets.push({ from: 'player', color: HEROES[p.hero].shot, vy: 0, dmg, life: charged ? 120 : 80, pad: HIT_PAD, drop: b.target ? 0 : HIT_DROP, ...b });
   p.cooldown = charged ? 14 : 8; p.shootAnim = 14;
   sfx(charged ? 'big' : 'shoot');
 }

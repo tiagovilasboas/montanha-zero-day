@@ -79,6 +79,13 @@ const PORTRAITS = {
     '..cWWKKKKKKKKKKKKKKWWc..', '...cWWWWWWWWWWWWWWWWc...', '....ccWWWWWWWWWWWWcc....', '......cccccccccccc......',
     '........gg....gg........', '.......gGg....gGg.......', '......ggg......ggg......',
   ],
+  gleyce: [
+    '.........YYYYYY.........', '.......YYYYYYYYYY.......', '......YYYYYYYYYYYY......', '.....YYYYYyyyyYYYYY.....',
+    '....YYYYyyyyyyyyYYYY....', '....YYYyyyyyyyyyyYYY....', '....YYYyyyyyyyyyyYYY....', '....YYYyyyyyyyyyyYYY....',
+    '.....YYyyyyyyyyyyYY.....', '......YyYYyyyyYYyY......', '.......yWWyyyyWWy.......', '.......yWWyyyyWWy.......',
+    '.......yyYyyyyYyy.......', '........yyyyyyyy........', '.........yyyyyy.........', '..........YyyY..........',
+    '.......YYYYYYyYYYY......', '......YYYYYyyyyYYYY.....', '.....YYYYYyyyyyyYYYY....', '....YYYYYyyyyyyyyYYYY...',
+  ],
   boss: [
     '.......rrrrrrrrrr.......', '.....rrRRRRRRRRRRrr.....', '....rRR..........RRr....', '....rR............Rr....',
     '....rR............Rr....', '..rrrrrrrrrrrrrrrrrrrr..', '.rKKKKKKKKKKKKKKKKKKKKr.', '.rKKRRRRKKKKKKKKRRRRKKr.',

@@ -62,7 +62,7 @@ export function buildLevel(stageIndex) {
   for (const name of stage.chunks) {
     const chunk = CHUNKS[name], width = Math.max(...chunk.map(r => r.length)), x0 = columns.length;
     const local = {}, beams = {};
-    chunk.join('').replace(/[123]/g, ch => { if (!(ch in local)) { local[ch] = groups.length; groups.push({ hacked: false }); } });
+    chunk.join('').replace(/[1239]/g, ch => { if (!(ch in local)) { local[ch] = groups.length; groups.push({ hacked: false }); } });
     if (name === 'arena') arenaX = x0 * T;
     for (let i = 0; i < width; i++) columns.push(Array.from({ length: ROWS }, () => ({ t: TILE.EMPTY, g: -1 })));
     chunk.forEach((raw, r) => [...normalizeRow(raw, width)].forEach((ch, i) => {
@@ -87,9 +87,9 @@ export function buildLevel(stageIndex) {
   for (const s of spawns) {
     switch (s.ch) {
       case 'P': start = { x: s.x + 3, y: s.y - 2 }; break;
-      case '1': case '2': case '3':
+      case '1': case '2': case '3': case '9':
         world.terminals.push({ x: s.x + 2, y: s.y, w: 12, h: 16, g: s.g, done: false, cool: 0,
-          boss: s.arena, kind: ['seq', 'bin', 'grid'][(s.g + stageIndex) % 3] }); break;
+          boss: s.arena, kind: s.ch === '9' ? 'grid' : ['seq', 'bin', 'grid'][(s.g + stageIndex) % 3], isHardBoss: s.ch === '9' }); break;
       case 'd': world.enemies.push(spawnEnemy('drone', s, 0)); break;
       case 'm': world.enemies.push(spawnEnemy('crawler', s, T - ENEMY.crawler.h)); break;
       case 'X': world.enemies.push(spawnEnemy('turret', s, T - ENEMY.turret.h)); break;

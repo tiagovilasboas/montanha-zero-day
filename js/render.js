@@ -320,7 +320,7 @@ function drawEnemy(ctx, e) {
   const img = art(e.type);
   if (img) drawEnemyArt(ctx, e, img);
   else if (e.type === 'turret') drawTurret(ctx, e);
-  else ctx.drawImage(SPR[e.type][e.vx < 0 ? 1 : 0], sx(e.x), Math.round(e.y));
+  // else we just wait for HD art to load
   if (e.stun > 0) drawSparks(ctx, sx(e.x) + e.w / 2, e.y - 2, 7);
 }
 
@@ -413,7 +413,7 @@ function drawBoss(ctx, b) {
   const img = art('boss');
   if (!(b.flash > 0 && blink(2))) {
     if (img) drawArt(ctx, img, x + b.w / 2, y + b.h + 4, BOSS_WIDTH);
-    else drawBossBody(ctx, b, x, y);
+    // else we wait for HD art to load
   }
   if (b.shield) drawShield(ctx, x + b.w / 2, y + b.h / 2);
   if (b.stun > 0) drawSparks(ctx, x + b.w / 2, y + 4, 18, 3);
@@ -429,8 +429,7 @@ function drawAlly(ctx, a) {
   const x = sx(a.x), y = Math.round(a.y), img = art(HEROES[world.player.hero].bot);
   if (a.flash) { const mx = x + 6 + a.face * 9; rect(ctx, botColor(), mx - 2, y + 3, 4, 4); rect(ctx, WHITE, mx - 1, y + 4, 2, 2); }
   if (img) { drawArt(ctx, img, x + 6, y + 13 + Math.sin(world.frame * 0.1), widthFor(img, BYTE_HEIGHT), a.face < 0); return; }
-  ctx.drawImage(SPR.byte[a.face > 0 ? 0 : 1], x, y);
-  rect(ctx, blink(2, 3) ? YELLOW : '#ff7a3d', x + 5, y + 11, 2, 1 + (world.frame % 3 === 0 ? 1 : 0));
+  // else wait for HD art
 }
 
 function heroKey(p) {
@@ -525,8 +524,7 @@ function drawPlayer(ctx, p) {
   // Pisca durante a invulnerabilidade, menos na explosão do chefe (ali ela é só proteção, não dano).
   if (!p || (p.invuln > 0 && !world.boss?.dead && Math.floor(world.frame / 2) % 2)) return;
   const x = sx(p.x - 3), y = Math.round(p.y - 2);
-  if (drawHero(ctx, p)) { drawCharge(ctx, p); return; }
-  ctx.drawImage(SPR.hero[heroKey(p)][p.face > 0 ? 0 : 1], x, y);
+  drawHero(ctx, p); // will return false if not loaded, but we don't care, we just wait for HD
   drawCharge(ctx, p, x, y);
 }
 

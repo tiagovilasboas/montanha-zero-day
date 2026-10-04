@@ -39,6 +39,7 @@ export const CHUNKS = {
   stairs: ['', '', '', '', '             =====', '', '         ===', '                 d', '     ===', '  e', '####           #####', '####^^^^^^^^^^^#####'],
   check: ['', '', '', '', '', '      h', '     ===', '', '             d', '   k        i', '####################', '####################'],
   goal: ['                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '                   #', '               G   #', '####################', '####################'],
+  datacenter_boss: ['              #', '              #', '              #', '              #', '              a', '              a', '              a', '              a', '              a', '     9        a', '####################', '####################'],
   // Blocos do Núcleo (fase 3): feixes de pulso, subida sobre lasers e um corredor de torretas.
   pulse: ['      |       |', '      |       |', '      |       |', '      |       |', '      |   d   |', '      |       |',
     '      |       |', '      |       |', '      |       |', '   i  |       |   e', '####################', '####################'],
@@ -82,7 +83,7 @@ export const STAGES = [
   },
   {
     name: 'Subsolo 404: Servidor Submerso', theme: 1, track: 1, hero: 'gle',
-    chunks: ['start', 'bridge', 'flat', 'turret', 'door', 'check', 'pit', 'stairs', 'flat', 'goal'],
+    chunks: ['start', 'bridge', 'flat', 'turret', 'door', 'check', 'pit', 'stairs', 'datacenter_boss', 'goal'],
     intro: [
       ['byte', 'Subsolo 404: Servidor Submerso. O rastro do RANSOM-TITAN passa por aqui.'],
       ['gleyce', 'Cada drone que eu derrubar me deixa mais perto dele, Byte.'],

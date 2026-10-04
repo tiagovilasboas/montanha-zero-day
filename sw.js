@@ -1,5 +1,5 @@
 // Service worker: cache-first offline shell + stale-while-revalidate for Google Fonts.
-const VERSION = 'zeroday-v19';
+const VERSION = 'zeroday-v20';
 const FONT_CACHE = 'zeroday-fonts';
 
 const MODULES = [

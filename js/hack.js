@@ -40,7 +40,7 @@ function hackBossTerminal(t) {
 
 function hackTerminal(t) {
   puzzle({
-    kind: t.kind, level: world.level.index + 1, label: `TERMINAL 0x${(0x3a + t.g).toString(16).toUpperCase()}`,
+    kind: t.kind, level: t.isHardBoss ? 5 : world.level.index + 1, label: t.isHardBoss ? `DATACENTER MAINFRAME` : `TERMINAL 0x${(0x3a + t.g).toString(16).toUpperCase()}`,
     onWin: () => { t.done = true; world.level.groups[t.g].hacked = true; gainXp(2); emit('toast', 'ACESSO LIBERADO'); },
   });
 }

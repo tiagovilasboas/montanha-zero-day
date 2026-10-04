@@ -1,5 +1,6 @@
 // Ação HACK do relógio: terminal próximo > torreta próxima > pulso EMP.
-import { world } from './world.js';
+import { world, tileAt, TILE, isSolid } from './world.js';
+import { T } from './config.js';
 import { center, distance } from './physics.js';
 import { emit } from './core.js';
 import { sfx } from './audio.js';
@@ -66,10 +67,29 @@ function emp(p) {
   if (b && b.active && !b.shield && distance(b, p) < 90) b.stun = 40;
 }
 
+const nearTurret = p => world.enemies.find(e => e.type === 'turret' && !e.ally && !e.dead && distance(e, p) < 56);
+
+// Porta laser fechada a até 3 blocos à frente?
+function doorAhead(p) {
+  const row = Math.floor((p.y + p.h / 2) / T), col = Math.floor((p.x + p.w / 2) / T);
+  for (let i = 1; i <= 3; i++) { const tx = col + p.face * i; if (tileAt(tx, row) === TILE.DOOR && isSolid(tx, row)) return true; }
+  return false;
+}
+
+// O que o HACK faria agora (o render usa para mostrar a etiqueta "HACK" em cima do alvo).
+export function hackTarget(p = world.player) {
+  if (!p || world.scene || world.love > 0) return null;   // nada de etiqueta durante a cena do rapto
+  const t = nearTerminal(p);
+  if (t) return t.boss && !(world.boss?.shield && t.cool <= 0) ? null : { x: t.x + 6, y: t.y - 14 };
+  const turret = nearTurret(p);
+  return turret ? { x: turret.x + turret.w / 2, y: turret.y - 4 } : null;
+}
+
 export function tryHack() {
   const p = world.player, t = nearTerminal(p);
   if (t) return t.boss ? hackBossTerminal(t) : hackTerminal(t);
-  const turret = world.enemies.find(e => e.type === 'turret' && !e.ally && !e.dead && distance(e, p) < 56);
+  const turret = nearTurret(p);
   if (turret) return hackTurret(turret, p);
+  if (doorAhead(p)) return emit('toast', txt('laserDoor'));   // não gasta EP: aponta o terminal
   emp(p);
 }

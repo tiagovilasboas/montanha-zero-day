@@ -5,6 +5,7 @@ import { world, TILE, tileAt, isHackedGroupTile, pulseState } from './world.js';
 import { SPR } from './sprites.js';
 import { art, anim } from './assets.js';
 import { clawY, clawClosed, clawHeight, sceneDarkness, sceneFlash } from './scene.js';
+import { hackTarget } from './hack.js';
 
 const LAYER_W = 640;
 const CYAN = PAL.C, MAGENTA = PAL.M, RED = PAL.R, YELLOW = PAL.Y, WHITE = PAL.W, GREEN = '#7dff9b', GREY = '#5a5f78';
@@ -254,6 +255,17 @@ function drawTerminal(ctx, t) {
   rect(ctx, '#2a3050', x, y + 2, 12, 14); rect(ctx, '#11152a', x + 1, y + 3, 10, 7);
   rect(ctx, terminalScreen(t), x + 2, y + 4, 8, 5);
   rect(ctx, '#454c70', x + 2, y + 12, 8, 2);
+}
+
+// Etiqueta "HACK" flutuando em cima do terminal ou da torreta que o botão vai hackear.
+function drawHackTag(ctx) {
+  const tg = hackTarget();
+  if (!tg) return;
+  const x = Math.round(sx(tg.x)), y = Math.round(tg.y - 9 + Math.sin(world.frame * 0.12) * 1.5);
+  rect(ctx, '#0b0d18', x - 12, y - 5, 24, 9); rect(ctx, MAGENTA, x - 12, y - 5, 24, 1); rect(ctx, MAGENTA, x - 12, y + 3, 24, 1);
+  rect(ctx, '#0b0d18', x - 1, y + 4, 2, 2);
+  ctx.fillStyle = blink(2, 10) ? WHITE : MAGENTA; ctx.font = '5px "Press Start 2P", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('HACK', x, y);
 }
 
 function drawCheckpoint(ctx, c) {
@@ -588,6 +600,7 @@ export function renderWorld(ctx) {
   drawBoss(ctx, world.boss);
   drawAlly(ctx, world.ally);
   drawPlayer(ctx, world.player);
+  drawHackTag(ctx);
   drawRapture(ctx);
   world.bullets.forEach(b => drawBullet(ctx, b));
   drawEffects(ctx);

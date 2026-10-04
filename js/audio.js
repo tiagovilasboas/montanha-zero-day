@@ -73,8 +73,13 @@ function roomImpulse(ctx, seconds) {
   return buf;
 }
 
+// Retoma o som parado. No iOS o estado pode ser 'interrupted' (ligação, app em segundo plano), não só 'suspended'.
+export function resumeAudio() {
+  if (ac && ac.state !== 'running') ac.resume()?.catch(() => { /* sem gesto do usuário: tenta no próximo toque */ });
+}
+
 export function unlockAudio() {
-  if (ac) { if (ac.state === 'suspended') ac.resume(); return; }
+  if (ac) { resumeAudio(); return; }
   const Ctx = window.AudioContext || window.webkitAudioContext;
   if (!Ctx) return;
   ac = new Ctx();

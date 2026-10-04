@@ -3,7 +3,7 @@ import { W, H, FPS, setViewWidth } from './config.js';
 import { $, on, emit } from './core.js';
 import { buildSprites } from './sprites.js';
 import { bindInput } from './input.js';
-import { tickMusic, unlockAudio } from './audio.js';
+import { tickMusic, unlockAudio, resumeAudio } from './audio.js';
 import { bindDialog } from './dialog.js';
 import { bindPuzzle } from './puzzle.js';
 import { bindScreens } from './screens.js';
@@ -72,7 +72,10 @@ function boot() {
   bindInput({ dpad: $('#dpad'), buttons: [...document.querySelectorAll('#btns [data-action]')] });
   bindDialog(); bindPuzzle(); bindScreens(); bindGame();
   $('#btn-pause').addEventListener('click', () => emit('ui:pause'));
-  document.addEventListener('pointerdown', unlockAudio, { once: true });
+  // Sem { once }: o iOS pode suspender o som depois; cada toque confere (barato) e retoma.
+  document.addEventListener('pointerdown', unlockAudio);
+  // App em segundo plano: pausa a fase; ao voltar, retoma o som.
+  document.addEventListener('visibilitychange', () => { if (document.hidden) emit('ui:pause'); else resumeAudio(); });
   addEventListener('resize', fitViewport);
   addEventListener('orientationchange', () => setTimeout(fitViewport, 200));
   fitViewport();

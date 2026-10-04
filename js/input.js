@@ -9,6 +9,7 @@ const KEYMAP = {
 };
 
 const keys = {}, touch = {}, latched = {}, prev = {};
+const resets = new Set();   // cada controle de toque registra como esquecer os dedos que segura
 export const input = { pressed: {}, released: {}, confirm: false, pause: false };
 ACTIONS.forEach(a => { input[a] = false; });
 
@@ -27,6 +28,13 @@ export function pollInput() {
 }
 export function consumeMeta() { input.confirm = false; input.pause = false; }
 
+// Solta tudo: ao perder o foco o navegador não manda keyup/pointerup e o herói seguiria andando sozinho.
+export function resetInput() {
+  ACTIONS.forEach(a => { keys[a] = touch[a] = latched[a] = false; });
+  resets.forEach(fn => fn());
+  sync();
+}
+
 let keyHook = null; // usado pelos puzzles para capturar teclas
 export const setKeyHook = fn => { keyHook = fn; };
 
@@ -40,7 +48,8 @@ export function bindInput({ dpad, buttons }) {
     if (a) { press(keys, a); e.preventDefault(); }
   });
   addEventListener('keyup', e => { const a = KEYMAP[e.code]; if (a) release(keys, a); });
-  addEventListener('blur', () => { ACTIONS.forEach(a => { keys[a] = touch[a] = false; }); sync(); });
+  addEventListener('blur', resetInput);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetInput(); });
 
   bindDpad(dpad);
   buttons.forEach(bindButton);
@@ -62,6 +71,7 @@ function bindDpad(el) {
   el.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); el.setPointerCapture(e.pointerId); track(e); });
   el.addEventListener('pointermove', e => { if (fingers.has(e.pointerId)) track(e); });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(n => el.addEventListener(n, e => { fingers.delete(e.pointerId); update(); }));
+  resets.add(() => { fingers.clear(); update(); });
 }
 
 function bindButton(el) {
@@ -75,5 +85,6 @@ function bindButton(el) {
     if (!fingers.size) { el.classList.remove('is-down'); release(touch, action); }
   };
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(n => el.addEventListener(n, up));
+  resets.add(() => { fingers.clear(); el.classList.remove('is-down'); });
   el.addEventListener('contextmenu', e => e.preventDefault());
 }

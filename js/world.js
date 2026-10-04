@@ -1,7 +1,25 @@
 // Mundo: estado compartilhado da fase, construção do mapa a partir dos blocos e consultas de tiles.
 import { T, ROWS, CHUNKS, STAGES, THEMES, ENEMY } from './config.js';
 
-export const TILE = { EMPTY: 0, SOLID: 1, PLATFORM: 2, LASER: 3, DOOR: 4, BRIDGE: 5 };
+export const TILE = { EMPTY: 0, SOLID: 1, PLATFORM: 2, LASER: 3, DOOR: 4, BRIDGE: 5, PULSE: 6 };
+
+// Feixes de pulso do Núcleo (fase 3): ligam e desligam num ritmo fixo. Feixes vizinhos alternam a fase,
+// então o jogador atravessa um, espera no meio e passa pelo próximo. Pisca antes de ligar (aviso).
+const PULSE_CYCLE = 150, PULSE_ON = 55, PULSE_WARN = 28;
+export function pulseState(tx, ty) {
+  const L = world.level, t = (world.frame + L.grp[ty * L.w + tx] * (PULSE_CYCLE / 2)) % PULSE_CYCLE;
+  if (t < PULSE_ON) return 'on';
+  return t >= PULSE_CYCLE - PULSE_WARN ? 'warn' : 'off';
+}
+// Algum feixe ligado encostando na caixa? (margem de 2 px para não punir raspão)
+export function pulseHit(o) {
+  const x0 = Math.floor((o.x + 2) / T), x1 = Math.floor((o.x + o.w - 3) / T);
+  const y0 = Math.max(0, Math.floor((o.y + 2) / T)), y1 = Math.min(ROWS - 1, Math.floor((o.y + o.h - 3) / T));
+  for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) {
+    if (tileAt(tx, ty) === TILE.PULSE && pulseState(tx, ty) === 'on') return { x: tx * T + T / 2 };
+  }
+  return null;
+}
 
 // Estado único da fase em andamento (KISS: um objeto, sem classes).
 export const world = {
@@ -11,7 +29,7 @@ export const world = {
   cam: { x: 0, y: 0, zoom: 1, shake: 0 }, love: 0, scene: null, frame: 0, time: 0, kills: 0, xpGained: 0, hints: new Set(),
 };
 
-const CHAR_TILE = { '#': TILE.SOLID, '=': TILE.PLATFORM, '^': TILE.LASER };
+const CHAR_TILE = { '#': TILE.SOLID, '=': TILE.PLATFORM, '^': TILE.LASER, '|': TILE.PULSE };
 const groupOf = (ch, base) => String.fromCharCode(ch.charCodeAt(0) - base); // a→1, A→1
 
 export function makeEnemy(type, x, y) {
@@ -43,13 +61,14 @@ export function buildLevel(stageIndex) {
 
   for (const name of stage.chunks) {
     const chunk = CHUNKS[name], width = Math.max(...chunk.map(r => r.length)), x0 = columns.length;
-    const local = {};
+    const local = {}, beams = {};
     chunk.join('').replace(/[123]/g, ch => { if (!(ch in local)) { local[ch] = groups.length; groups.push({ hacked: false }); } });
     if (name === 'arena') arenaX = x0 * T;
     for (let i = 0; i < width; i++) columns.push(Array.from({ length: ROWS }, () => ({ t: TILE.EMPTY, g: -1 })));
     chunk.forEach((raw, r) => [...normalizeRow(raw, width)].forEach((ch, i) => {
       const cell = columns[x0 + i][r];
       if (CHAR_TILE[ch]) cell.t = CHAR_TILE[ch];
+      if (ch === '|') { if (!(i in beams)) beams[i] = Object.keys(beams).length % 2; cell.g = beams[i]; }   // fase do feixe
       else if ('abc'.includes(ch)) { cell.t = TILE.DOOR; cell.g = local[groupOf(ch, 48)]; }
       else if ('ABC'.includes(ch)) { cell.t = TILE.BRIDGE; cell.g = local[groupOf(ch, 16)]; }
       else if (ch !== ' ') spawns.push({ ch, x: (x0 + i) * T, y: r * T, g: local[ch], arena: name === 'arena' });

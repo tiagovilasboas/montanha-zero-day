@@ -1,7 +1,7 @@
 // Renderização: fundo parallax, tiles, objetos, inimigos, chefe, herói e efeitos. Só desenho, nenhuma regra.
 import { W, H, T, ROWS, THEMES, PAL, HEROES, HERO_HEIGHT } from './config.js';
 import { rng } from './core.js';
-import { world, TILE, tileAt, isHackedGroupTile } from './world.js';
+import { world, TILE, tileAt, isHackedGroupTile, pulseState } from './world.js';
 import { SPR } from './sprites.js';
 import { art, anim } from './assets.js';
 import { clawY, clawClosed, clawHeight, sceneDarkness, sceneFlash } from './scene.js';
@@ -191,6 +191,26 @@ function drawLaser(ctx, x, y) {
   }
 }
 
+// Feixe de pulso: ligado é uma coluna de luz; avisando, pisca fino; desligado, só os emissores.
+function drawPulse(ctx, x, y, tx, ty) {
+  const state = pulseState(tx, ty), top = tileAt(tx, ty - 1) !== TILE.PULSE, bottom = tileAt(tx, ty + 1) !== TILE.PULSE;
+  if (state === 'on') {
+    ctx.globalAlpha = 0.35 + 0.15 * Math.sin(world.frame * 0.6 + ty);
+    rect(ctx, MAGENTA, x + 3, y, 10, T);
+    ctx.globalAlpha = 1;
+    rect(ctx, '#ffd0f4', x + 6, y, 4, T); rect(ctx, WHITE, x + 7, y, 2, T);
+  } else if (state === 'warn' && blink(2, 3)) {
+    rect(ctx, MAGENTA, x + 7, y, 2, T);
+  } else {
+    // Desligado: um fio apagado marca onde o feixe vai acender (os emissores podem estar fora da tela).
+    ctx.globalAlpha = 0.28; rect(ctx, WHITE, x + 7, y, 1, T); rect(ctx, MAGENTA, x + 8, y, 1, T);
+    if ((ty + (world.frame >> 3)) % 3 === 0) { ctx.globalAlpha = 0.4; rect(ctx, MAGENTA, x + 7, y + 6, 2, 4); }
+    ctx.globalAlpha = 1;
+  }
+  if (top) { rect(ctx, GREY, x + 3, y, 10, 3); rect(ctx, state === 'off' ? '#5a2f60' : MAGENTA, x + 6, y + 3, 4, 1); }
+  if (bottom) { rect(ctx, GREY, x + 3, y + T - 3, 10, 3); rect(ctx, state === 'off' ? '#5a2f60' : MAGENTA, x + 6, y + T - 4, 4, 1); }
+}
+
 function drawDoor(ctx, x, y, tx, ty) {
   if (isHackedGroupTile(tx, ty)) return;
   for (let i = 0; i < 3; i++) rect(ctx, (world.frame + i * 3) % 8 < 4 ? CYAN : MAGENTA, x + 3 + i * 5, y, 1, T);
@@ -218,6 +238,7 @@ function drawTiles(ctx, theme) {
       else if (t === TILE.LASER) drawLaser(ctx, x, y);
       else if (t === TILE.DOOR) drawDoor(ctx, x, y, tx, ty);
       else if (t === TILE.BRIDGE) drawBridge(ctx, x, y, tx, ty);
+      else if (t === TILE.PULSE) drawPulse(ctx, x, y, tx, ty);
     }
 }
 

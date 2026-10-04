@@ -2,7 +2,7 @@
 import { PHYS, PLAYER, T, H, HEROES, HERO_HEIGHT, maxHpFor, shotDamage } from './config.js';
 import { aimTarget } from './combat.js';
 import { save, emit } from './core.js';
-import { world, TILE, tileAt } from './world.js';
+import { world, TILE, tileAt, pulseHit } from './world.js';
 import { moveX, moveY, touchesTile, center } from './physics.js';
 import { input } from './input.js';
 import { sfx } from './audio.js';
@@ -110,7 +110,15 @@ export function updatePlayer() {
   if (p.invuln) p.invuln--;
   p.anim += Math.abs(p.vx) * 0.12;
   if (world.frame % 45 === 0) p.ep = Math.min(p.maxEp, p.ep + 1);
-  if (touchesTile(p, TILE.LASER) || p.y > H + 16) fallHazard();
+  if (touchesTile(p, TILE.LASER) || p.y > H + 16) { fallHazard(); return; }
+  // Feixe de pulso ligado: dano e empurrão para longe do feixe (não volta ao checkpoint).
+  // Ainda piscando do golpe, o feixe ligado vira parede: não dá para "pagar" 3 de HP e atravessar.
+  const beam = pulseHit(p);
+  if (beam) {
+    const fromLeft = p.x + p.w / 2 < beam.x;
+    if (p.invuln) { p.x = fromLeft ? beam.x - T / 2 - p.w + 1 : beam.x + T / 2 - 1; p.vx = 0; }
+    else emit('player:hit', { dmg: 3, dir: fromLeft ? -1 : 1 });
+  }
 }
 
 export function hurtPlayer(dmg, dir = -world.player.face) {

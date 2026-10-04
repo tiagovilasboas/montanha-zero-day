@@ -20,6 +20,7 @@ function puzzle(opts) {
     ...opts,
     onWin: () => { lockButtons(); opts.onWin(); },
     onFail: () => { lockButtons(); const p = world.player; p.hp = Math.max(1, p.hp - 2); emit('toast', 'Choque de retorno: -2 HP'); },
+    onCancel: () => { lockButtons(); opts.onCancel?.(); },
   });
 }
 
@@ -50,6 +51,7 @@ function hackTurret(turret, p) {
   puzzle({
     kind: 'seq', level: 0, label: 'TORRETA HOSTIL',
     onWin: () => { turret.ally = true; turret.hp = turret.max; gainXp(4); emit('toast', 'TORRETA AGORA É ALIADA'); },
+    onCancel: () => { p.ep = Math.min(p.maxEp, p.ep + TURRET_COST); },   // desistiu: devolve o EP
   });
 }
 

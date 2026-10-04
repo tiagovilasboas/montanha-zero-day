@@ -110,9 +110,9 @@ function playSequence(p) {
 
 function message(text, cls = '') { const m = $('#pz-msg'); m.textContent = text; m.className = `pz-msg ${cls}`; }
 
-export function openPuzzle({ kind, level, label, onWin, onFail }) {
+export function openPuzzle({ kind, level, label, onWin, onFail, onCancel }) {
   const k = KINDS[kind];
-  pz = { kind, level, onWin, onFail, time: 0, max: k.seconds * 60, done: false };
+  pz = { kind, level, onWin, onFail, onCancel, time: 0, max: k.seconds * 60, done: false };
   $('#pz-title').textContent = `HACK // ${label}`;
   $('#pz-help').textContent = HELP[kind];
   message('');
@@ -124,6 +124,8 @@ export function openPuzzle({ kind, level, label, onWin, onFail }) {
 }
 
 function close() { $('#puzzle').hidden = true; pz = null; setKeyHook(null); }
+// Sair sem terminar (Esc ou botão Sair): quem abriu decide o que devolver.
+function cancel() { if (!pz || pz.done) return; const p = pz; close(); p.onCancel?.(); }
 
 function finish(ok, text) {
   if (!pz || pz.done) return;
@@ -146,8 +148,8 @@ export function tickPuzzle() {
 }
 
 function onKey(e) {
-  if (!pz || pz.done) return true;
-  if (e.code === 'Escape') { close(); return true; }
+  if (!pz || pz.done || e.repeat) return true;   // tecla segurada não conta como vários toques
+  if (e.code === 'Escape') { cancel(); return true; }
   const v = KINDS[pz.kind].key(e, pz);
   if (v === null) return false;
   KINDS[pz.kind].pick(pz, v, document.querySelector(`#pz-body [data-v="${v}"]`));
@@ -155,7 +157,7 @@ function onKey(e) {
 }
 
 export function bindPuzzle() {
-  $('#pz-cancel').addEventListener('click', () => { if (pz && !pz.done) close(); });
+  $('#pz-cancel').addEventListener('click', cancel);
   $('#pz-body').addEventListener('click', e => {
     const btn = e.target.closest('[data-v]');
     if (!btn || !pz || pz.done) return;

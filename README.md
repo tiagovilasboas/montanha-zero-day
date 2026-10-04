@@ -1,6 +1,6 @@
 # Montanha: Zero Day
 
-[![Play online](https://img.shields.io/badge/play-online-3df0ff?style=flat-square)](https://tiagovilasboas.github.io/montanha-zero-day/) [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff4fd8?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/tiagovilasboas) ![PWA](https://img.shields.io/badge/PWA-offline-ffd23d?style=flat-square) ![No build](https://img.shields.io/badge/vanilla-JS%20%2B%20canvas-9b5cff?style=flat-square)
+[![Play online](https://img.shields.io/badge/play-online-3df0ff?style=flat-square)](https://tiagovilasboas.github.io/montanha-zero-day/) [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff4fd8?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/tiagovilasboas) ![PWA](https://img.shields.io/badge/PWA-offline-ffd23d?style=flat-square) ![No build](https://img.shields.io/badge/vanilla-JS%20%2B%20canvas-9b5cff?style=flat-square) [![License: MIT](https://img.shields.io/badge/code-MIT-7dff9b?style=flat-square)](LICENSE)
 
 A mobile-first 2D platformer PWA with a Mega Man feel, Final Fantasy flavor and a cyberpunk city.
 He went to rescue Gle. Now she's coming for him.
@@ -111,4 +111,4 @@ If you enjoyed the game, you can support new stages and projects on **[GitHub Sp
 
 ## License
 
-Made by [Tiago Vilas Boas](https://github.com/tiagovilasboas). No license yet. All rights reserved by the author until one is added.
+Made by [Tiago Vilas Boas](https://github.com/tiagovilasboas). The source code is released under the [MIT License](LICENSE). The artwork, characters and likenesses (`assets/`, `icons/`, `docs/screenshots/`, and Montanha, Gle and BYTE themselves) are all rights reserved.

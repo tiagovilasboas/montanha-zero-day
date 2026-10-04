@@ -1,6 +1,6 @@
 # Montanha: Zero Day
 
-[![Play online](https://img.shields.io/badge/play-online-3df0ff?style=flat-square)](https://tiagovilasboas.github.io/montanha-zero-day/) [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff4fd8?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/tiagovilasboas) ![PWA](https://img.shields.io/badge/PWA-offline-ffd23d?style=flat-square) ![No build](https://img.shields.io/badge/vanilla-JS%20%2B%20canvas-9b5cff?style=flat-square)
+[![Play online](https://img.shields.io/badge/play-online-3df0ff?style=flat-square)](https://tiagovilasboas.github.io/montanha-zero-day/) [![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff4fd8?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/tiagovilasboas) ![PWA](https://img.shields.io/badge/PWA-offline-ffd23d?style=flat-square) ![No build](https://img.shields.io/badge/vanilla-JS%20%2B%20canvas-9b5cff?style=flat-square) [![License: MIT](https://img.shields.io/badge/code-MIT-7dff9b?style=flat-square)](LICENSE)
 
 Plataforma 2D em PWA, pensada para celular: pegada de Mega Man, sabor de Final Fantasy e uma cidade cyberpunk.
 Ele foi resgatar a Gle. Agora é ela quem vai buscar ele.
@@ -83,4 +83,4 @@ Curtiu o jogo? Você pode apoiar novas fases e projetos pelo **[GitHub Sponsors]
 
 ## Autor
 
-Feito por [Tiago Vilas Boas](https://github.com/tiagovilasboas). Ainda sem licença: todos os direitos reservados ao autor até que uma seja adicionada.
+Feito por [Tiago Vilas Boas](https://github.com/tiagovilasboas). O código está sob a [licença MIT](LICENSE). A arte, os personagens e os retratos (`assets/`, `icons/`, `docs/screenshots/`, além do próprio Montanha, da Gle e do BYTE) têm todos os direitos reservados.

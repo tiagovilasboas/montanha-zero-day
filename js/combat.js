@@ -62,7 +62,7 @@ export function gainXp(amount) {
   if (p) { p.max = maxHpFor(save.lv); p.hp = p.max; burst(p.x + 5, p.y + 9, '#ffd23d', 24); }
   persist();
   sfx('levelUp');
-  emit('toast', `LEVEL UP! LV ${save.lv}`);
+  emit('toast', `SUBIU DE NÍVEL! LV ${save.lv}`);
 }
 
 export function damageEnemy(e, dmg) {

@@ -65,7 +65,8 @@ export const STAGES = [
     ],
     infos: [
       'Segure TIRO para carregar o relógio. Solte para um disparo pesado que atravessa inimigos.',
-      'Perto de uma torreta vermelha, aperte HACK e ela passa a lutar do nosso lado. Longe de tudo, HACK solta um pulso EMP que paralisa inimigos.',
+      'Perto de uma torreta vermelha, aperte HACK: ela passa a lutar do nosso lado.',
+      'Longe de terminais e torretas, HACK solta um pulso EMP que paralisa inimigos.',
     ],
   },
   {
@@ -74,19 +75,22 @@ export const STAGES = [
     intro: [
       ['byte', 'Subsolo 404: Servidor Submerso. O rastro do RANSOM-TITAN passa por aqui.'],
       ['gleyce', 'Cada drone que eu derrubar me deixa mais perto dele, Byte.'],
-      ['byte', 'Sua manopla dourada atira e hackeia igual ao relógio dele. No ar, segure PULO para planar com as botas.'],
+      ['byte', 'Mudei minha cor pro seu time. Modo Gle ativado.'],
+      ['byte', 'Sua manopla atira e hackeia igual ao relógio dele.'],
+      ['byte', 'No ar, segure PULO e as botas de luz te seguram no alto.'],
     ],
     infos: [
-      'Ponte apagada à frente. O terminal ao lado religa ela. Sem ponte, só lasers lá embaixo.',
+      'Ponte apagada à frente. O terminal ao lado religa a ponte. Sem ela, só lasers lá embaixo.',
       'Cada inimigo derrotado dá XP. Subir de nível aumenta seu HP e o dano da manopla.',
     ],
   },
   {
-    name: 'Kernel Panic no Covil do Chefe', theme: 2, track: 2, hero: 'gle',
+    name: 'Kernel Panic: o Núcleo', theme: 2, track: 2, hero: 'gle',
     chunks: ['start', 'flat', 'door', 'stairs', 'turret', 'check', 'arena'],
     intro: [
-      ['byte', 'Kernel Panic no Covil do Chefe. Ele está lá dentro, Gle.'],
-      ['gleyce', 'Ele está aí dentro. E eu vou buscar.'],
+      ['gleyce', 'Subsolo limpo. E agora, Byte?'],
+      ['byte', 'O sinal do Montanha some dentro do Núcleo, a casa do RANSOM-TITAN.'],
+      ['gleyce', 'Então é lá que eu vou. Aguenta, amor.'],
     ],
     infos: [
       'Sinto a assinatura do RANSOM-TITAN. Guarde EP para os terminais.',
@@ -98,12 +102,13 @@ export const STAGES = [
 export const STORY = {
   intro: [
     ['sys', 'ANO 2099. NEO-SAMPA.'],
-    ['sys', 'A LEGIÃO NULL, uma IA invasora, sequestrou a rede do planeta. Drones de malware tomaram as ruas.'],
+    ['sys', 'A LEGIÃO NULL, uma IA invasora, tomou a rede do planeta.'],
+    ['sys', 'Seu general, o RANSOM-TITAN, soltou drones de malware nas ruas.'],
     ['gleyce', 'Montanha! Eles invadiram a casa! Estão me levando!'],
     ['sys', 'SINAL PERDIDO. CÁPSULA CRIPTOGRAFADA EM TRÂNSITO.'],
     ['byte', 'Montanha, levaram a Gle! O RANSOM-TITAN trancou ela numa cápsula, no alto dos telhados.'],
     ['hero', 'Pega minha mochila e o relógio, Byte. Ninguém mexe com a minha parceira.'],
-    ['byte', 'Mochila JET carregada. Relógio H4X pronto: atira, hackeia terminais e converte torretas inimigas.'],
+    ['byte', 'Mochila JET carregada. Relógio H4X pronto pra atirar e hackear.'],
     ['hero', 'Mesmo time, sempre. Aguenta firme, amor. Tô indo.'],
   ],
   // Fim da fase 1, parte 1: o Montanha encontra a Gle presa na cápsula.
@@ -115,22 +120,25 @@ export const STORY = {
   // Parte 2 (depois do rapto): a cápsula abre e a Gle, livre, parte atrás dele.
   freed: [
     ['gleyce', 'MONTANHA! Não! Solta ele!'],
-    ['byte', 'Foi uma garra do RANSOM-TITAN. Ele levou o Montanha e a cápsula abriu. Você está livre, Gle!'],
-    ['gleyce', 'Ele me tirou da cápsula só pra me fazer correr atrás. Pois eu vou. Byte, me mostra o caminho.'],
-    ['byte', 'O sinal dele vai para o Subsolo 404. Eu te guio.'],
+    ['byte', 'Era uma isca! O RANSOM-TITAN queria o hacker. A cápsula abriu sozinha.'],
+    ['gleyce', 'Então ele vai ter que me aguentar.'],
+    ['byte', 'O Montanha deixou comigo a manopla reserva e as botas de luz. Veste!'],
+    ['byte', 'E copiei os upgrades dele pra você. O sinal dele vai pro Subsolo 404.'],
+    ['gleyce', 'Me mostra o caminho, Byte. Mesmo time, sempre.'],
   ],
   boss: [
-    ['boss', 'A princesa veio buscar o hacker? Que comovente.'],
+    ['boss', 'A princesa veio buscar o hacker? O hacker é meu. E a rede também.'],
     ['gleyce', 'Ele não é só um hacker. É meu parceiro. Mesmo time, sempre.'],
     ['boss', 'Eu sou RANSOM-TITAN. Nada sai deste Núcleo sem a minha chave.'],
-    ['byte', 'Quando ele perder metade da energia, vai erguer um firewall. Fica de olho no terminal!'],
+    ['byte', 'Ele é blindado. Acerta enquanto dá, Gle!'],
   ],
   firewall: [['byte', 'Ele ergueu um FIREWALL! Os tiros não passam. Hackeia o terminal à esquerda, Gle!']],
   ending: [
     ['boss', 'Impossível... minha criptografia era... perfeita...'],
-    ['byte', 'Chave mestra extraída! Liberando os servidores do planeta... espera. Tem mais uma coisa aqui.'],
-    ['byte', 'A cela do Montanha! Ele estava preso aqui no Núcleo o tempo todo!'],
-    ['sys', 'CELA CRIPTOGRAFADA ABERTA. MONTANHA.EXE ONLINE.'],
+    ['byte', 'Chave mestra extraída! Liberando os servidores do planeta...'],
+    ['byte', 'E achei a cela do Montanha, bem no fundo do Núcleo!'],
+    ['gleyce', 'A chave é minha agora. Abre essa cela, Byte.'],
+    ['sys', 'CELA CRIPTOGRAFADA ABERTA. PRISIONEIRO LIBERADO: MONTANHA.'],
     ['hero', '...Gle? Eu sabia que você vinha, amor.'],
     ['gleyce', 'Mesmo time, sempre.'],
     ['byte', 'Neo-Sampa acendeu de novo. Missão cumprida, vocês dois.'],

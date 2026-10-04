@@ -27,14 +27,14 @@ const soundLabel = () => `Som: ${save.muted ? 'desligado' : 'ligado'}`;
 export function showTitle(canInstall) {
   show(`${EMBLEM}
     <h1 class="logo">MONTANHA<small>ZERO DAY</small></h1>
-    <p class="tagline">Um hacker, uma princesa e uma cidade inteira offline.</p>
+    <p class="tagline">Ele foi resgatar a Gle. Agora é ela quem vai buscar ele.</p>
     <div class="menu">
       ${save.started ? button('continue', 'Continuar') : ''}
       ${button('new', save.started ? 'Novo jogo' : 'Começar')}
       ${button('sound', soundLabel())}
       ${button('install', 'Instalar app', canInstall ? '' : 'hidden')}
     </div>
-    <p class="hint">Teclado: ← → mover · Z pular (segure no ar = JET) · X atirar (segure = carga) · C hack · Esc pausa</p>`);
+    <p class="hint">Teclado: ← → mover · Z pular (segure no ar = voar) · X atirar (segure = carga) · C hack · Esc pausa</p>`);
 }
 
 function stageButton(stage, i) {
@@ -49,10 +49,10 @@ function stageButton(stage, i) {
 const ROSTER = {
   montanha: { name: 'MONTANHA', label: 'Montanha', portrait: 'hero', gear: [
     ['Relógio H4X', 'atira, carrega disparo pesado e hackeia terminais e torretas.'],
-    ['Mochila JET', 'segure PULO no ar para planar e subir.']] },
+    ['Mochila JET', 'segure PULO no ar: o jato te leva pro alto.']] },
   gle: { name: 'GLE', label: 'Gle', portrait: 'gleyce', gear: [
     ['Manopla dourada', 'atira, carrega disparo pesado e hackeia terminais e torretas.'],
-    ['Botas de luz', 'segure PULO no ar para planar e subir.']] },
+    ['Botas de luz', 'segure PULO no ar: as botas te seguram no alto.']] },
 };
 
 export function showMap() {
@@ -79,8 +79,11 @@ export function showMap() {
   <div class="menu">${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>`);
 }
 
-export function showResult({ stageName, time, kills, xp }) {
-  show(`<h2 class="logo">MISSÃO<small>CONCLUÍDA</small></h2>
+export function showResult({ stageName, time, kills, xp, rescue }) {
+  // Fase 1 termina com o rapto: a manchete é a Gle livre, não "missão concluída".
+  const head = rescue ? 'GLE<small>LIBERTADA</small>' : 'MISSÃO<small>CONCLUÍDA</small>';
+  const note = rescue ? '<p class="tagline">O Montanha foi capturado. Agora é a vez dela.</p>' : '';
+  show(`<h2 class="logo">${head}</h2>${note}
     <section class="win result"><h3>${stageName}</h3>
       ${statList([['Tempo', formatTime(time)], ['Inimigos', kills], ['XP ganho', xp], ['Nível', save.lv]])}
     </section>
@@ -100,7 +103,7 @@ export function showPause() {
 
 export function showEnding() {
   show(`${EMBLEM}<h2 class="logo">A REDE<small>ESTÁ LIVRE</small></h2>
-    <p class="tagline">A Gle venceu o RANSOM-TITAN, o Montanha voltou do backup e Neo-Sampa acendeu de novo. Mesmo time, sempre.</p>
+    <p class="tagline">A Gle venceu o RANSOM-TITAN, tirou o Montanha da cela e Neo-Sampa acendeu de novo. Mesmo time, sempre.</p>
     <section class="win result"><h3>FICHA FINAL</h3>${statList([['Nível', save.lv], ['XP total', save.xp]])}</section>
     <div class="menu">${button('map', 'Mapa de missões')}${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>`);
 }

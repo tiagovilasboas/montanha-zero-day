@@ -68,7 +68,7 @@ function finishStage() {
   save.unlocked = Math.max(save.unlocked, Math.min(STAGES.length, i + 2));
   if (!save.cleared.includes(i)) save.cleared.push(i);
   persist(); stopMusic(); sfx('levelUp'); setHudVisible(false);
-  screens.showResult({ stageName: STAGES[i].name, time: world.time, kills: world.kills, xp: world.xpGained });
+  screens.showResult({ stageName: STAGES[i].name, time: world.time, kills: world.kills, xp: world.xpGained, rescue: !!STAGES[i].rescue });
 }
 
 function gameOver() {

@@ -10,7 +10,7 @@ Ele foi resgatar a Gle. Agora é ela quem vai buscar ele.
 **Neo-Sampa, 2099.** A IA invasora LEGIÃO NULL tomou a rede do planeta. A Gle foi sequestrada e trancada numa cápsula.
 
 - **Fase 1, Telhados do Cecapão.** Você joga com o **Montanha**: mochila com jato, relógio hacker e o robô BYTE. No fim ele encontra a Gle na cápsula (sobem corações), então uma garra do RANSOM-TITAN o rapta e a Gle é libertada.
-- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic: o Núcleo.** Você joga com a **Gle**, que vai atrás do RANSOM-TITAN com a manopla dourada, botas que planam e um BYTE rosa.
+- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic: o Núcleo.** Você joga com a **Gle**, que vai atrás do RANSOM-TITAN com a manopla dourada, botas que planam e um BYTE rosa. O Núcleo tem feixes de pulso que ligam e desligam no ritmo, uma subida sobre lasers e um corredor de torretas antes do chefe.
 - **Final.** Depois do chefe, a Gle usa a chave do RANSOM-TITAN e tira o Montanha da cela no fundo do Núcleo.
 
 ### Controles

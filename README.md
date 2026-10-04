@@ -10,7 +10,7 @@ He went to rescue Gle. Now she's coming for him.
 **Neo-Sampa, 2099.** The invading AI LEGIÃO NULL has taken the planet's network. Gle was kidnapped and locked in a capsule.
 
 - **Phase 1, Telhados do Cecapão.** You play **Montanha**: backpack jetpack, a hacking watch and the robot BYTE. At the end he finds Gle in her capsule (hearts rise), then a RANSOM-TITAN claw snatches him away and Gle is freed.
-- **Phases 2 and 3, Subsolo 404: Servidor Submerso and Kernel Panic: o Núcleo.** You play **Gle**, who goes after RANSOM-TITAN with her golden gauntlet, hover boots and a pink BYTE.
+- **Phases 2 and 3, Subsolo 404: Servidor Submerso and Kernel Panic: o Núcleo.** You play **Gle**, who goes after RANSOM-TITAN with her golden gauntlet, hover boots and a pink BYTE. The Core adds pulse beams that switch on and off in rhythm, a climb over lasers and a turret gauntlet before the boss.
 - **Ending.** After the boss, Gle takes RANSOM-TITAN's key and opens Montanha's cell deep in the Core.
 
 ### Controls

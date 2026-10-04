@@ -11,6 +11,7 @@ const PORTRAITS = { hero: 'portrait_hero', byte: 'portrait_byte', boss: 'portrai
 
 const images = {};
 const portraitSrc = {};
+let botKey = 'byte';   // qual BYTE (azul ou rosa) aparece nos diálogos agora
 export const assetPath = name => `assets/${name}.webp`;
 
 // Devolve a imagem pronta ou null (quem chama decide o desenho de reserva).
@@ -36,8 +37,9 @@ export function loadArt() {
     const img = new Image();
     img.onload = () => {
       portraitSrc[who] = img.src;
-      if (who === 'byte') PORTRAIT_URL.byte ??= img.src;
-      else if (who !== 'byte_pink') PORTRAIT_URL[who] = img.src;   // hero, gleyce, boss: rosto HD no lugar da pixel art
+      // O BYTE só troca se for a cor da vez (a pixel art de sprites.js já ocupa o lugar antes do HD chegar).
+      if (who === 'byte' || who === 'byte_pink') { if (who === botKey) PORTRAIT_URL.byte = img.src; }
+      else PORTRAIT_URL[who] = img.src;   // hero, gleyce, boss: rosto HD no lugar da pixel art
     };
     img.src = assetPath(file);
   });
@@ -45,6 +47,6 @@ export function loadArt() {
 
 // O robô muda de cor com quem joga: nos diálogos, BYTE aparece rosa nas fases da Gle.
 export function useBotPortrait(botArt) {
-  const key = botArt === 'byte_pink' ? 'byte_pink' : 'byte';
-  if (portraitSrc[key]) PORTRAIT_URL.byte = portraitSrc[key];
+  botKey = botArt === 'byte_pink' ? 'byte_pink' : 'byte';
+  if (portraitSrc[botKey]) PORTRAIT_URL.byte = portraitSrc[botKey];
 }

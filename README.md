@@ -9,8 +9,8 @@ A hacker, a princess and a whole city offline.
 
 **Neo-Sampa, 2099.** The invading AI LEGIÃO NULL has taken the planet's network. Gle was kidnapped and locked in a capsule.
 
-- **Phase 1, Telhados do Cecapão Velho.** You play **Montanha**: backpack jetpack, a hacking watch and the robot BYTE. At the end he finds Gle in her capsule (hearts rise), then a RANSOM-TITAN claw snatches him away and Gle is freed.
-- **Phases 2 and 3, Data Center Abissal and Núcleo da Legião.** You play **Gle**, who goes after RANSOM-TITAN with her golden gauntlet, hover boots and a pink BYTE.
+- **Phase 1, Telhados do Cecapão.** You play **Montanha**: backpack jetpack, a hacking watch and the robot BYTE. At the end he finds Gle in her capsule (hearts rise), then a RANSOM-TITAN claw snatches him away and Gle is freed.
+- **Phases 2 and 3, Subsolo 404: Servidor Submerso and Kernel Panic no Covil do Chefe.** You play **Gle**, who goes after RANSOM-TITAN with her golden gauntlet, hover boots and a pink BYTE.
 - **Ending.** After the boss, BYTE finds Montanha's locked cell inside the Core and frees him: MONTANHA.EXE back online.
 
 ### Controls
@@ -26,7 +26,7 @@ A hacker, a princess and a whole city offline.
 | Advance dialog | `Enter`, jump or shoot | tap the buttons |
 
 Hack near a red turret to convert it to your side, near a yellow terminal to open its puzzle, and far from everything to fire an EMP pulse that stuns enemies.
-Play with the phone in landscape: the game fills the whole screen.
+The game is landscape-only on phones: in portrait a "rotate your phone" screen appears and the game stays paused (the manifest also requests landscape when installed; the **Tela cheia** button locks it on Android).
 
 ## Run it
 

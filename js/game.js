@@ -18,7 +18,7 @@ import { updateInteractables } from './interact.js';
 import { updateFx, startLove } from './fx.js';
 import { startScene, endScene, updateScene } from './scene.js';
 
-export const game = { mode: 'title', menuFrame: 0, cardTimer: 0, cardDone: null, canInstall: false };
+export const game = { mode: 'title', menuFrame: 0, cardTimer: 0, cardDone: null, canInstall: false, blocked: false };   // blocked: celular em retrato (pede para girar)
 
 // ---- Navegação entre telas
 function goTitle() { game.mode = 'title'; setHudVisible(false); playTrack('title'); screens.showTitle(game.canInstall); }
@@ -46,7 +46,7 @@ function startStage(index) {
   game.cardDone = () => talk(STAGES[index].intro);
 }
 
-function pause() { if (game.mode !== 'play') return; game.mode = 'pause'; screens.showPause(); }
+function pause() { if (game.mode !== 'play' || dialogOpen() || puzzleOpen() || game.cardTimer > 0) return; game.mode = 'pause'; screens.showPause(); }
 function resume() { game.mode = 'play'; screens.hideScreen(); lockButtons(); }
 
 function clearStage() {
@@ -57,7 +57,7 @@ function clearStage() {
 }
 
 function rescueCutscene() {
-  game.mode = 'cutscene'; stopMusic(); startLove(200); sfx('hackOk');
+  game.mode = 'cutscene'; setHudVisible(false); stopMusic(); startLove(200); sfx('hackOk');
   talk(STORY.meet, () => startScene(() => talk(STORY.freed, finishStage)));
 }
 
@@ -136,6 +136,7 @@ function updatePlay() {
 
 // ---- Um passo fixo de simulação (60 por segundo)
 export function step() {
+  if (game.blocked) return;   // retrato no celular: simulação parada até girar
   pollInput();
   game.menuFrame++;
   if (dialogOpen()) {

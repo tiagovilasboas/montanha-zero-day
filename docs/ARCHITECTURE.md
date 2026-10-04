@@ -24,7 +24,7 @@ Plain ES modules, no framework and no bundler. Each module has one job; shared d
 
 ## Screen, units and camera
 
-- **Logical units.** Height is always 192 units and a tile is 16 units. Width follows the phone's aspect ratio, from 256 (tall portrait) up to 448 (21:9 landscape), so the game fills the screen with no side bars.
+- **Logical units.** Height is always 192 units and a tile is 16 units. Width follows the screen's aspect ratio, from 320 (touch layout) up to 448 (21:9 landscape), so the game fills the screen with no side bars. Phones in portrait are not supported: `#rotate` (CSS media query `orientation: portrait` + `pointer: coarse` + `max-width: 820px`) covers the app, `main.js` mirrors it into `game.blocked` and `step()` stops the simulation until the phone is rotated. Desktop windows in portrait keep the old layout (min width 256).
 - **Real pixels.** The canvas is `W × scale` by `H × scale` real pixels (scale up to 4) and drawing uses logical coordinates.
 - **Zoom.** The world is drawn with `cam.zoom` (`ZOOM = 1.56` in `config.js`). The painted backdrop is not zoomed, so characters and props read bigger against it. In the boss room the zoom eases back to 1 and shows the whole arena.
 - **Vertical follow.** The camera keeps the floor in view and rises when the player jumps high.

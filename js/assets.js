@@ -34,7 +34,11 @@ export function loadArt() {
   NAMES.forEach(name => { const img = new Image(); img.decoding = 'async'; img.src = assetPath(name); images[name] = img; });
   Object.entries(PORTRAITS).forEach(([who, file]) => {
     const img = new Image();
-    img.onload = () => { portraitSrc[who] = img.src; if (who === 'byte') PORTRAIT_URL.byte ??= img.src; };
+    img.onload = () => {
+      portraitSrc[who] = img.src;
+      if (who === 'byte') PORTRAIT_URL.byte ??= img.src;
+      else if (who !== 'byte_pink') PORTRAIT_URL[who] = img.src;   // hero, gleyce, boss: rosto HD no lugar da pixel art
+    };
     img.src = assetPath(file);
   });
 }

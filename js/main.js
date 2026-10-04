@@ -14,6 +14,7 @@ import { game, step, bindGame, showsWorld, goTitle } from './game.js';
 const ctx = $('#cv').getContext('2d');
 
 function fitViewport() {
+  game.blocked = getComputedStyle($('#rotate')).display !== 'none';
   const app = $('#app'), wrap = $('#wrap'), pad = $('#pad');
   const padStyle = getComputedStyle(pad);
   const padOverlays = padStyle.display === 'none' || padStyle.position === 'absolute';
@@ -31,6 +32,16 @@ function fitViewport() {
   const s = Math.max(1, Math.min(4, Math.ceil((width * (window.devicePixelRatio || 1)) / W)));
   const cv = $('#cv');
   if (cv.width !== W * s) { cv.width = W * s; cv.height = H * s; setRenderScale(s); }
+}
+
+// Tela cheia + trava em paisagem (Android; no iOS o botão nem aparece).
+function bindRotate() {
+  const b = $('#rotate-fs');
+  if (!document.documentElement.requestFullscreen) return;
+  b.hidden = false;
+  b.addEventListener('click', async () => {
+    try { await document.documentElement.requestFullscreen({ navigationUI: 'hide' }); await screen.orientation.lock('landscape'); } catch { /* sem suporte: só girar o celular */ }
+  });
 }
 
 function installSupport() {
@@ -65,6 +76,7 @@ function boot() {
   addEventListener('resize', fitViewport);
   addEventListener('orientationchange', () => setTimeout(fitViewport, 200));
   fitViewport();
+  bindRotate();
   installSupport();
   goTitle();
   requestAnimationFrame(loop);

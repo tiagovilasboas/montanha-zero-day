@@ -50,10 +50,10 @@ export const HEROES = {
 
 export const STAGES = [
   {
-    name: 'Telhados do Cecapão Velho', theme: 0, track: 0, hero: 'montanha', rescue: true,
+    name: 'Telhados do Cecapão', theme: 0, track: 0, hero: 'montanha', rescue: true,
     chunks: ['start', 'flat', 'pit', 'door', 'check', 'turret', 'stairs', 'bridge', 'goal'],
     intro: [
-      ['byte', 'Telhados do Cecapão Velho. O sinal da cápsula da Gle vem do fim destes prédios.'],
+      ['byte', 'Telhados do Cecapão. O sinal da cápsula da Gle vem do fim destes prédios.'],
       ['byte', 'Lembrete: no ar, SEGURE o PULO para ligar o JET da mochila.'],
       ['hero', 'Cada drone derrubado é um passo mais perto de você, amor. Bora.'],
     ],
@@ -63,10 +63,10 @@ export const STAGES = [
     ],
   },
   {
-    name: 'Data Center Abissal', theme: 1, track: 1, hero: 'gle',
+    name: 'Subsolo 404: Servidor Submerso', theme: 1, track: 1, hero: 'gle',
     chunks: ['start', 'bridge', 'flat', 'turret', 'door', 'check', 'pit', 'stairs', 'flat', 'goal'],
     intro: [
-      ['byte', 'Data Center Abissal. O rastro do RANSOM-TITAN passa por aqui.'],
+      ['byte', 'Subsolo 404: Servidor Submerso. O rastro do RANSOM-TITAN passa por aqui.'],
       ['gleyce', 'Cada drone que eu derrubar me deixa mais perto dele, Byte.'],
       ['byte', 'Sua manopla dourada atira e hackeia igual ao relógio dele. No ar, segure PULO para planar com as botas.'],
     ],
@@ -76,10 +76,10 @@ export const STAGES = [
     ],
   },
   {
-    name: 'Núcleo da Legião', theme: 2, track: 2, hero: 'gle',
+    name: 'Kernel Panic no Covil do Chefe', theme: 2, track: 2, hero: 'gle',
     chunks: ['start', 'flat', 'door', 'stairs', 'turret', 'check', 'arena'],
     intro: [
-      ['byte', 'O Núcleo da Legião. Ele está lá dentro, Gle.'],
+      ['byte', 'Kernel Panic no Covil do Chefe. Ele está lá dentro, Gle.'],
       ['gleyce', 'Ele está aí dentro. E eu vou buscar.'],
     ],
     infos: [
@@ -111,7 +111,7 @@ export const STORY = {
     ['gleyce', 'MONTANHA! Não! Solta ele!'],
     ['byte', 'Foi uma garra do RANSOM-TITAN. Ele levou o Montanha e a cápsula abriu. Você está livre, Gle!'],
     ['gleyce', 'Ele me tirou da cápsula só pra me fazer correr atrás. Pois eu vou. Byte, me mostra o caminho.'],
-    ['byte', 'O sinal dele vai para o Data Center Abissal. Eu te guio.'],
+    ['byte', 'O sinal dele vai para o Subsolo 404. Eu te guio.'],
   ],
   boss: [
     ['boss', 'A princesa veio buscar o hacker? Que comovente.'],

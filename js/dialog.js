@@ -9,6 +9,13 @@ const el = () => $('#dialog');
 
 export const dialogOpen = () => !!current;
 
+// Mostra as n primeiras letras e reserva o resto invisível: a caixa já nasce do tamanho final e não pula a cada linha.
+function paint(n) {
+  const rest = document.createElement('span');
+  rest.className = 'dlg-rest'; rest.textContent = current.text.slice(n);
+  $('#dlg-text').replaceChildren(current.text.slice(0, n), rest);
+}
+
 export function say(lines, onDone) {
   current = { lines, index: 0, shown: 0, onDone };
   el().hidden = false;
@@ -22,7 +29,7 @@ function showLine() {
   if (PORTRAIT_URL[who]) img.src = PORTRAIT_URL[who];
   $('#dlg-name').textContent = SPEAKERS[who] || '';
   current.text = text; current.shown = 0;
-  $('#dlg-text').textContent = '';
+  paint(0);
   el().classList.remove('is-done');
 }
 
@@ -32,7 +39,7 @@ export function tickDialog() {
   current.shown = Math.min(current.text.length, current.shown + 1.25);
   const now = Math.floor(current.shown);
   if (now !== before) {
-    $('#dlg-text').textContent = current.text.slice(0, now);
+    paint(now);
     if (now % 3 === 0) sfx('blip');
   }
   if (current.shown >= current.text.length) el().classList.add('is-done');
@@ -42,7 +49,7 @@ export function advanceDialog() {
   if (!current) return;
   if (current.shown < current.text.length) {
     current.shown = current.text.length;
-    $('#dlg-text').textContent = current.text;
+    paint(current.text.length);
     el().classList.add('is-done');
     return;
   }

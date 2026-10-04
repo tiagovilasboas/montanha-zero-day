@@ -10,7 +10,6 @@ const NAMES = [
 const PORTRAITS = { hero: 'portrait_hero', byte: 'portrait_byte', boss: 'portrait_boss', gleyce: 'portrait_gleyce', byte_pink: 'portrait_byte_pink' };
 
 const images = {};
-const portraitSrc = {};
 let botKey = 'byte';   // qual BYTE (azul ou rosa) aparece nos diálogos agora
 export const assetPath = name => `assets/${name}.webp`;
 
@@ -33,20 +32,18 @@ function loadAnims() {
 export function loadArt() {
   loadAnims();
   NAMES.forEach(name => { const img = new Image(); img.decoding = 'async'; img.src = assetPath(name); images[name] = img; });
-  Object.entries(PORTRAITS).forEach(([who, file]) => {
-    const img = new Image();
-    img.onload = () => {
-      portraitSrc[who] = img.src;
-      // O BYTE só troca se for a cor da vez (a pixel art de sprites.js já ocupa o lugar antes do HD chegar).
-      if (who === 'byte' || who === 'byte_pink') { if (who === botKey) PORTRAIT_URL.byte = img.src; }
-      else PORTRAIT_URL[who] = img.src;   // hero, gleyce, boss: rosto HD no lugar da pixel art
-    };
-    img.src = assetPath(file);
-  });
+  // Pré-carrega os retratos HD para o primeiro diálogo já abrir com eles.
+  Object.values(PORTRAITS).forEach(file => { new Image().src = assetPath(file); });
 }
 
 // O robô muda de cor com quem joga: nos diálogos, BYTE aparece rosa nas fases da Gle.
-export function useBotPortrait(botArt) {
-  botKey = botArt === 'byte_pink' ? 'byte_pink' : 'byte';
-  if (portraitSrc[botKey]) PORTRAIT_URL.byte = portraitSrc[botKey];
+export function useBotPortrait(botArt) { botKey = botArt === 'byte_pink' ? 'byte_pink' : 'byte'; }
+
+// Retrato de quem fala: sempre o HD (o navegador cuida do carregamento, sem corrida com o load).
+// Se o arquivo falhar, cai na pixel art de sprites.js; quem não tem retrato (SISTEMA) some.
+export function setPortrait(img, who) {
+  const key = who === 'byte' ? botKey : who, file = PORTRAITS[key], fallback = PORTRAIT_URL[who];
+  img.onerror = () => { img.onerror = null; if (fallback) img.src = fallback; else img.hidden = true; };
+  img.hidden = !file && !fallback;
+  if (file) img.src = assetPath(file); else if (fallback) img.src = fallback;
 }

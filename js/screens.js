@@ -2,7 +2,7 @@
 // e avisam o jogo pelo barramento: cada botão com data-act vira o evento `ui:<ação>`.
 import { $, emit, save } from './core.js';
 import { STAGES, xpNeed, maxHpFor, shotDamage } from './config.js';
-import { PORTRAIT_URL } from './sprites.js';
+import { setPortrait } from './assets.js';
 
 // Emblema do Montanha: o pico de montanha do relógio e do patch da jaqueta.
 const EMBLEM = `<svg class="emblem" viewBox="0 0 120 64" aria-hidden="true">
@@ -64,7 +64,7 @@ export function showMap() {
   show(`<div class="map-grid">
     <section class="win status">
       <h3>${hero.name}</h3>
-      <img src="${PORTRAIT_URL[hero.portrait]}" alt="Retrato de ${hero.label}">
+      <img class="portrait" alt="Retrato de ${hero.label}">
       ${statList([['LV', save.lv], ['HP', maxHpFor(save.lv)], ['XP', `${save.xp} / ${xpNeed(save.lv)}`],
         ['Tiro', shotDamage(save.lv, false)], ['Carga', shotDamage(save.lv, true)]])}
     </section>
@@ -80,6 +80,7 @@ export function showMap() {
     </section>
   </div>
   <div class="menu">${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>`);
+  setPortrait($('#screen .status img.portrait'), hero.portrait);
 }
 
 export function showResult({ stageName, time, kills, xp, rescue }) {

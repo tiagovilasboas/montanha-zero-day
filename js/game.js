@@ -25,7 +25,7 @@ function goTitle() { game.mode = 'title'; setHudVisible(false); playTrack('title
 function goMap() { game.mode = 'map'; persist(); setHudVisible(false); playTrack('title'); screens.showMap(); }   // salva o XP ganho na fase
 
 function startStory() {
-  game.mode = 'story'; screens.hideScreen();
+  game.mode = 'story'; screens.hideScreen(); useBotPortrait('byte');   // história começa com o BYTE azul
   // Só apaga o progresso ao fim da introdução: fechar o app no meio dela não perde o jogo salvo.
   talk(STORY.intro, () => { resetSave(); save.started = true; persist(); goMap(); });
 }

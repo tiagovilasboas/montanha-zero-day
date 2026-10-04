@@ -28,7 +28,7 @@ HEAD = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="description" content="Montanha: Zero Day — plataforma cyberpunk em pixel art. Hackeie a cidade com o robô BYTE.">
+<meta name="description" content="Montanha: Zero Day — plataforma cyberpunk em pixel art. O Montanha vai resgatar a Gle; depois é ela quem vai buscar ele.">
 <meta name="theme-color" content="#070914">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">

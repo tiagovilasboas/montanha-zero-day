@@ -1,7 +1,7 @@
 # Montanha: Zero Day
 
 Plataforma 2D em PWA, pensada para celular: pegada de Mega Man, sabor de Final Fantasy e uma cidade cyberpunk.
-Um hacker, uma princesa e uma cidade inteira offline.
+Ele foi resgatar a Gle. Agora é ela quem vai buscar ele.
 
 *Read in English: [README.md](README.md)*
 
@@ -10,8 +10,8 @@ Um hacker, uma princesa e uma cidade inteira offline.
 **Neo-Sampa, 2099.** A IA invasora LEGIÃO NULL tomou a rede do planeta. A Gle foi sequestrada e trancada numa cápsula.
 
 - **Fase 1, Telhados do Cecapão.** Você joga com o **Montanha**: mochila com jato, relógio hacker e o robô BYTE. No fim ele encontra a Gle na cápsula (sobem corações), então uma garra do RANSOM-TITAN o rapta e a Gle é libertada.
-- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic no Covil do Chefe.** Você joga com a **Gle**, que vai atrás do RANSOM-TITAN com a manopla dourada, botas que planam e um BYTE rosa.
-- **Final.** Depois do chefe, o BYTE encontra a cela do Montanha dentro do Núcleo e o liberta: MONTANHA.EXE online.
+- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic: o Núcleo.** Você joga com a **Gle**, que vai atrás do RANSOM-TITAN com a manopla dourada, botas que planam e um BYTE rosa.
+- **Final.** Depois do chefe, a Gle usa a chave do RANSOM-TITAN e tira o Montanha da cela no fundo do Núcleo.
 
 ### Controles
 

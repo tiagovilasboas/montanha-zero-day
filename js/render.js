@@ -443,21 +443,44 @@ function heroPose(p) {
 }
 
 // Quadro da animação conforme a ação: corrida e respiração em loop, tiro acompanha o recuo.
-const ANIM_FPS = { run: 14, idle: 8, jump: 10 };
+const ANIM_FPS = { idle: 8, air: 10, hover: 16 };
 const SHOOT_FIRST = 2;
+// A corrida avança pela distância percorrida (p.anim), não pelo relógio: os pés não deslizam no chão
+// e a passada acelera junto com o herói.
+const RUN_STEP = 1.15;
+const all = n => Array.from({ length: n }, (_, i) => i);
 function animFrame(a, pose, p) {
   // O tiro nasce com o braço esticado: pula os quadros de preparação (0 e 1) e mostra só a parte do disparo.
   if (pose === 'shoot') return SHOOT_FIRST + Math.min(a.frames - SHOOT_FIRST - 1, Math.floor(((14 - p.shootAnim) / 14) * (a.frames - SHOOT_FIRST)));
-  return Math.floor((world.frame * ANIM_FPS[pose]) / 60) % a.frames;
+  const pick = HEROES[p.hero].frames;
+  if (pose === 'run') { const seq = pick.run || all(a.frames); return seq[Math.floor(p.anim * RUN_STEP) % seq.length]; }
+  if (pose === 'jump') {
+    const mode = p.hovering ? 'hover' : 'air', seq = pick[mode] || all(a.frames);
+    return seq[Math.floor((world.frame * ANIM_FPS[mode]) / 60) % seq.length];
+  }
+  return Math.floor((world.frame * ANIM_FPS.idle) / 60) % a.frames;
+}
+
+// Aura de energia do herói: um contorno suave na cor dele, que pulsa e cresce ao carregar o tiro ou voar.
+function auraFor(p) {
+  const hero = HEROES[p.hero], boost = (p.charge > 20 ? 0.35 : 0) + (p.hovering ? 0.2 : 0);
+  return { color: hero.glow, alpha: Math.min(1, hero.aura * (0.75 + 0.25 * Math.sin(world.frame * 0.08)) + boost) };
 }
 
 // Folha de animação: desenha um quadro com a âncora (centro dos pés) no ponto (cx, bottom).
-function drawAnim(ctx, a, frame, cx, bottom, flip) {
+function drawAnim(ctx, a, frame, cx, bottom, flip, aura) {
   const k = HERO_HEIGHT / (a.ay * 0.97), w = a.w * k, h = a.h * k;
   ctx.save();
   ctx.imageSmoothingEnabled = true;
   ctx.translate(cx, bottom);
   if (flip) ctx.scale(-1, 1);
+  if (aura) {
+    // shadowBlur é em pixels reais: acompanha a escala atual (tela x zoom da câmera).
+    ctx.shadowColor = aura.color; ctx.shadowBlur = 2.6 * Math.abs(ctx.getTransform().a);
+    ctx.globalAlpha = aura.alpha;
+    ctx.drawImage(a.img, frame * a.w, 0, a.w, a.h, -a.ax * k, -a.ay * k, w, h);
+    ctx.shadowBlur = 0; ctx.shadowColor = 'transparent'; ctx.globalAlpha = 1;
+  }
   ctx.drawImage(a.img, frame * a.w, 0, a.w, a.h, -a.ax * k, -a.ay * k, w, h);
   ctx.restore();
 }
@@ -471,7 +494,7 @@ function drawHeroArt(ctx, p, img) {
 
 function drawHero(ctx, p) {
   const prefix = HEROES[p.hero].art, pose = heroPose(p), a = anim(`${prefix}_${pose}`);
-  if (a) { drawAnim(ctx, a, animFrame(a, pose, p), sx(p.x + p.w / 2), p.y + p.h + 1, p.face < 0); return true; }
+  if (a) { drawAnim(ctx, a, animFrame(a, pose, p), sx(p.x + p.w / 2), p.y + p.h + 1, p.face < 0, auraFor(p)); return true; }
   const img = art(`${prefix}_${pose}`);
   if (img) { drawHeroArt(ctx, p, img); return true; }
   return false;

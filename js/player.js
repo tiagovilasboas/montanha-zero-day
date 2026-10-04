@@ -1,4 +1,4 @@
-// Montanha: movimento estilo Mega Man, JET da mochila, tiro do relógio (normal e carregado), dano.
+// Herói jogável (Montanha ou Gle): movimento estilo Mega Man, JET da mochila, tiro do relógio (normal e carregado), dano.
 import { PHYS, PLAYER, T, H, HEROES, HERO_HEIGHT, maxHpFor, shotDamage } from './config.js';
 import { aimTarget } from './combat.js';
 import { save, emit } from './core.js';
@@ -47,7 +47,12 @@ function jumpAndJet(p) {
   if (p.hovering) {
     p.vy = Math.max(p.vy - PHYS.jet, PHYS.jetMax);
     p.fuel--;
-    if (world.frame % 3 === 0) exhaust(p.x + (p.face > 0 ? 1 : 8), p.y + 14);
+    // JET sai da mochila (atrás, na altura das costas); as botas da Gle soltam faísca dos pés.
+    const trail = HEROES[p.hero].trail, back = trail.from === 'back';
+    if (world.frame % (back ? 2 : 3) === 0) {
+      const x = back ? p.x + p.w / 2 - p.face * 7 : p.x + p.w / 2 + (Math.random() - 0.5) * 6;
+      exhaust(x, back ? p.y + 6 : p.y + p.h, trail.colors, back ? -p.face * 0.5 : 0);
+    }
   }
 }
 

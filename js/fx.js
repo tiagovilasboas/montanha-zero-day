@@ -9,8 +9,9 @@ export function burst(x, y, color, count = 12, speed = 2.2) {
 }
 export const spark = (x, y, color) => burst(x, y, color, 4, 1.2);
 
-export function exhaust(x, y) {
-  world.fx.push({ x, y, vx: (Math.random() - 0.5) * 0.4, vy: 1 + Math.random(), life: 14, color: Math.random() < 0.5 ? '#ffd23d' : '#ff7a3d', size: 2 });
+// Rastro do voo: cada herói com suas cores (JET ciano do Montanha, botas douradas da Gle).
+export function exhaust(x, y, colors = ['#ffd23d', '#ff7a3d'], vx = 0) {
+  world.fx.push({ x, y, vx: vx + (Math.random() - 0.5) * 0.4, vy: 1 + Math.random(), life: 14, color: colors[Math.random() < 0.5 ? 0 : 1], size: 2 });
 }
 
 const HEART_COLORS = ['#ff4f9a', '#ff6b8a', '#ff3b7a'];

@@ -44,8 +44,14 @@ export const CHUNKS = {
 // Personagens jogáveis: a fase decide quem joga (fase 1 Montanha; fases 2 e 3 Gle).
 export const HEROES = {
   // muzzle: onde o relógio/manopla fica na arte de tiro (altura = fração do corpo; reach = px à frente do centro)
-  montanha: { art: 'hero', portrait: 'hero', shot: '#3df0ff', boost: 'JET', bot: 'byte', muzzle: { h: 0.79, reach: 15 } },
-  gle: { art: 'gle', portrait: 'gleyce', shot: '#ffd23d', boost: 'BOTAS', bot: 'byte_pink', muzzle: { h: 0.75, reach: 11 } },
+  // glow: aura de energia em volta do desenho (cada um com sua cor). trail: rastro do JET/botas e de onde ele sai.
+  // frames: quais quadros de cada folha usar (corrida sem quadros repetidos; pulo separado em "no ar" e "voando").
+  montanha: { art: 'hero', portrait: 'hero', shot: '#3df0ff', boost: 'JET', bot: 'byte', muzzle: { h: 0.79, reach: 15 },
+    glow: '#3df0ff', aura: 1, trail: { colors: ['#3df0ff', '#bff9ff'], from: 'back' },
+    frames: { run: [0, 1, 2, 4, 5, 6, 8, 9], air: [0], hover: [1, 2, 3] } },
+  gle: { art: 'gle', portrait: 'gleyce', shot: '#ffd23d', boost: 'BOTAS', bot: 'byte_pink', muzzle: { h: 0.75, reach: 11 },
+    glow: '#ffd23d', aura: 0.55, trail: { colors: ['#ffd23d', '#ff9de6'], from: 'feet' },
+    frames: {} },
 };
 
 export const STAGES = [

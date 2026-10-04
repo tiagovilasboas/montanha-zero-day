@@ -14,10 +14,10 @@
   "ay": 217
  },
  "hero_jump": {
-  "frames": 6,
-  "w": 169,
+  "frames": 4,
+  "w": 218,
   "h": 215,
-  "ax": 60,
+  "ax": 109,
   "ay": 215
  },
  "hero_shoot": {

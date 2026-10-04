@@ -42,7 +42,8 @@ export function bindInput({ dpad, buttons }) {
   addEventListener('keydown', e => {
     unlockAudio();
     if (keyHook && keyHook(e)) { e.preventDefault(); return; }
-    if (e.code === 'Enter') input.confirm = true;
+    // Enter num botão de menu só clica nele (sem pular a primeira fala da cena que abre em seguida).
+    if (e.code === 'Enter' && !e.target.closest?.('button')) input.confirm = true;
     if (e.code === 'Escape' || e.code === 'KeyP') input.pause = true;
     const a = KEYMAP[e.code];
     if (a) { press(keys, a); e.preventDefault(); }

@@ -81,7 +81,7 @@ export function showMap() {
       </ul>
     </section>
   </div>
-  <div class="menu">${button('title', 'Tela inicial', 'class="btn-ghost"')}</div>`);
+  <div class="menu">${button('title', t('titleScreen'), 'class="btn-ghost"')}</div>`);
   setPortrait($('#screen .status img.portrait'), hero.portrait);
 }
 
@@ -120,7 +120,19 @@ export function refreshSoundLabel() {
   if (b) b.textContent = soundLabel();
 }
 
+// Setas do teclado andam entre os botões da tela (título, mapa, pausa, resultado).
+function moveFocus(e) {
+  const el = $('#screen');
+  if (el.hidden || !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) return;
+  const list = [...el.querySelectorAll('button:not([disabled]):not([hidden])')];
+  if (!list.length) return;
+  const step = e.code === 'ArrowUp' || e.code === 'ArrowLeft' ? -1 : 1, i = list.indexOf(document.activeElement);
+  list[(i + step + list.length) % list.length].focus({ preventScroll: true });
+  e.preventDefault();
+}
+
 export function bindScreens() {
+  addEventListener('keydown', moveFocus);
   $('#screen').addEventListener('click', e => {
     const b = e.target.closest('[data-act]');
     if (b && !b.disabled) emit(`ui:${b.dataset.act}`, b.dataset);

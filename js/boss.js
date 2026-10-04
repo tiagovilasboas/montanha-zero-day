@@ -59,5 +59,6 @@ export function updateBoss() {
   if (--b.cd <= 0) { b.cd = b.phase === 1 ? 80 : 60; spread(b, target); }
   if (--b.spawnCd <= 0) { b.spawnCd = b.phase === 1 ? 300 : 240; summon(b); }
   if (b.phase === 2) beam(b, target);
-  if (overlap(b, world.player)) emit('player:hit', { dmg: 3, dir: -1 });
+  // Encostar no chefe dói menos que os tiros dele: a arena é apertada e ele flutua baixo.
+  if (overlap(b, world.player)) emit('player:hit', { dmg: 2, dir: -1 });
 }

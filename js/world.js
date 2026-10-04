@@ -43,7 +43,7 @@ export function makeEnemy(type, x, y) {
 const spawnEnemy = (type, s, dy) => makeEnemy(type, s.x + (T - ENEMY[type].w) / 2, s.y + dy);
 
 export function makeBoss(x, y) {
-  return { x, y, w: 56, h: 50, baseY: y, hp: 60, max: 60, phase: 1, shield: false, shieldTime: 0,
+  return { x, y, w: 56, h: 50, baseY: y, hp: 48, max: 48, phase: 1, shield: false, shieldTime: 0,
     stun: 0, flash: 0, cd: 90, spawnCd: 240, t: 0, beam: null, active: false, dead: false, deathT: 0, gone: false };
 }
 // Posição única do chefe na arena: usada ao montar a fase e ao recomeçar a luta.

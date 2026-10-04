@@ -7,3 +7,6 @@ tools/fetch_art.py
 # Script auxiliar de commits
 commit_history.sh
 __pycache__/
+
+# Saídas do app do Claude salvas na pasta do projeto
+Claude outputs/

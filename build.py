@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build: wraps game.html into a full PWA document (index.html) and renders the app icons."""
+import hashlib, re, sys
 from pathlib import Path
 
 from PIL import Image, ImageColor, ImageDraw, ImageFilter
@@ -88,6 +89,28 @@ def build_icons():
     return written
 
 
+def stamp_sw():
+    """Version the service worker cache by content: any change to code, page or art gives a new VERSION,
+    so installed copies refresh on their own (no more bumping it by hand)."""
+    files = sorted([*ROOT.glob("js/*.js"), ROOT / "css" / "style.css", ROOT / "index.html", ROOT / "manifest.webmanifest",
+                    *ROOT.glob("assets/*"), *ROOT.glob("icons/*")])
+    digest = hashlib.sha1()
+    for f in files:
+        digest.update(f.relative_to(ROOT).as_posix().encode())
+        digest.update(f.read_bytes())
+    sw = ROOT / "sw.js"
+    text, n = re.subn(r"const VERSION = '[^']*';", f"const VERSION = 'zeroday-{digest.hexdigest()[:10]}';", sw.read_text(encoding="utf-8"), count=1)
+    if n != 1:
+        sys.exit("sw.js: VERSION line not found")
+    sw.write_text(text, encoding="utf-8")
+    return sw
+
+
 if __name__ == "__main__":
-    for path in [build_html(), *build_icons()]:
-        print(f"wrote {path.relative_to(ROOT)} ({path.stat().st_size} bytes)")
+    # python3 build.py        -> index.html, icons and the service worker version
+    # python3 build.py --sw   -> only the service worker version (run before each deploy)
+    steps = [stamp_sw] if "--sw" in sys.argv else [build_html, build_icons, stamp_sw]
+    for step in steps:
+        out = step()
+        for path in out if isinstance(out, list) else [out]:
+            print(f"wrote {path.relative_to(ROOT)} ({path.stat().st_size} bytes)")

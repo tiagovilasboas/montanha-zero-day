@@ -1,12 +1,13 @@
 // Inimigos da Legião Null: drone, malware rastejante e torreta (que pode virar aliada).
-import { T, PHYS, ENEMY } from './config.js';
+import { T, W, PHYS, ENEMY } from './config.js';
 import { emit } from './core.js';
 import { world, isSolid, tileAt, TILE } from './world.js';
 import { moveX, moveY, overlap, center } from './physics.js';
 import { fireAt, nearestHostile } from './combat.js';
 
 const ACTIVE_MARGIN = 80;
-const onScreen = e => e.x > world.cam.x - ACTIVE_MARGIN && e.x < world.cam.x + 320 + ACTIVE_MARGIN;
+// A área visível depende da largura lógica (W muda com a tela) e do zoom da câmera.
+const onScreen = e => e.x > world.cam.x - ACTIVE_MARGIN && e.x < world.cam.x + W / world.cam.zoom + ACTIVE_MARGIN;
 
 function fall(e) { e.vy = Math.min(e.vy + PHYS.gravity, PHYS.maxFall); moveY(e, e.vy); }
 

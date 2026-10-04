@@ -1,5 +1,5 @@
 // Combate: projéteis, dano, XP e nível. Quem atira só cria o projétil; aqui se resolve o impacto.
-import { T, ROWS, ENEMY, xpNeed, maxHpFor } from './config.js';
+import { T, W, ROWS, ENEMY, xpNeed, maxHpFor } from './config.js';
 import { save, persist, emit, chance } from './core.js';
 import { world, isSolid } from './world.js';
 import { overlap, center, distance } from './physics.js';
@@ -96,10 +96,11 @@ function strike(b, target, onHit) {
 
 export function updateBullets() {
   const { cam, player, boss } = world;
+  const vw = W / cam.zoom;   // largura visível do mundo: muda com a tela (até 21:9) e com o zoom
   for (const b of world.bullets) {
     if (b.target) steer(b);
     b.x += b.vx; b.y += b.vy;
-    if (--b.life <= 0 || b.x < cam.x - 24 || b.x > cam.x + 360) { b.dead = true; continue; }
+    if (--b.life <= 0 || b.x < cam.x - 24 || b.x > cam.x + vw + 24) { b.dead = true; continue; }
     if (hitsWall(b)) { b.dead = true; spark(b.x, b.y, COLORS[b.from]); continue; }
 
     if (b.from === 'enemy') {

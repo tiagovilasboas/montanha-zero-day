@@ -3,7 +3,7 @@ title: "Construí um Jogo PWA em um Dia com Claude Opus 5.5 e Claude Code: Custo
 published: false
 description: "Montanha: Zero Day, um PWA estilo Mega Man X feito com o Claude Opus 5.5 e Claude Code sobre um harness central de engenharia: benchmarks vs entrega real, assets gerados no Artlist e testes E2E com Playwright."
 tags: ai, gamedev, javascript, claude
-cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/title_art.webp
+cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/devto-cover.png
 ---
 
 Em um domingo, transformei uma ideia meio boba num jogo de verdade: **Montanha: Zero Day**, um plataforma cyberpunk no estilo Mega Man X que roda no navegador e no celular, offline, como PWA. O herói sou eu (o Montanha), a heroína é a Gle, e o vilão é um ransomware gigante chamado RANSOM-TITAN.
@@ -14,6 +14,8 @@ Este post conta o que o modelo promete nos benchmarks, como ele operou com maest
 
 👉 **Jogue aqui:** [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/)  
 👉 **Código-fonte:** [github.com/tiagovilasboas/montanha-zero-day](https://github.com/tiagovilasboas/montanha-zero-day)
+
+![Tela de Título do Montanha: Zero Day](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/title-screen.webp)
 
 ---
 
@@ -127,6 +129,10 @@ Em vez de assumir que o código funcionava, ele orquestrou testes E2E usando **P
 - **Exploração de Mecânicas:** O teste no Playwright identificou que dava para tomar 3 de dano de propósito e atravessar lasers usando a invulnerabilidade temporária pós-dano. O modelo corrigiu os feixes para atuarem como paredes sólidas durante o piscar do herói.
 - **Varredura Completa de Telas:** Testou cutscenes, diálogos com portraits HD, vitória sobre o chefe e transição para o mapa.
 
+![Montanha voando com o jetpack em Neo-Sampa](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/montanha-jetpack.webp)
+
+![Gle encarando os feixes de laser pulsantes na Fase 3](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-pulse-beams.webp)
+
 ---
 
 ## O Que o Modelo Entregou na Prática
@@ -165,9 +171,28 @@ Quando a capacidade do modelo encontra um harness bem estruturado, o desenvolvim
 
 ---
 
+## O Cenário Maior: Opus 5.5 Provoca um Renascimento de Jogos no Navegador
+
+O *Montanha: Zero Day* não é um ponto fora da curva isolado. Na comunidade global, o Opus 5.5 operado com o Claude Code virou uma verdadeira febre de desenvolvimento de jogos sem engines pesadas (adeus overhead de Unity e Unreal):
+
+- **[Awesome Opus 5.5 Games](https://github.com/VibeFin/awesome-opus-5.5-games):** Curadoria colaborativa com quase 200 jogos jogáveis criados com o modelo.
+- **[Rundevue (Built with Opus 5.5)](https://rundevue.com/built-with/opus-5-5):** Vitrine com clones de Rocket League, mundos abertos, pod racers e simuladores rodando direto em WebGL/Three.js.
+- **[Hearthlight](https://hearthlight.github.io/):** Jogo de aventura pixel-art com 10 capítulos, 8 personagens, masmorras e multiplayer para até 8 pessoas, desenvolvido do zero com Claude Code + Opus 5.5 + Three.js apenas com iterações em linguagem natural ([Discussão no Reddit](https://www.reddit.com/r/ClaudeAI/comments/1wtcs7k/i_opensourced_the_cozy_pixelart_game_opus_55_made/)).
+- **NUTSHOT!:** Criado pelo brasileiro Yan Mantovani, mostrando como um shooter 3D de browser nasceu de poucos prompts e foi calibrado via playtesting interativo.
+- **O Fenômeno Fallout: New York:** Um fan game de navegador impressionante com 117 localidades, 112 personagens e 46 armas feito com Opus 5.5, que viralizou a ponto de atrair a atenção da imprensa especializada.
+
+O padrão que emergiu é inequívoco:  
+`Opus 5.5 + Claude Code` → `TypeScript / JavaScript Modular (ESM)` → `Canvas / Three.js / WebGL` → `Assets Procedurais / Generativos` → `Distribuição Instantânea via Web`.
+
+Quando o design de software é protegido por um harness rigoroso, o desenvolvedor dispensa a burocracia de engines e coloca universos ricos e interativos para rodar na web em questão de horas.
+
+---
+
 **Links e Fontes:**
 - [Jogar Montanha: Zero Day](https://tiagovilasboas.github.io/montanha-zero-day/)
 - [Repositório no GitHub](https://github.com/tiagovilasboas/montanha-zero-day)
 - [Anúncio do Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)
 - [Leaderboard da Artificial Analysis](https://artificialanalysis.ai/models)
 - [Artlist Generative Suite](https://artlist.io/)
+- [Awesome Opus 5.5 Games](https://github.com/VibeFin/awesome-opus-5.5-games)
+- [Rundevue Showcase](https://rundevue.com/built-with/opus-5-5)

@@ -178,9 +178,28 @@ When you connect a model of this caliber to a solid, battle-tested engineering h
 
 ---
 
+## The Bigger Picture: Opus 5.5 Is Sparking a Browser Game Renaissance
+
+*Montanha: Zero Day* is not an isolated experiment. Across the community, Opus 5.5 combined with Claude Code is triggering an explosion of indie game development without traditional engines (no Unity, no Unreal):
+
+- **[Awesome Opus 5.5 Games](https://github.com/VibeFin/awesome-opus-5.5-games):** Curated directory featuring nearly 200 playable games built with Opus 5.5.
+- **[Rundevue (Built with Opus 5.5)](https://rundevue.com/built-with/opus-5-5):** Community showcase featuring Rocket League clones, open-world experiments, pod racers, and tycoon titles running in WebGL/Three.js.
+- **[Hearthlight](https://hearthlight.github.io/):** A cozy 10-chapter pixel-art adventure game with 8 characters, dungeons, and up to 8-player multiplayer, built entirely using Claude Code + Opus 5.5 + Three.js with natural language playtesting iterations ([Reddit discussion](https://www.reddit.com/r/ClaudeAI/comments/1wtcs7k/i_opensourced_the_cozy_pixelart_game_opus_55_made/)).
+- **NUTSHOT!:** Created by Brazilian dev Yan Mantovani, showcasing how a 3D browser shooter was spun up from a single kickoff prompt and refined via playtesting loops.
+- **The Fallout: New York Phenomenon:** A sprawling browser fan game featuring 117 locations, 112 characters, and 46 weapons crafted with Opus 5.5 that went viral across gaming outlets.
+
+The emerging stack is unmistakable:  
+`Opus 5.5 + Claude Code` → `TypeScript / Vanilla ES Modules` → `Canvas / Three.js / WebGL` → `Procedural / Generative Assets` → `Instant Browser Delivery`.
+
+When software architecture is enforced by a proper harness, developers can bypass the bloated setup of traditional engines and build rich, responsive, interactive worlds directly for the open web.
+
+---
+
 **Sources & Links:**
 - [Play Montanha: Zero Day](https://tiagovilasboas.github.io/montanha-zero-day/)
 - [GitHub Repository](https://github.com/tiagovilasboas/montanha-zero-day)
 - [Anthropic Opus 5.5 Announcement](https://www.anthropic.com/claude-opus-5-5)
 - [Artificial Analysis Leaderboard](https://artificialanalysis.ai/models)
 - [Artlist Generative Suite](https://artlist.io/)
+- [Awesome Opus 5.5 Games](https://github.com/VibeFin/awesome-opus-5.5-games)
+- [Rundevue Showcase](https://rundevue.com/built-with/opus-5-5)

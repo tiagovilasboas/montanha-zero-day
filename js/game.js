@@ -15,7 +15,8 @@ import { updateEnemies } from './enemies.js';
 import { updateBoss } from './boss.js';
 import { updateBullets, gainXp } from './combat.js';
 import { updateInteractables } from './interact.js';
-import { updateFx } from './fx.js';
+import { updateFx, startLove } from './fx.js';
+import { startScene, endScene, updateScene } from './scene.js';
 
 export const game = { mode: 'title', menuFrame: 0, cardTimer: 0, cardDone: null, canInstall: false };
 
@@ -50,12 +51,18 @@ function resume() { game.mode = 'play'; screens.hideScreen(); lockButtons(); }
 
 function clearStage() {
   if (game.mode !== 'play') return;
-  // Fim da fase 1: o Montanha abre a cápsula e cai na armadilha antes do resultado.
-  if (STAGES[world.level.index].rescue) { game.mode = 'cutscene'; stopMusic(); talk(STORY.fall, finishStage); return; }
+  // Fim da fase 1: o Montanha encontra a Gle, uma garra o rapta e a Gle é libertada.
+  if (STAGES[world.level.index].rescue) { rescueCutscene(); return; }
   finishStage();
 }
 
+function rescueCutscene() {
+  game.mode = 'cutscene'; stopMusic(); startLove(200); sfx('hackOk');
+  talk(STORY.meet, () => startScene(() => talk(STORY.freed, finishStage)));
+}
+
 function finishStage() {
+  endScene();
   const i = world.level.index;
   game.mode = 'result';
   save.unlocked = Math.max(save.unlocked, Math.min(STAGES.length, i + 2));
@@ -84,7 +91,7 @@ function retryFromCheckpoint() {
 function resetArena() {
   setArenaWall(false);
   world.enemies = world.enemies.filter(e => e.x < world.level.arenaX);
-  world.boss = makeBoss(world.level.arenaX + 15 * T - 8, 56);
+  world.boss = makeBoss(world.level.arenaX + 14 * T, 56);
   world.terminals.forEach(t => { t.cool = 0; });
 }
 
@@ -133,7 +140,10 @@ export function step() {
   game.menuFrame++;
   if (dialogOpen()) {
     tickDialog();
+    if (game.mode === 'cutscene') updateFx();   // os corações seguem subindo durante a conversa
     if (input.pressed.jump || input.pressed.fire || input.confirm) advanceDialog();
+  } else if (game.mode === 'cutscene' && game.cardTimer <= 0) {
+    updateScene(); updateFx();
   } else if (puzzleOpen()) {
     tickPuzzle();
   } else if (game.cardTimer > 0) {

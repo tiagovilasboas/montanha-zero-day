@@ -8,7 +8,7 @@ export const world = {
   level: null, player: null, ally: null, boss: null,
   enemies: [], bullets: [], pickups: [], fx: [], rings: [],
   terminals: [], checkpoints: [], infos: [], goal: null,
-  cam: { x: 0, y: 0, zoom: 1, shake: 0 }, frame: 0, time: 0, kills: 0, xpGained: 0, hints: new Set(),
+  cam: { x: 0, y: 0, zoom: 1, shake: 0 }, love: 0, scene: null, frame: 0, time: 0, kills: 0, xpGained: 0, hints: new Set(),
 };
 
 const CHAR_TILE = { '#': TILE.SOLID, '=': TILE.PLATFORM, '^': TILE.LASER };
@@ -21,8 +21,11 @@ export function makeEnemy(type, x, y) {
     originX: x, originY: y, angle: Math.PI, onGround: false };
 }
 
+// Centra o inimigo no bloco do mapa; dy posiciona de cima do bloco (chão: T - altura).
+const spawnEnemy = (type, s, dy) => makeEnemy(type, s.x + (T - ENEMY[type].w) / 2, s.y + dy);
+
 export function makeBoss(x, y) {
-  return { x, y, w: 44, h: 44, baseY: y, hp: 60, max: 60, phase: 1, shield: false, shieldTime: 0,
+  return { x, y, w: 56, h: 50, baseY: y, hp: 60, max: 60, phase: 1, shield: false, shieldTime: 0,
     stun: 0, flash: 0, cd: 90, spawnCd: 240, t: 0, beam: null, active: false, dead: false, deathT: 0, gone: false };
 }
 
@@ -57,7 +60,7 @@ export function buildLevel(stageIndex) {
   Object.assign(world, {
     level: { index: stageIndex, stage, theme: THEMES[stage.theme], w, grid, grp, groups, arenaX, locked: false },
     enemies: [], bullets: [], pickups: [], fx: [], rings: [], terminals: [], checkpoints: [], infos: [],
-    goal: null, boss: null, time: 0, kills: 0, xpGained: 0, hints: new Set(),
+    goal: null, boss: null, love: 0, scene: null, time: 0, kills: 0, xpGained: 0, hints: new Set(),
   });
 
   for (const s of spawns) {
@@ -66,9 +69,9 @@ export function buildLevel(stageIndex) {
       case '1': case '2': case '3':
         world.terminals.push({ x: s.x + 2, y: s.y, w: 12, h: 16, g: s.g, done: false, cool: 0,
           boss: s.arena, kind: ['seq', 'bin', 'grid'][(s.g + stageIndex) % 3] }); break;
-      case 'd': world.enemies.push(makeEnemy('drone', s.x, s.y)); break;
-      case 'm': world.enemies.push(makeEnemy('crawler', s.x, s.y + 7)); break;
-      case 'X': world.enemies.push(makeEnemy('turret', s.x + 1, s.y + 4)); break;
+      case 'd': world.enemies.push(spawnEnemy('drone', s, 0)); break;
+      case 'm': world.enemies.push(spawnEnemy('crawler', s, T - ENEMY.crawler.h)); break;
+      case 'X': world.enemies.push(spawnEnemy('turret', s, T - ENEMY.turret.h)); break;
       case 'h': case 'e': world.pickups.push({ kind: s.ch === 'h' ? 'hp' : 'ep', x: s.x + 4, y: s.y + 4, w: 8, h: 8 }); break;
       case 'k': world.checkpoints.push({ x: s.x + 4, y: s.y - 8, w: 8, h: 24, on: false }); break;
       case 'i': world.infos.push({ x: s.x + 2, y: s.y, w: 12, h: 16, seen: false,

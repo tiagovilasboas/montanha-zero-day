@@ -5,6 +5,8 @@ export let W = 320;
 export const setViewWidth = w => { W = w; };
 // Zoom da câmera no mundo (personagens maiores no celular). A área visível do mundo é W/ZOOM x H/ZOOM.
 export const ZOOM = 1.56;
+// Caixa de colisão dos heróis (o desenho tem 36 de altura; a caixa cobre ~2/3 dele).
+export const PLAYER = { w: 12, h: 24 };
 // Altura do herói desenhado (px lógicos). A caixa de colisão é menor que o desenho.
 export const HERO_HEIGHT = 36;
 
@@ -65,7 +67,7 @@ export const STAGES = [
     chunks: ['start', 'bridge', 'flat', 'turret', 'door', 'check', 'pit', 'stairs', 'flat', 'goal'],
     intro: [
       ['byte', 'Data Center Abissal. O rastro do RANSOM-TITAN passa por aqui.'],
-      ['gleyce', 'Cada drone que eu derrubar é por ele, Byte.'],
+      ['gleyce', 'Cada drone que eu derrubar me deixa mais perto dele, Byte.'],
       ['byte', 'Sua manopla dourada atira e hackeia igual ao relógio dele. No ar, segure PULO para planar com as botas.'],
     ],
     infos: [
@@ -78,11 +80,11 @@ export const STAGES = [
     chunks: ['start', 'flat', 'door', 'stairs', 'turret', 'check', 'arena'],
     intro: [
       ['byte', 'O Núcleo da Legião. Ele está lá dentro, Gle.'],
-      ['gleyce', 'Então acabou pra ele.'],
+      ['gleyce', 'Ele está aí dentro. E eu vou buscar.'],
     ],
     infos: [
       'Sinto a assinatura do RANSOM-TITAN. Guarde EP para os terminais.',
-      'Depois deste checkpoint vem o chefe. Respira fundo, Gle. O Montanha estaria orgulhoso.',
+      'Depois deste checkpoint vem o chefe. Respira fundo, Gle. O Montanha está esperando por você.',
     ],
   },
 ];
@@ -98,19 +100,22 @@ export const STORY = {
     ['byte', 'Mochila JET carregada. Relógio H4X pronto: atira, hackeia terminais e converte torretas inimigas.'],
     ['hero', 'Mesmo time, sempre. Aguenta firme, amor. Tô indo.'],
   ],
-  // Fim da fase 1: o Montanha abre a cápsula, mas cai na armadilha do vírus.
-  fall: [
+  // Fim da fase 1, parte 1: o Montanha encontra a Gle presa na cápsula.
+  meet: [
     ['hero', 'Gle! Achei você, amor. Segura que eu vou abrir isso.'],
-    ['byte', 'Cuidado! A cápsula tem uma armadilha. É o Vírus Zero Day!'],
-    ['sys', 'INFECÇÃO DETECTADA. SISTEMAS DO MONTANHA EM FALHA.'],
-    ['hero', 'Tá tudo bem... a cápsula abriu. Vai, Gle... termina isso por nós dois.'],
-    ['gleyce', 'Montanha! Não! Fica comigo... MONTANHA!'],
-    ['byte', 'Os sinais dele... sumiram.'],
-    ['gleyce', 'O RANSOM-TITAN vai pagar por isso. Byte, me mostra o caminho.'],
+    ['gleyce', 'Montanha... eu sabia que você vinha.'],
+    ['byte', 'Cuidado! Tem alguma coisa descendo do céu!'],
+  ],
+  // Parte 2 (depois do rapto): a cápsula abre e a Gle, livre, parte atrás dele.
+  freed: [
+    ['gleyce', 'MONTANHA! Não! Solta ele!'],
+    ['byte', 'Foi uma garra do RANSOM-TITAN. Ele levou o Montanha e a cápsula abriu. Você está livre, Gle!'],
+    ['gleyce', 'Ele me tirou da cápsula só pra me fazer correr atrás. Pois eu vou. Byte, me mostra o caminho.'],
+    ['byte', 'O sinal dele vai para o Data Center Abissal. Eu te guio.'],
   ],
   boss: [
-    ['boss', 'A princesa veio vingar o hacker? Que comovente.'],
-    ['gleyce', 'Ele não era só um hacker. Era meu parceiro. Mesmo time, sempre.'],
+    ['boss', 'A princesa veio buscar o hacker? Que comovente.'],
+    ['gleyce', 'Ele não é só um hacker. É meu parceiro. Mesmo time, sempre.'],
     ['boss', 'Eu sou RANSOM-TITAN. Nada sai deste Núcleo sem a minha chave.'],
     ['byte', 'Quando ele perder metade da energia, vai erguer um firewall. Fica de olho no terminal!'],
   ],
@@ -118,8 +123,8 @@ export const STORY = {
   ending: [
     ['boss', 'Impossível... minha criptografia era... perfeita...'],
     ['byte', 'Chave mestra extraída! Liberando os servidores do planeta... espera. Tem mais uma coisa aqui.'],
-    ['byte', 'Um backup... do Montanha! O vírus não apagou tudo!'],
-    ['sys', 'REINICIANDO: MONTANHA.EXE'],
+    ['byte', 'A cela do Montanha! Ele estava preso aqui no Núcleo o tempo todo!'],
+    ['sys', 'CELA CRIPTOGRAFADA ABERTA. MONTANHA.EXE ONLINE.'],
     ['hero', '...Gle? Eu sabia que você vinha, amor.'],
     ['gleyce', 'Mesmo time, sempre.'],
     ['byte', 'Neo-Sampa acendeu de novo. Missão cumprida, vocês dois.'],
@@ -129,9 +134,10 @@ export const STORY = {
 export const SPEAKERS = { hero: 'MONTANHA', byte: 'BYTE', boss: 'RANSOM-TITAN', gleyce: 'GLE', sys: 'SISTEMA' };
 
 export const ENEMY = {
-  drone:   { w: 14, h: 10, hp: 2, xp: 3, contact: 2 },
-  crawler: { w: 14, h: 12, hp: 3, xp: 4, contact: 2 },
-  turret:  { w: 14, h: 12, hp: 4, xp: 5, contact: 2 },
+  // w/h cobrem ~75% do desenho (a arte é ~30 px de largura), para o tiro e o toque baterem com o que se vê.
+  drone:   { w: 22, h: 13, hp: 2, xp: 3, contact: 2 },
+  crawler: { w: 20, h: 15, hp: 3, xp: 4, contact: 2 },
+  turret:  { w: 18, h: 16, hp: 4, xp: 5, contact: 2 },
 };
 
 const XP_TABLE = [0, 10, 25, 45, 70, 100, 140, 190, 250, 320];

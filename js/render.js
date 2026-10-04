@@ -4,13 +4,14 @@ import { rng } from './core.js';
 import { world, TILE, tileAt, isHackedGroupTile } from './world.js';
 import { SPR } from './sprites.js';
 import { art, anim } from './assets.js';
+import { clawY, clawClosed, clawHeight, sceneDarkness, sceneFlash } from './scene.js';
 
 const LAYER_W = 640;
 const CYAN = PAL.C, MAGENTA = PAL.M, RED = PAL.R, YELLOW = PAL.Y, WHITE = PAL.W, GREEN = '#7dff9b', GREY = '#5a5f78';
 const layerCache = new Map();
 const TILE_ART = { city: 'tile_city', dc: 'tile_dc', core: 'tile_core' };
 const ENEMY_WIDTH = { drone: 31, crawler: 29, turret: 24 };
-const BYTE_HEIGHT = 13, BOSS_WIDTH = 72;
+const BYTE_HEIGHT = 13, BOSS_WIDTH = 72, CAPSULE_HEIGHT = 45;
 let vx0 = 0, scale = 1;
 
 // O canvas tem W*scale x H*scale pixels reais; todo o desenho usa coordenadas lógicas.
@@ -289,7 +290,7 @@ function drawEnemyArt(ctx, e, img) {
   // A arte olha para a esquerda; espelha quando o inimigo vai (ou mira) para a direita.
   const facingRight = e.type === 'turret' ? Math.cos(e.angle) > 0 : e.vx > 0;
   if (e.ally) ctx.filter = 'hue-rotate(180deg) saturate(1.3)';
-  drawArt(ctx, img, sx(e.x) + e.w / 2, e.y + e.h + (e.type === 'drone' ? 3 : 0), ENEMY_WIDTH[e.type], facingRight);
+  drawArt(ctx, img, sx(e.x) + e.w / 2, e.y + e.h + (e.type === 'drone' ? 2 : 0), ENEMY_WIDTH[e.type], facingRight);
   ctx.filter = 'none';
 }
 
@@ -335,12 +336,47 @@ function drawBeam(ctx, beam) {
   if (beam.t < 70) { rect(ctx, RED, 0, y, W, 6); rect(ctx, WHITE, 0, y + 2, W, 2); }
 }
 
+// Gle já libertada: de pé onde ficava a cápsula, olhando para onde o Montanha foi levado.
+function drawFreedGle(ctx, g) {
+  const a = anim('gle_idle'), cx = sx(g.x + g.w / 2), feet = g.y + g.h;
+  if (a) drawAnim(ctx, a, Math.floor((world.scene.t * ANIM_FPS.idle) / 60) % a.frames, cx, feet, true);
+}
+
+// Garra do RANSOM-TITAN: drone no alto, cabo, tenaz e feixe que prende o herói.
+function drawRapture(ctx) {
+  const s = world.scene, p = world.player;
+  if (!s || s.freed) return;
+  const cx = sx(p.x + p.w / 2), tip = clawY(s.t, s.baseY - 2, world.cam.y), top = tip - clawHeight(), closed = clawClosed(s.t);
+  if (s.t > 30) {   // feixe de captura
+    ctx.globalAlpha = Math.min(0.35, (s.t - 30) / 100) * (0.8 + 0.2 * Math.sin(s.t * 0.4)); ctx.fillStyle = '#ff4fd8';
+    ctx.beginPath(); ctx.moveTo(cx - 3, tip); ctx.lineTo(cx + 3, tip); ctx.lineTo(cx + 22, tip + 70); ctx.lineTo(cx - 22, tip + 70); ctx.fill(); ctx.globalAlpha = 1;
+  }
+  rect(ctx, '#3a3f58', cx, top - 6, 1, 6 + clawHeight());               // cabo
+  rect(ctx, '#1d2236', cx - 14, top - 10, 28, 9); rect(ctx, '#3a3f58', cx - 12, top - 12, 24, 3);   // corpo do drone
+  rect(ctx, RED, cx - 3, top - 7, 6, 3); if (blink(2, 6)) rect(ctx, WHITE, cx - 1, top - 6, 2, 1);  // olho
+  const open = (1 - closed) * 7 + 2;                                     // tenaz que fecha ao agarrar
+  ctx.strokeStyle = '#8a90b0'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(cx, tip - 8); ctx.lineTo(cx + d * open, tip - 2); ctx.lineTo(cx + d * (open - 3), tip + 5); ctx.stroke(); }
+  ctx.lineCap = 'butt';
+}
+
+// Escurece o céu quando a ameaça chega e acende um clarão quando a cápsula abre.
+function drawSceneTint(ctx) {
+  const s = world.scene; if (!s) return;
+  const dark = sceneDarkness(s.t), flash = sceneFlash(s.t);
+  if (dark > 0) { ctx.globalAlpha = dark; rect(ctx, '#2a0a30', 0, 0, W, H); }
+  if (flash > 0) { ctx.globalAlpha = flash * 0.8; rect(ctx, WHITE, 0, 0, W, H); }
+  ctx.globalAlpha = 1;
+}
+
 // Gle presa na cápsula criptografada, no lugar do portal da fase do resgate.
 function drawCaptive(ctx) {
   const g = world.goal;
   if (!g || !world.level.stage.rescue) return;
+  if (world.scene?.freed) { drawFreedGle(ctx, g); return; }
   const x = sx(g.x), y = g.y + g.h - 90, img = art('gleyce_capsule');
-  if (img) { drawArt(ctx, img, x + 8, y + 90, 40); return; }
+  // A Gle dentro da cápsula ocupa ~80% da altura dela: cápsula de 45 deixa a Gle do tamanho do Montanha (36).
+  if (img) { drawArt(ctx, img, x + 8, y + 90, widthFor(img, CAPSULE_HEIGHT)); return; }
   const glow = 0.25 + 0.1 * Math.sin(world.frame * 0.08);
   rect(ctx, '#2a3050', x - 2, y + 82, 20, 8); rect(ctx, '#2a3050', x - 2, y - 4, 20, 6);
   ctx.globalAlpha = glow; rect(ctx, CYAN, x, y, 16, 82); ctx.globalAlpha = 1;
@@ -355,11 +391,11 @@ function drawBoss(ctx, b) {
   const x = sx(b.x), y = Math.round(b.y);
   const img = art('boss');
   if (!(b.flash > 0 && blink(2))) {
-    if (img) drawArt(ctx, img, x + 22, y + 50, BOSS_WIDTH);
+    if (img) drawArt(ctx, img, x + b.w / 2, y + b.h + 4, BOSS_WIDTH);
     else drawBossBody(ctx, b, x, y);
   }
-  if (b.shield) drawShield(ctx, x + 22, y + 26);
-  if (b.stun > 0) drawSparks(ctx, x + 22, y + 4, 18, 3);
+  if (b.shield) drawShield(ctx, x + b.w / 2, y + b.h / 2);
+  if (b.stun > 0) drawSparks(ctx, x + b.w / 2, y + 4, 18, 3);
   if (b.beam) drawBeam(ctx, b.beam);
 }
 
@@ -382,19 +418,20 @@ function heroKey(p) {
   return `${torso}-${legs}`;
 }
 
-function drawCharge(ctx, p, x, y) {
+function drawCharge(ctx, p) {
+  const mz = HEROES[p.hero].muzzle, feet = p.y + p.h + 1, cx = sx(p.x + p.w / 2);
   if (p.charge > 20) {
-    const hx = x + 3 + (p.face > 0 ? 12 : -2), hy = y + 12;
+    const hx = cx + p.face * mz.reach, hy = feet - (mz.h * HERO_HEIGHT) / 0.97;
     for (let i = 0; i < 2; i++) {
       const a = world.frame * 0.4 + i * Math.PI;
-      rect(ctx, CYAN, Math.round(hx + Math.cos(a) * 3), Math.round(hy + Math.sin(a) * 3), 1, 1);
+      rect(ctx, HEROES[p.hero].shot, Math.round(hx + Math.cos(a) * 3), Math.round(hy + Math.sin(a) * 3), 1, 1);
     }
   }
   if (p.charge >= 42) {
-    const color = blink(2, 3) ? CYAN : MAGENTA;
+    const color = blink(2, 3) ? HEROES[p.hero].shot : MAGENTA, by = feet - HERO_HEIGHT * 0.5;
     for (let i = 0; i < 6; i++) {
       const a = world.frame * 0.15 + (i * Math.PI) / 3;
-      rect(ctx, color, Math.round(x + 8 + Math.cos(a) * 10), Math.round(y + 10 + Math.sin(a) * 12), 1, 1);
+      rect(ctx, color, Math.round(cx + Math.cos(a) * 10), Math.round(by + Math.sin(a) * 14), 1, 1);
     }
   }
 }
@@ -407,8 +444,10 @@ function heroPose(p) {
 
 // Quadro da animação conforme a ação: corrida e respiração em loop, tiro acompanha o recuo.
 const ANIM_FPS = { run: 14, idle: 8, jump: 10 };
+const SHOOT_FIRST = 2;
 function animFrame(a, pose, p) {
-  if (pose === 'shoot') return Math.min(a.frames - 1, Math.floor(((14 - p.shootAnim) / 14) * a.frames));
+  // O tiro nasce com o braço esticado: pula os quadros de preparação (0 e 1) e mostra só a parte do disparo.
+  if (pose === 'shoot') return SHOOT_FIRST + Math.min(a.frames - SHOOT_FIRST - 1, Math.floor(((14 - p.shootAnim) / 14) * (a.frames - SHOOT_FIRST)));
   return Math.floor((world.frame * ANIM_FPS[pose]) / 60) % a.frames;
 }
 
@@ -441,13 +480,16 @@ function drawHero(ctx, p) {
 function drawPlayer(ctx, p) {
   if (!p || (p.invuln > 0 && Math.floor(world.frame / 2) % 2)) return;
   const x = sx(p.x - 3), y = Math.round(p.y - 2);
-  if (drawHero(ctx, p)) { drawCharge(ctx, p, x, y); return; }
+  if (drawHero(ctx, p)) { drawCharge(ctx, p); return; }
   ctx.drawImage(SPR.hero[heroKey(p)][p.face > 0 ? 0 : 1], x, y);
   drawCharge(ctx, p, x, y);
 }
 
 function drawBullet(ctx, b) {
   const x = sx(b.x), y = Math.round(b.y);
+  // Tiros guiados voam inclinados: gira o desenho para apontar na direção do movimento.
+  const tilted = b.from === 'player' && Math.abs(b.vy) > 0.05;
+  if (tilted) { ctx.save(); ctx.translate(x + b.w / 2, y + b.h / 2); ctx.rotate(Math.atan2(b.vy, b.vx)); ctx.translate(-(x + b.w / 2), -(y + b.h / 2)); }
   if (b.from === 'player' && b.pierce) {
     const flick = blink(2) ? 1 : 0;
     const c = b.color || CYAN;
@@ -459,10 +501,24 @@ function drawBullet(ctx, b) {
   } else {
     rect(ctx, RED, x, y, b.w, b.h); rect(ctx, '#4a0814', x + 1, y + 1, b.w - 2, b.h - 2);
   }
+  if (tilted) ctx.restore();
+}
+
+function drawHeart(ctx, x, y, s, color, alpha) {
+  ctx.globalAlpha = alpha; ctx.fillStyle = color; ctx.beginPath();
+  ctx.moveTo(x, y + s * 0.9);
+  ctx.bezierCurveTo(x - s * 1.5, y - s * 0.1, x - s * 0.8, y - s * 1.2, x, y - s * 0.4);
+  ctx.bezierCurveTo(x + s * 0.8, y - s * 1.2, x + s * 1.5, y - s * 0.1, x, y + s * 0.9);
+  ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.globalAlpha = alpha * 0.7; ctx.beginPath(); ctx.ellipse(x - s * 0.5, y - s * 0.35, s * 0.2, s * 0.13, -0.6, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
 }
 
 function drawEffects(ctx) {
-  for (const f of world.fx) rect(ctx, f.color, sx(f.x), Math.round(f.y), f.size, f.size);
+  for (const f of world.fx) {
+    if (f.heart) drawHeart(ctx, sx(f.x), f.y, f.size * 0.5 * Math.min(1, f.age / 6), f.color, Math.min(1, f.life / 25));
+    else rect(ctx, f.color, sx(f.x), Math.round(f.y), f.size, f.size);
+  }
   for (const r of world.rings) { ctx.globalAlpha = Math.max(0, r.life / 24); ring(ctx, CYAN, sx(r.x), r.y, r.r); }
   ctx.globalAlpha = 1;
 }
@@ -489,9 +545,11 @@ export function renderWorld(ctx) {
   drawBoss(ctx, world.boss);
   drawAlly(ctx, world.ally);
   drawPlayer(ctx, world.player);
+  drawRapture(ctx);
   world.bullets.forEach(b => drawBullet(ctx, b));
   drawEffects(ctx);
   ctx.restore();
+  drawSceneTint(ctx);
 }
 
 // Tela de título: arte de capa com movimento lento de câmera.

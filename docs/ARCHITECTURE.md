@@ -15,7 +15,7 @@ Plain ES modules, no framework and no bundler. Each module has one job; shared d
 | Systems | `combat.js`, `fx.js`, `scene.js`, `hack.js`, `puzzle.js`, `interact.js` | bullets, damage, XP and levels, particles and hearts, the abduction cutscene timeline, hacking, terminal puzzles, doors, pickups and checkpoints |
 | UI | `dialog.js`, `hud.js`, `screens.js` | dialog windows, HUD, title/map/pause/result/ending screens |
 | Audio | `audio.js` | WebAudio sound effects and the procedural soundtrack |
-| Render | `render.js`, `sprites.js`, `assets.js` | canvas drawing, camera zoom, parallax, pixel-art fallbacks, HD asset loading |
+| Render | `render.js`, `assets.js` | canvas drawing, camera zoom, parallax and HD asset loading without legacy character fallbacks |
 | Flow | `game.js`, `main.js` | state machine and event wiring, boot, viewport fitting and the fixed-step loop |
 
 ## Game loop
@@ -49,7 +49,7 @@ Levels are strings. A stage lists chunk names (`start`, `flat`, `pit`, `door`, `
 
 ## Animation
 
-`assets/anims.json` describes each sheet: frame count, cell size and a foot anchor (`ax`, `ay`). `render.js` plays `hero_*` or `gle_*` sheets by pose (`idle`, `run`, `jump`, `shoot`) and falls back to the static pose, then to pixel art, while assets load.
+`assets/anims.json` describes each sheet: frame count, cell size and a foot anchor (`ax`, `ay`). `render.js` plays `hero_*` or `gle_*` sheets by pose (`idle`, `run`, `jump`, `shoot`) and falls back only to the matching HD static pose while animation assets load.
 
 ## Audio
 

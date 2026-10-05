@@ -2,7 +2,6 @@
 import { W, H, T, ROWS, THEMES, PAL, HEROES, HERO_HEIGHT } from './config.js';
 import { rng } from './core.js';
 import { world, TILE, tileAt, isHackedGroupTile, pulseState } from './world.js';
-import { SPR } from './sprites.js';
 import { art, anim } from './assets.js';
 import { clawY, clawClosed, clawHeight, sceneDarkness, sceneFlash } from './scene.js';
 import { hackTarget } from './hack.js';
@@ -629,6 +628,8 @@ export function renderBackdrop(ctx, t) {
     rect(ctx, theme.line, x + T - 1, groundY, 1, 2 * T);
     rect(ctx, theme.hi, x, groundY, T, 2);
   }
-  ctx.drawImage(SPR.hero['idle-stand'][0], 120, groundY - 20);
-  ctx.drawImage(SPR.byte[0], 100, groundY - 34 + Math.round(Math.sin(t * 0.08) * 3));
+  // Enquanto a capa maior carrega, mostra apenas os personagens HD atuais; nunca os sprites antigos.
+  const hero = art('hero_idle'), bot = art('byte');
+  if (hero) drawArt(ctx, hero, 120, groundY, widthFor(hero, HERO_HEIGHT));
+  if (bot) drawArt(ctx, bot, 100, groundY - 20 + Math.round(Math.sin(t * 0.08) * 3), widthFor(bot, BYTE_HEIGHT));
 }

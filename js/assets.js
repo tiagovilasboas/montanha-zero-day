@@ -1,6 +1,5 @@
-// Arte HD gerada no Artlist (assets/*.webp). Carrega em segundo plano; enquanto não chega,
-// o render usa a pixel art de reserva de sprites.js.
-import { PORTRAIT_URL } from './sprites.js';
+// Arte HD gerada no Artlist (assets/*.webp). Carrega em segundo plano e nunca volta
+// para os retratos antigos enquanto os arquivos novos chegam.
 
 const NAMES = [
   'hero_idle', 'hero_run', 'hero_jump', 'hero_shoot', 'gle_idle', 'gle_run', 'gle_jump', 'gle_shoot', 'byte', 'byte_pink', 'drone', 'crawler', 'turret', 'boss',
@@ -40,10 +39,10 @@ export function loadArt() {
 export function useBotPortrait(botArt) { botKey = botArt === 'byte_pink' ? 'byte_pink' : 'byte'; }
 
 // Retrato de quem fala: sempre o HD (o navegador cuida do carregamento, sem corrida com o load).
-// Se o arquivo falhar, cai na pixel art de sprites.js; quem não tem retrato (SISTEMA) some.
+// Se o arquivo falhar, o retrato some; a arte antiga nunca reaparece.
 export function setPortrait(img, who) {
-  const key = who === 'byte' ? botKey : who, file = PORTRAITS[key], fallback = PORTRAIT_URL[who];
-  img.onerror = () => { img.onerror = null; if (fallback) img.src = fallback; else img.hidden = true; };
-  img.hidden = !file && !fallback;
-  if (file) img.src = assetPath(file); else if (fallback) img.src = fallback;
+  const key = who === 'byte' ? botKey : who, file = PORTRAITS[key];
+  img.onerror = () => { img.onerror = null; img.hidden = true; };
+  img.hidden = !file;
+  if (file) img.src = assetPath(file);
 }

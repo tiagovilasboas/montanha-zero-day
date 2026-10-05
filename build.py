@@ -3,26 +3,13 @@
 import hashlib, re, sys
 from pathlib import Path
 
-from PIL import Image, ImageColor, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parent
 BG = "#070914"
 CYAN = "#3df0ff"
 
-# Copied from js/config.js (PAL) and js/sprites.js (PORTRAITS.hero). '.' = transparent.
-PAL = {
-    "K": "#0b0d18", "k": "#1d2236", "G": "#6c7391", "g": "#aab1c9", "S": "#c98d63", "s": "#9a6747",
-    "B": "#2b1e17", "W": "#f1f4ff", "C": "#3df0ff", "c": "#1a8aa6", "P": "#28304d", "R": "#ff3b5c",
-    "r": "#a3173a", "O": "#e6e8f2", "Y": "#ffd23d", "V": "#9b5cff", "v": "#5a2fb0", "M": "#ff5ad1",
-}
-HERO = [
-    "......KKKKKKKKKKKK......", "....KKKKKKKKKKKKKKKK....", "...KKKKKKgggggggKKKKK...", "...KKKKKKKKKKKKKKKKKK...",
-    "..GGGGGGGGGGGGGGGGGGGG..", "..GgggggggggggggggggGG..", "....SSSSSSSSSSSSSSSS....", "...SSBBBBSSSSSSBBBBSS...",
-    "...SSSKWSSSSSSSSKWSSS...", "...sSSKKSSSSSSSSKKSSs...", "...sSSSSSSSssSSSSSSSs...", "...sBSSSSSSssSSSSSSBs...",
-    "...BBSSSBBBBBBBBSSSBB...", "...BBBSBBBBBBBBBBSBBB...", "...BBBBBBBSsSSBBBBBBB...", "....BBBBBBBgggBBBBBB....",
-    "....BBBBBBBBgBBBBBBB....", ".....BBBBBBBBBBBBBB.....", "......BBBBBBBBBBBB......", "..kkkkkkBBBBBBBBkkkkkk..",
-    ".kkkkkkkkkBBBBkkkkkkkkk.", "kkkkkkkkkkkkkkkkkkkkkkkk", "kkkkCkkkkkkkkkkkkkkCkkkk", "kkkkkkkkkkkkkkkkkkkkkkkk",
-]
+PORTRAIT = ROOT / "assets" / "portrait_hero.webp"
 
 HEAD = """<!doctype html>
 <html lang="en">
@@ -48,17 +35,8 @@ def build_html():
     return out
 
 
-def pixel_art(rows, palette):
-    img = Image.new("RGBA", (len(rows[0]), len(rows)), (0, 0, 0, 0))
-    for y, row in enumerate(rows):
-        for x, ch in enumerate(row):
-            if ch in palette:
-                img.putpixel((x, y), ImageColor.getrgb(palette[ch]) + (255,))
-    return img
-
-
 def render_icon(size, safe):
-    """Portrait centred on BG with a cyan ring; `safe` = fraction of the canvas the art+ring may occupy."""
+    """Current HD portrait centred on BG; `safe` keeps maskable artwork inside the safe area."""
     img = Image.new("RGBA", (size, size), BG)
     box = size * safe
     ring_r = box / 2 * 0.9
@@ -70,10 +48,11 @@ def render_icon(size, safe):
     img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(size / 40)))
     ImageDraw.Draw(img).ellipse([c - ring_r, c - ring_r, c + ring_r, c + ring_r], outline=CYAN, width=ring_w)
 
-    art = pixel_art(HERO, PAL)
-    scale = max(1, int((ring_r * 1.3) // art.width))
-    art = art.resize((art.width * scale, art.height * scale), Image.NEAREST)
-    img.alpha_composite(art, (round(c - art.width / 2), round(c - art.height / 2)))
+    art = Image.open(PORTRAIT).convert("RGBA")
+    if box := art.getbbox():
+        art = art.crop(box)
+    art.thumbnail((round(ring_r * 1.55), round(ring_r * 1.55)), Image.Resampling.LANCZOS)
+    img.alpha_composite(art, (round(c - art.width / 2), round(c - art.height / 2 + ring_r * 0.04)))
     return img.convert("RGB")
 
 

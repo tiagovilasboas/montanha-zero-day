@@ -1,7 +1,6 @@
 // Ponto de entrada: monta os módulos, dimensiona a tela e roda o loop com passo fixo.
 import { W, H, FPS, setViewWidth } from './config.js';
 import { $, on, emit } from './core.js';
-import { buildSprites } from './sprites.js';
 import { bindInput } from './input.js';
 import { tickMusic, unlockAudio, resumeAudio } from './audio.js';
 import { bindDialog } from './dialog.js';
@@ -68,7 +67,6 @@ function loop(now) {
 }
 
 function boot() {
-  buildSprites();
   loadArt();
   bindInput({ dpad: $('#dpad'), buttons: [...document.querySelectorAll('#btns [data-action]')] });
   bindDialog(); bindPuzzle(); bindScreens(); bindGame();

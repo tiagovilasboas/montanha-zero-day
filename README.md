@@ -19,16 +19,16 @@ Works in any modern browser, on desktop with a keyboard and on phones with touch
 
 **Neo-Sampa, 2099.** The invading AI LEGIÃO NULL has taken the planet's network. Gle was kidnapped and locked in a capsule.
 
-- **Phase 1, Telhados do Cecapão.** You play **Montanha**: backpack jetpack, a hacking watch and the robot BYTE. At the end he finds Gle in her capsule (hearts rise), then a RANSOM-TITAN claw snatches him away and Gle is freed.
-- **Phases 2 and 3, Subsolo 404: Servidor Submerso and Kernel Panic: o Núcleo.** You play **Gle**, who goes after RANSOM-TITAN with her golden gauntlet, hover boots and a pink BYTE. The Core adds pulse beams that switch on and off in rhythm, a climb over lasers and a turret gauntlet before the boss.
-- **Ending.** After the boss, Gle takes RANSOM-TITAN's key and opens Montanha's cell deep in the Core.
+- **Phase 1, Telhados do Cecapão.** You play **Montanha**: backpack jetpack, a hacking watch and the robot BYTE. At the end he finds Gle in her capsule (hearts rise), then a TITAN claw snatches him away and Gle is freed.
+- **Phases 2 and 3, Subsolo 404: Servidor Submerso and Kernel Panic: o Núcleo.** You play **Gle**, who goes after TITAN with her golden gauntlet, hover boots and a pink BYTE. The Core adds pulse beams that switch on and off in rhythm, a climb over lasers and a turret gauntlet before the boss.
+- **Ending.** After the boss, Gle takes TITAN's key and opens Montanha's cell deep in the Core.
 
 ### Highlights
 
 - **Two heroes, each with their own style:** Montanha flies with a cyan jetpack, Gle glides on golden light boots. Same physics, distinct look (aura, trail and animations).
 - **Hacking:** three puzzle types on terminals (sequence, binary and a node grid with hints), turrets you can turn to your side, and an EMP pulse.
 - **Story told in-engine:** dialog with portraits, a phase 1 cutscene (hearts, the claw abduction, Gle breaking free) and an ending that pays it off.
-- **The Core (phase 3):** pulse beams that switch on and off in rhythm, a climb over a laser pit, a turret gauntlet and the RANSOM-TITAN boss with a firewall phase.
+- **The Core (phase 3):** pulse beams that switch on and off in rhythm, a climb over a laser pit, a turret gauntlet and the TITAN boss with a firewall phase.
 - **Original soundtrack per stage,** synthesized live with WebAudio.
 - **Mobile first:** landscape-only, camera zoom tuned for phones, translucent touch controls, pause when the app goes to the background.
 - **Offline PWA:** installable, cache-first service worker.

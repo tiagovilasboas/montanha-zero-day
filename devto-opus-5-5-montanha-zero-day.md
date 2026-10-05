@@ -11,7 +11,7 @@ On Sunday I sat down to turn a three-sentence idea into a browser game, **Montan
 
 Without the jig, the model invents the workshop. A framework, a bundler, a new folder layout, and the token limit goes into the second and third attempt. I have watched that happen. The hard part is not the idea. It is holding the cut after the first structure comes out wrong.
 
-What held it was not a longer prompt. A harness already sits next to the repo: guides before the model writes, sensors after it says the work is done. Opus 5.5, through Claude Code, used about half of my daily allotment on the usage panel and shipped the game. The hero is me (Montanha), the heroine is Gle, and the villain is a ransomware called RANSOM-TITAN. It runs in the browser and on phones, offline, as a PWA.
+What held it was not a longer prompt. A harness already sits next to the repo: guides before the model writes, sensors after it says the work is done. Opus 5.5, through Claude Code, used about half of my daily allotment on the usage panel and shipped the game. The hero is me (Montanha), the heroine is Gle, and the villain is a ransomware called TITAN. It runs in the browser and on phones, offline, as a PWA.
 
 👉 **Play it live:** [tiagovilasboas.github.io/montanha-zero-day](https://tiagovilasboas.github.io/montanha-zero-day/) (Portuguese only when the browser language is Portuguese and the timezone is Brazil; English otherwise)  
 👉 **Source Code:** [github.com/tiagovilasboas/montanha-zero-day](https://github.com/tiagovilasboas/montanha-zero-day)
@@ -26,7 +26,7 @@ People often ask what kind of 5-page prompt was required to spin up an entire ga
 
 The kickoff prompt was surprisingly concise:
 
-> *"Build a cyberpunk Mega Man X–style platformer game in pure JavaScript (ES modules) with canvas. The hero is Montanha (backpack jetpack, cybernetic hacking watch), the heroine is Gle, and the final boss is a ransomware virus named RANSOM-TITAN. It needs to run offline as a PWA on mobile and desktop."*
+> *"Build a cyberpunk Mega Man X–style platformer game in pure JavaScript (ES modules) with canvas. The hero is Montanha (backpack jetpack, cybernetic hacking watch), the heroine is Gle, and the final boss is a ransomware virus named TITAN. It needs to run offline as a PWA on mobile and desktop."*
 
 How can a model go from a 3-sentence prompt to 24 modular ES architecture files without derailing into chaos or hallucinated spaghetti code?
 
@@ -89,18 +89,18 @@ Anthropic claims real-world workflows run **~40% cheaper than on Opus 5** becaus
 
 ## The Game
 
-- **Stage 1:** You pilot Montanha (jetpack vertical boost + hacker watch that shoots and overrides terminal nodes). Reaching the end reveals Gle trapped in a cryo-capsule. Love hearts float up, but RANSOM-TITAN drops an extraction claw from the sky and abducts Montanha. It was bait.
+- **Stage 1:** You pilot Montanha (jetpack vertical boost + hacker watch that shoots and overrides terminal nodes). Reaching the end reveals Gle trapped in a cryo-capsule. Love hearts float up, but TITAN drops an extraction claw from the sky and abducts Montanha. It was bait.
 - **Stages 2 and 3:** Gle, freed from containment, retaliates armed with a golden buster gauntlet and high-speed light boots.
 - **Ending:** She shatters the boss core, retrieves his decryption key, and opens Montanha's prison cell.
 
 Under the hood: **Vanilla JavaScript ES modules** (~2,700 lines across 24 single-purpose files), HTML5 Canvas, a deterministic 60 Hz simulation loop, service workers for offline PWA installation, a 100% synthesized WebAudio procedural soundtrack (no bulky MP3/OGG assets), and HD-2D art pipeline. Zero frameworks, zero bundlers.
 
-![The stage 1 ending: hearts, the RANSOM-TITAN claw drops, grabs Montanha and lifts him away from Gle's capsule](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
+![The stage 1 ending: hearts, the TITAN claw drops, grabs Montanha and lifts him away from Gle's capsule](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
 *The stage 1 ending, frame by frame: hearts, the claw drops, grabs Montanha and lifts him away.*
 
 ![Gle gliding on her golden light boots through the flooded server room of stage 2](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-boots.jpg)
 
-![Gle facing the RANSOM-TITAN boss, a giant padlock with a red eye, in the Core arena](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
+![Gle facing the TITAN boss, a giant padlock with a red eye, in the Core arena](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
 
 ---
 

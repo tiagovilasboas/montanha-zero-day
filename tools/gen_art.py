@@ -51,7 +51,7 @@ PLAN = [
      "Wall-mounted security turret: chunky grey metal base, red dome sensor, a single short cannon barrel pointing LEFT. "
      f"Compact, readable silhouette. {SPRITE_BG} {STYLE}"),
     ("boss", "1:1", [],
-     "Final boss RANSOM-TITAN: a giant floating machine shaped like a menacing padlock, dark crimson armor plates, a "
+     "Final boss TITAN: a giant floating machine shaped like a menacing padlock, dark crimson armor plates, a "
      "huge glowing red eye core in the center, a golden keyhole below the eye, side cannons, red energy cracks. "
      f"Front view, imposing. {SPRITE_BG} {STYLE}"),
     ("bg_city_far", "16:9", [],

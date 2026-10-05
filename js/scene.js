@@ -1,4 +1,4 @@
-// Cena do rapto (fim da fase 1): uma garra do RANSOM-TITAN leva o Montanha e a Gle é libertada da cápsula.
+// Cena do rapto (fim da fase 1): uma garra do TITAN leva o Montanha e a Gle é libertada da cápsula.
 // Só o roteiro no tempo: o desenho fica no render.js, que lê `world.scene` e as funções abaixo.
 import { W, T } from './config.js';
 import { clamp } from './core.js';

@@ -1,4 +1,4 @@
-// RANSOM-TITAN: chefe final. Fase 1 atira em leque; fase 2 liga firewall e dispara um raio horizontal.
+// TITAN: chefe final. Fase 1 atira em leque; fase 2 liga firewall e dispara um raio horizontal.
 import { T } from './config.js';
 import { emit } from './core.js';
 import { world, makeEnemy } from './world.js';
@@ -31,7 +31,7 @@ function beam(b, target) {
   if (!b.beam && b.t % 360 === 180) b.beam = { y: target.y - 3, t: 0 };
   if (!b.beam) return;
   b.beam.t++;
-  if (b.beam.t > 45 && b.beam.t < 70 && Math.abs(target.y - (b.beam.y + 3)) < 10) emit('player:hit', { dmg: 3, dir: -1 });
+  if (b.beam.t > 45 && b.beam.t < 70 && Math.abs(target.y - (b.beam.y + 3)) < 10) emit('player:hit', { dmg: 2, dir: -1 });
   if (b.beam.t >= 70) b.beam = null;
 }
 
@@ -56,7 +56,7 @@ export function updateBoss() {
   const target = center(world.player);
   b.y = b.baseY + Math.sin(b.t * 0.03) * 40;
   if (b.phase === 2) b.x = world.level.arenaX + 12 * T + Math.sin(b.t * 0.017) * 40;
-  if (--b.cd <= 0) { b.cd = b.phase === 1 ? 80 : 60; spread(b, target); }
+  if (--b.cd <= 0) { b.cd = b.phase === 1 ? 80 : 70; spread(b, target); }
   if (--b.spawnCd <= 0) { b.spawnCd = b.phase === 1 ? 300 : 240; summon(b); }
   if (b.phase === 2) beam(b, target);
   // Encostar no chefe dói menos que os tiros dele: a arena é apertada e ele flutua baixo.

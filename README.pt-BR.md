@@ -19,16 +19,16 @@ Roda em qualquer navegador moderno: no computador com teclado e no celular com c
 
 **Neo-Sampa, 2099.** A IA invasora LEGIÃO NULL tomou a rede do planeta. A Gle foi sequestrada e trancada numa cápsula.
 
-- **Fase 1, Telhados do Cecapão.** Você joga com o **Montanha**: mochila com jato, relógio hacker e o robô BYTE. No fim ele encontra a Gle na cápsula (sobem corações), então uma garra do RANSOM-TITAN o rapta e a Gle é libertada.
-- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic: o Núcleo.** Você joga com a **Gle**, que vai atrás do RANSOM-TITAN com a manopla dourada, botas que planam e um BYTE rosa. O Núcleo tem feixes de pulso que ligam e desligam no ritmo, uma subida sobre lasers e um corredor de torretas antes do chefe.
-- **Final.** Depois do chefe, a Gle usa a chave do RANSOM-TITAN e tira o Montanha da cela no fundo do Núcleo.
+- **Fase 1, Telhados do Cecapão.** Você joga com o **Montanha**: mochila com jato, relógio hacker e o robô BYTE. No fim ele encontra a Gle na cápsula (sobem corações), então uma garra do TITAN o rapta e a Gle é libertada.
+- **Fases 2 e 3, Subsolo 404: Servidor Submerso e Kernel Panic: o Núcleo.** Você joga com a **Gle**, que vai atrás do TITAN com a manopla dourada, botas que planam e um BYTE rosa. O Núcleo tem feixes de pulso que ligam e desligam no ritmo, uma subida sobre lasers e um corredor de torretas antes do chefe.
+- **Final.** Depois do chefe, a Gle usa a chave do TITAN e tira o Montanha da cela no fundo do Núcleo.
 
 ### Destaques
 
 - **Dois heróis, cada um com seu estilo:** o Montanha voa com a mochila de jato ciano, a Gle plana com as botas de luz douradas. Mesma física, visual próprio (aura, rastro e animações).
 - **Hacking:** três tipos de puzzle nos terminais (sequência, binário e grade de nós com dica), torretas que passam para o seu lado e pulso EMP.
 - **História contada no jogo:** diálogos com retrato, cena no fim da fase 1 (corações, a garra que rapta o Montanha, a Gle libertada) e um final que fecha a história.
-- **O Núcleo (fase 3):** feixes de pulso que ligam e desligam no ritmo, subida sobre um poço de laser, corredor de torretas e o chefe RANSOM-TITAN com fase de firewall.
+- **O Núcleo (fase 3):** feixes de pulso que ligam e desligam no ritmo, subida sobre um poço de laser, corredor de torretas e o chefe TITAN com fase de firewall.
 - **Trilha original em cada fase,** sintetizada ao vivo com WebAudio.
 - **Feito para celular:** só na horizontal, zoom de câmera pensado para telas pequenas, controles de toque translúcidos e pausa quando o app vai para o fundo.
 - **PWA offline:** instalável, com service worker que guarda tudo em cache.

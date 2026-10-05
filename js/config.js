@@ -87,7 +87,7 @@ export const STAGES = [
     name: 'Subsolo 404: Servidor Submerso', theme: 1, track: 1, hero: 'gle',
     chunks: ['start', 'bridge', 'flat', 'turret', 'door', 'check', 'pit', 'stairs', 'datacenter_boss', 'goal'],
     intro: [
-      ['byte', 'Subsolo 404: Servidor Submerso. O rastro do RANSOM-TITAN passa por aqui.'],
+      ['byte', 'Subsolo 404: Servidor Submerso. O rastro do TITAN passa por aqui.'],
       ['gleyce', 'Cada drone que eu derrubar me deixa mais perto dele, Byte.'],
       ['byte', 'Mudei minha cor pro seu time. Modo Gle ativado.'],
       ['byte', 'Sua manopla atira e hackeia igual ao relógio dele.'],
@@ -103,11 +103,11 @@ export const STAGES = [
     chunks: ['start', 'flat', 'pulse', 'door', 'climb', 'check', 'gauntlet', 'pulse2', 'stairs', 'turret', 'check', 'arena'],
     intro: [
       ['gleyce', 'Subsolo limpo. E agora, Byte?'],
-      ['byte', 'O sinal do Montanha some dentro do Núcleo, a casa do RANSOM-TITAN.'],
+      ['byte', 'O sinal do Montanha some dentro do Núcleo, a casa do TITAN.'],
       ['gleyce', 'Então é lá que eu vou. Aguenta, amor.'],
     ],
     infos: [
-      'Sinto a assinatura do RANSOM-TITAN. Guarde EP para os terminais.',
+      'Sinto a assinatura do TITAN. Guarde EP para os terminais.',
       'Feixes de pulso! Eles piscam antes de ligar. Passe quando apagarem.',
       'Checkpoint salvo. O sinal do Montanha ficou mais forte. Tá perto, Gle.',
       'Depois deste checkpoint vem o chefe. Respira fundo, Gle. O Montanha está esperando por você.',
@@ -119,10 +119,10 @@ export const STORY = {
   intro: [
     ['sys', 'ANO 2099. NEO-SAMPA.'],
     ['sys', 'A LEGIÃO NULL, uma IA invasora, tomou a rede do planeta.'],
-    ['sys', 'Seu general, o RANSOM-TITAN, soltou drones de malware nas ruas.'],
+    ['sys', 'Seu general, o TITAN, soltou drones de malware nas ruas.'],
     ['gleyce', 'Montanha! Eles invadiram a casa! Estão me levando!'],
     ['sys', 'SINAL PERDIDO. CÁPSULA CRIPTOGRAFADA EM TRÂNSITO.'],
-    ['byte', 'Montanha, levaram a Gle! O RANSOM-TITAN trancou ela numa cápsula, no alto dos telhados.'],
+    ['byte', 'Montanha, levaram a Gle! O TITAN trancou ela numa cápsula, no alto dos telhados.'],
     ['hero', 'Pega minha mochila e o relógio, Byte. Ninguém mexe com a minha parceira.'],
     ['byte', 'Mochila JET carregada. Relógio H4X pronto pra atirar e hackear.'],
     ['hero', 'Mesmo time, sempre. Aguenta firme, amor. Tô indo.'],
@@ -136,7 +136,7 @@ export const STORY = {
   // Parte 2 (depois do rapto): a cápsula abre e a Gle, livre, parte atrás dele.
   freed: [
     ['gleyce', 'MONTANHA! Não! Solta ele!'],
-    ['byte', 'Era uma isca! O RANSOM-TITAN queria o hacker. A cápsula abriu sozinha.'],
+    ['byte', 'Era uma isca! O TITAN queria o hacker. A cápsula abriu sozinha.'],
     ['gleyce', 'Então ele vai ter que me aguentar.'],
     ['byte', 'O Montanha deixou comigo a manopla reserva e as botas de luz. Veste!'],
     ['byte', 'E copiei os upgrades dele pra você. O sinal dele vai pro Subsolo 404.'],
@@ -145,7 +145,7 @@ export const STORY = {
   boss: [
     ['boss', 'A princesa veio buscar o hacker? O hacker é meu. E a rede também.'],
     ['gleyce', 'Ele não é só um hacker. É meu parceiro. Mesmo time, sempre.'],
-    ['boss', 'Eu sou RANSOM-TITAN. Nada sai deste Núcleo sem a minha chave.'],
+    ['boss', 'Eu sou TITAN. Nada sai deste Núcleo sem a minha chave.'],
     ['byte', 'Ele é blindado. Acerta enquanto dá, Gle!'],
   ],
   firewall: [['byte', 'Ele ergueu um FIREWALL! Os tiros não passam. Hackeia o terminal à esquerda, Gle!']],
@@ -161,7 +161,7 @@ export const STORY = {
   ],
 };
 
-export const SPEAKERS = { hero: 'MONTANHA', byte: 'BYTE', boss: 'RANSOM-TITAN', gleyce: 'GLE', sys: 'SISTEMA' };
+export const SPEAKERS = { hero: 'MONTANHA', byte: 'BYTE', boss: 'TITAN', gleyce: 'GLE', sys: 'SISTEMA' };
 
 export const ENEMY = {
   // w/h cobrem ~75% do desenho (a arte é ~30 px de largura), para o tiro e o toque baterem com o que se vê.

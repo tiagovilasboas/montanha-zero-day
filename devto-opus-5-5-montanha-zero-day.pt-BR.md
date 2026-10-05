@@ -6,7 +6,7 @@ tags: ai, gamedev, javascript, claude
 cover_image: https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/assets/devto-cover.png
 ---
 
-Em um domingo, transformei uma ideia meio boba num jogo de verdade: **Montanha: Zero Day**, um plataforma cyberpunk no estilo Mega Man X que roda no navegador e no celular, offline, como PWA. O herói sou eu (o Montanha), a heroína é a Gle, e o vilão é um ransomware gigante chamado RANSOM-TITAN.
+Em um domingo, transformei uma ideia meio boba num jogo de verdade: **Montanha: Zero Day**, um plataforma cyberpunk no estilo Mega Man X que roda no navegador e no celular, offline, como PWA. O herói sou eu (o Montanha), a heroína é a Gle, e o vilão é um ransomware gigante chamado TITAN.
 
 Fiz tudo em parceria com o **Claude Opus 5.5**, orquestrado pelo **Claude Code** e pelo Cowork (o ecossistema de agentes da Anthropic). No fim do dia, o painel de uso mostrava que eu tinha gastado **cerca de metade do limite diário de tokens**.
 
@@ -25,7 +25,7 @@ Muita gente pergunta que tipo de mega-prompt de 10 páginas foi necessário para
 
 O prompt de partida foi surpreendentemente direto:
 
-> *"Crie um jogo de plataforma cyberpunk estilo Mega Man X em JavaScript puro (módulos ES) com canvas. O herói é o Montanha (mochila a jato, relógio hacker), a heroína é a Gle, e o chefe final é um vírus ransomware chamado RANSOM-TITAN. Precisa rodar offline como PWA no celular e no desktop."*
+> *"Crie um jogo de plataforma cyberpunk estilo Mega Man X em JavaScript puro (módulos ES) com canvas. O herói é o Montanha (mochila a jato, relógio hacker), a heroína é a Gle, e o chefe final é um vírus ransomware chamado TITAN. Precisa rodar offline como PWA no celular e no desktop."*
 
 Como um modelo vai de um prompt de 3 linhas para uma arquitetura limpa de 24 módulos ES funcionais sem se perder ou alucinar código espaguete?
 
@@ -88,18 +88,18 @@ A Anthropic estima que tarefas típicas saiam **~40% mais baratas que no Opus 5*
 
 ## O Jogo
 
-- **Fase 1:** Você controla o Montanha (jetpack vertical e relógio hacker que atira e invade terminais). Ao final, encontra a Gle presa em uma cápsula. Sobem corações, mas a garra do RANSOM-TITAN desce do céu e o rapta. Era uma armadilha.
+- **Fase 1:** Você controla o Montanha (jetpack vertical e relógio hacker que atira e invade terminais). Ao final, encontra a Gle presa em uma cápsula. Sobem corações, mas a garra do TITAN desce do céu e o rapta. Era uma armadilha.
 - **Fases 2 e 3:** Gle assume o resgate com manopla dourada e botas de velocidade.
 - **Final:** Ela destrói o chefe, pega a chave e abre a cela do Montanha.
 
 Arquitetura: **JavaScript puro em módulos ES** (~2.700 linhas em 24 módulos), HTML5 Canvas, loop fixo a 60 Hz, PWA offline via service worker, trilha sonora inteiramente sintetizada com WebAudio (sem arquivos de áudio pesados) e arte HD. Sem frameworks, sem build.
 
-![O fim da fase 1: corações, a garra do RANSOM-TITAN desce, agarra o Montanha e o leva para longe da cápsula da Gle](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
+![O fim da fase 1: corações, a garra do TITAN desce, agarra o Montanha e o leva para longe da cápsula da Gle](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/abduction-cutscene.jpg)
 *O fim da fase 1, quadro a quadro: corações, a garra desce, agarra o Montanha e o leva embora.*
 
 ![A Gle planando com as botas de luz douradas na sala de servidores alagada da fase 2](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/gle-boots.jpg)
 
-![A Gle diante do chefe RANSOM-TITAN, um cadeado gigante com um olho vermelho, na arena do Núcleo](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
+![A Gle diante do chefe TITAN, um cadeado gigante com um olho vermelho, na arena do Núcleo](https://raw.githubusercontent.com/tiagovilasboas/montanha-zero-day/main/docs/screenshots/boss-fight.jpg)
 
 ---
 

@@ -11,7 +11,7 @@ Plain ES modules, no framework and no bundler. Each module has one job; shared d
 | Input | `input.js` | keyboard, d-pad and buttons merged into one `input` state with `pressed`/`released` edges |
 | Physics | `physics.js` | axis-separated tile collision, overlap and distance helpers |
 | World | `world.js` | the single mutable `world` object, level assembly from ASCII chunks, tile queries, boss arena wall |
-| Actors | `player.js`, `enemies.js`, `boss.js`, `ally.js` | movement and shooting, enemy AI, RANSOM-TITAN, the BYTE helper |
+| Actors | `player.js`, `enemies.js`, `boss.js`, `ally.js` | movement and shooting, enemy AI, TITAN, the BYTE helper |
 | Systems | `combat.js`, `fx.js`, `scene.js`, `hack.js`, `puzzle.js`, `interact.js` | bullets, damage, XP and levels, particles and hearts, the abduction cutscene timeline, hacking, terminal puzzles, doors, pickups and checkpoints |
 | UI | `dialog.js`, `hud.js`, `screens.js` | dialog windows, HUD, title/map/pause/result/ending screens |
 | Audio | `audio.js` | WebAudio sound effects and the procedural soundtrack |

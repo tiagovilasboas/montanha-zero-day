@@ -375,7 +375,7 @@ function drawFreedGle(ctx, g) {
   if (a) drawAnim(ctx, a, Math.floor((world.scene.t * ANIM_FPS.idle) / 60) % a.frames, cx, feet, true);
 }
 
-// Garra do RANSOM-TITAN: drone no alto, cabo, tenaz e feixe que prende o herói.
+// Garra do TITAN: drone no alto, cabo, tenaz e feixe que prende o herói.
 function drawRapture(ctx) {
   const s = world.scene, p = world.player;
   if (!s || s.freed) return;
